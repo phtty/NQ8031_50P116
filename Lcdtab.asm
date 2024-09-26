@@ -70,31 +70,92 @@ lcd_d3	.equ lcd_d2+7
 	db_c_s	c1,s7					;3g
 
 lcd_d4	.equ lcd_d3+7
-	db_c_s	c4,s13					;D1
-	db_c_s	c4,s14					;D2
-	db_c_s	c4,s15					;D3
-	db_c_s	c4,s12					;D4
-	db_c_s	c3,s15					;D5
-	db_c_s	c3,s40					;D6
-	db_c_s	c3,s13					;D7
-	db_c_s	c3,s14					;D8
-	db_c_s	c2,s40					;D9
-	db_c_s	c2,s13					;D10
-	db_c_s	c2,s14					;D11
-	db_c_s	c2,s15					;D12
-	db_c_s	c1,s14					;D13
-	db_c_s	c1,s15					;D14
-	db_c_s	c1,s40					;D15
-	db_c_s	c1,s13					;D16
-	db_c_s	c0,s14					;D17
-	db_c_s	c0,s15					;D18
-	db_c_s	c0,s12					;D19
-	db_c_s	c0,s13					;D20
-	db_c_s	c0,s40					;D21
+	db_c_s	c3,s9					;4a
+	db_c_s	c2,s9					;4b
+	db_c_s	c1,s9					;4c
+	db_c_s	c0,s9					;4d
+	db_c_s	c0,s10					;4e
+	db_c_s	c2,s10					;4f
+	db_c_s	c1,s10					;4g
+
+lcd_d5	.equ lcd_d4+7
+	db_c_s	c3,s11					;5a
+	db_c_s	c2,s11					;5b
+	db_c_s	c1,s11					;5c
+	db_c_s	c0,s11					;5d
+	db_c_s	c0,s12					;5e
+	db_c_s	c2,s12					;5f
+	db_c_s	c1,s12					;5g
+
+lcd_d6	.equ lcd_d5+7
+	db_c_s	c3,s13					;6a
+	db_c_s	c2,s13					;6b
+	db_c_s	c1,s13					;6c
+	db_c_s	c0,s13					;6d
+	db_c_s	c0,s14					;6e
+	db_c_s	c2,s14					;6f
+	db_c_s	c1,s14					;6g
+
+lcd_d7	.equ lcd_d6+7
+	db_c_s	c3,s16					;7a
+	db_c_s	c2,s16					;7b
+	db_c_s	c1,s16					;7c
+	db_c_s	c0,s16					;7d
+	db_c_s	c0,s17					;7e
+	db_c_s	c2,s17					;7f
+	db_c_s	c1,s17					;7g
+
+lcd_d8	.equ lcd_d7+7
+	db_c_s	c3,s18					;8a
+	db_c_s	c2,s18					;8b
+	db_c_s	c1,s18					;8c
+	db_c_s	c0,s18					;8d
+	db_c_s	c0,s19					;8e
+	db_c_s	c1,s19					;8g
+
+lcd_d9	.equ lcd_d8+6
+	db_c_s	c3,s20					;9a
+	db_c_s	c2,s20					;9b
+	db_c_s	c1,s20					;9c
+	db_c_s	c0,s20					;9d
+	db_c_s	c0,s21					;9e
+	db_c_s	c2,s21					;9f
+	db_c_s	c1,s21					;9g
+
+lcd_d10	.equ lcd_d9+7
+	db_c_s	c1,s1					;10aced
+	db_c_s	c2,s1					;10b
+	db_c_s	c0,s1					;10c
+
+lcd_d11	.equ lcd_d10+3
+	db_c_s	c1,s16					;11aced
+	db_c_s	c2,s16					;11b
+	db_c_s	c0,s16					;11c
 
 lcd_dot:
-lcd_MS .equ lcd_dot-lcd_table1
-	db_c_s	c4,s40					;MS
+lcd_AM .equ lcd_dot-lcd_table1
+	db_c_s	c1,s0					;AM
+lcd_PM .equ lcd_AM+1
+	db_c_s	c0,s0					;PM
+lcd_Bell .equ lcd_PM+1
+	db_c_s	c2,s4					;Bell
+lcd_DotC .equ lcd_Bell+1
+	db_c_s	c1,s4					;DotC
+lcd_Zz .equ lcd_DotC+1
+	db_c_s	c0,s4					;Zz
+lcd_Mo .equ lcd_Zz+1
+	db_c_s	c3,s17					;Mo
+lcd_Da .equ lcd_Mo+1
+	db_c_s	c0,s4					;Da
+lcd_Alm .equ lcd_Da+1
+	db_c_s	c0,s4					;Alm
+lcd_DotA .equ lcd_Alm+1
+	db_c_s	c0,s4					;DotA
+lcd_slh	.equ lcd_DotA+1
+	db_c_s	c0,s4					;slh
+lcd_T9	.equ lcd_slh+1
+	db_c_s	c0,s4					;T9
+
 
 ;==========================================================
 ;==========================================================
