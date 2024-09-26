@@ -1,0 +1,8 @@
+# 6502汇编忽略规则
+*.exe
+*.o
+*.bin
+*.dbg
+*.lst
+*.map
+/.vscode
