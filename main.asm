@@ -52,11 +52,21 @@ V_RESET:
 	sta		SYSCLK
 
 	jsr		F_Timer_Init
-	jsr		F_Display_Time
 
 	cli											; 开总中断
 
 	; test Code
+	lda		#8
+	ldx		#lcd_d10
+	jsr		L_Dis_7Bit_DigitDot_Prog
+	lda		#3
+	ldx		#lcd_d9
+	jsr		L_Dis_6Bit_DigitDot_Prog
+	lda		#2
+	ldx		#lcd_d7
+	jsr		L_Dis_3Bit_DigitDot_Prog
+	ldx		#lcd_PM2
+	jsr		F_DispSymbol
 
 ;***********************************************************************
 ;***********************************************************************

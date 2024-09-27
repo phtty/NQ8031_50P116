@@ -27,12 +27,14 @@ L_Init_SystemRam_Prog:							; 系统初始化
 F_LCD_Init:
 	jsr		F_ClearScreen						; LCD初始化
 
+	CHECK_LCD
+
 	PC67_SEG									; 配置IO口为SEG线模式
 	PD03_SEG
 	PD47_SEG
 
-	lda		#C_COM_4_40_36						; 配置COM线数量
-	sta		LCD_COM
+	rmb1	LCD_COM								; 配置COM线数量
+	smb0	LCD_COM
 
 	LCD_ON
 	jsr		F_ClearScreen						; 清屏

@@ -47,6 +47,10 @@ s0		.equ	0
 
 Lcd_byte:							;段码<==>SEG/COM表
 lcd_table1:
+lcd_d0	equ	$-lcd_table1
+	db_c_s	c1,s42	; 10AGED
+	db_c_s	c2,s42	; 10B
+	db_c_s	c0,s42	; 10C
 lcd_d1	equ	$-lcd_table1
 	db_c_s	c3,s40	; 1A
 	db_c_s	c2,s40	; 1B
@@ -102,6 +106,11 @@ lcd_d6	equ	$-lcd_table1
 	db_c_s	c1,s13	; 6G
 
 lcd_d7	equ	$-lcd_table1
+	db_c_s	c1,s12	; 11AGED
+	db_c_s	c2,s12	; 11B
+	db_c_s	c0,s12	; 11C
+
+lcd_d8	equ	$-lcd_table1
 	db_c_s	c3,s11	; 7A
 	db_c_s	c2,s11	; 7B
 	db_c_s	c1,s11	; 7C
@@ -110,7 +119,7 @@ lcd_d7	equ	$-lcd_table1
 	db_c_s	c2,s10	; 7F
 	db_c_s	c1,s10	; 7G
 
-lcd_d8	equ	$-lcd_table1
+lcd_d9	equ	$-lcd_table1
 	db_c_s	c3,s9	; 8A
 	db_c_s	c2,s9	; 8B
 	db_c_s	c1,s9	; 8C
@@ -118,7 +127,7 @@ lcd_d8	equ	$-lcd_table1
 	db_c_s	c0,s8	; 8E
 	db_c_s	c1,s8	; 8G
 
-lcd_d9	equ	$-lcd_table1
+lcd_d10	equ	$-lcd_table1
 	db_c_s	c3,s7	; 9A
 	db_c_s	c2,s7	; 9B
 	db_c_s	c1,s7	; 9C
@@ -127,27 +136,29 @@ lcd_d9	equ	$-lcd_table1
 	db_c_s	c2,s6	; 9F
 	db_c_s	c1,s6	; 9G
 
-lcd_d10	equ	$-lcd_table1
-	db_c_s	c1,s42	; 10AGED
-	db_c_s	c2,s42	; 10B
-	db_c_s	c0,s42	; 10C
-
 lcd_d11	equ	$-lcd_table1
-	db_c_s	c1,s12	; 11AGED
-	db_c_s	c2,s12	; 11B
-	db_c_s	c0,s12	; 11C
+	db_c_s	c3,s6	; 10BC
 
-lcd_dot	equ	$-lcd_table1
+lcd_dot:
+lcd_AM		equ	$-lcd_table1
 	db_c_s	c1,s43	; AM
+lcd_PM		equ	$-lcd_table1
 	db_c_s	c0,s43	; PM
-	db_c_s	c2,s39	; T1
-	db_c_s	c1,s39	; T2
-	db_c_s	c0,s39	; T3
-	db_c_s	c3,s10	; T4
-	db_c_s	c3,s33	; T6
-	db_c_s	c3,s15	; T7
-	db_c_s	c3,s8	; T8
-	db_c_s	c3,s6	; T9
+lcd_bell	equ	$-lcd_table1
+	db_c_s	c2,s39	; bell
+lcd_DotC	equ	$-lcd_table1
+	db_c_s	c1,s39	; DotC
+lcd_Zz		equ	$-lcd_table1
+	db_c_s	c0,s39	; Zz
+lcd_MD		equ	$-lcd_table1
+	db_c_s	c3,s10	; MD
+lcd_ALM		equ	$-lcd_table1
+	db_c_s	c3,s33	; ALM
+lcd_DotA	equ	$-lcd_table1
+	db_c_s	c3,s15	; DotA
+lcd_SLH		equ	$-lcd_table1
+	db_c_s	c3,s8	; SLH
+lcd_PM2		equ	$-lcd_table1
 	db_c_s	c3,s13	; PM2
 
 
@@ -155,6 +166,10 @@ lcd_dot	equ	$-lcd_table1
 ;==========================================================
 
 Lcd_bit:
+	db_c_y	c1,s42	; 10AGED
+	db_c_y	c2,s42	; 10B
+	db_c_y	c0,s42	; 10C
+
 	db_c_y	c3,s40	; 1A
 	db_c_y	c2,s40	; 1B
 	db_c_y	c1,s40	; 1C
@@ -203,6 +218,10 @@ Lcd_bit:
 	db_c_y	c2,s13	; 6F
 	db_c_y	c1,s13	; 6G
 
+	db_c_y	c1,s12	; 11AGED
+	db_c_y	c2,s12	; 11B
+	db_c_y	c0,s12	; 11C
+
 	db_c_y	c3,s11	; 7A
 	db_c_y	c2,s11	; 7B
 	db_c_y	c1,s11	; 7C
@@ -226,23 +245,16 @@ Lcd_bit:
 	db_c_y	c2,s6	; 9F
 	db_c_y	c1,s6	; 9G
 
-	db_c_y	c1,s42	; 10AGED
-	db_c_y	c2,s42	; 10B
-	db_c_y	c0,s42	; 10C
-
-	db_c_y	c1,s12	; 11AGED
-	db_c_y	c2,s12	; 11B
-	db_c_y	c0,s12	; 11C
+	db_c_y	c3,s6	; 10BC
 
 	db_c_y	c1,s43	; AM
 	db_c_y	c0,s43	; PM
-	db_c_y	c2,s39	; T1
-	db_c_y	c1,s39	; T2
-	db_c_y	c0,s39	; T3
-	db_c_y	c3,s10	; T4
-	db_c_y	c3,s33	; T6
-	db_c_y	c3,s15	; T7
-	db_c_y	c3,s8	; T8
-	db_c_y	c3,s6	; T9
+	db_c_y	c2,s39	; bell
+	db_c_y	c1,s39	; DotC
+	db_c_y	c0,s39	; Zz
+	db_c_y	c3,s10	; MD
+	db_c_y	c3,s33	; ALM
+	db_c_y	c3,s15	; DotA
+	db_c_y	c3,s8	; SLH
 	db_c_y	c3,s13	; PM2
 ;=========================================
