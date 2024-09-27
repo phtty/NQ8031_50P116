@@ -1,27 +1,27 @@
 ;------------------------------------
 PB2_PB2_COMS MACRO
         RMB0    PADF0
-        SMB2    PB_TYPE ;COMS		
+        SMB2    PB_TYPE ; COMS
         ENDM
 PB2_PB2_NOMS MACRO
         RMB0    PADF0
-        RMB2    PB_TYPE ;NOMS		
+        RMB2    PB_TYPE ; NOMS
         ENDM		
 PB2_PWM MACRO
         SMB0    PADF0
-        SMB2    PB_TYPE ;COMS
+        SMB2    PB_TYPE
         ENDM
 PB3_PB3_COMS MACRO
         RMB1    PADF0
-        SMB3    PB_TYPE ;NMOS		
+        SMB3    PB_TYPE ; CMOS		
         ENDM
 PB3_PB3_NOMS MACRO
         RMB1    PADF0
-        RMB3    PB_TYPE ;CMOS		
+        RMB3    PB_TYPE ; NMOS		
         ENDM			
 PB3_PWM MACRO
         SMB1    PADF0
-        SMB3    PB_TYPE ;CMOS
+        SMB3    PB_TYPE
         ENDM
 
 PA4_PA4 MACRO

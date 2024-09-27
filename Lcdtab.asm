@@ -11,6 +11,14 @@ s43		.equ	43
 s42		.equ	42
 s41		.equ	41
 s40		.equ	40
+s39		.equ	39
+s38		.equ	38
+s37		.equ	37
+s36		.equ	36
+s35		.equ	35
+s34		.equ	34
+s33		.equ	33
+s32		.equ	32
 s15		.equ	15
 s14		.equ	14
 s13		.equ	13
@@ -29,9 +37,6 @@ s1		.equ	1
 s0		.equ	0
 
 
-MS_dot .equ	1
-
-
 .MACRO  db_c_s	com,seg
           .BYTE com*6+seg/8
 .ENDMACRO
@@ -42,212 +47,202 @@ MS_dot .equ	1
 
 Lcd_byte:							;段码<==>SEG/COM表
 lcd_table1:
-lcd_d1 .equ	lcd_table1-lcd_table1
-	db_c_s	c3,s3					;1a
-	db_c_s	c2,s3					;1b
-	db_c_s	c1,s3					;1c
-	db_c_s	c0,s3					;1d
-	db_c_s	c0,s2					;1e
-	db_c_s	c2,s2					;1f
-	db_c_s	c1,s2					;1g
+lcd_d1:	equ	$-lcd_table1
+	db_c_s	c3,s40	; 1A
+	db_c_s	c2,s40	; 1B
+	db_c_s	c1,s40	; 1C
+	db_c_s	c0,s40	; 1D
+	db_c_s	c0,s41	; 1E
+	db_c_s	c2,s41	; 1F
+	db_c_s	c1,s41	; 1G
 
-lcd_d2	.equ lcd_d1+7
-	db_c_s	c3,s6					;2a
-	db_c_s	c2,s6					;2b
-	db_c_s	c1,s6					;2c
-	db_c_s	c0,s6					;2d
-	db_c_s	c0,s5					;2e
-	db_c_s	c2,s5					;2f
-	db_c_s	c1,s5					;2g
+lcd_d2:	equ	$-lcd_table1
+	db_c_s	c3,s37	; 2A 
+	db_c_s	c2,s37	; 2B
+	db_c_s	c1,s37	; 2C
+	db_c_s	c0,s37	; 2D
+	db_c_s	c0,s38	; 2E
+	db_c_s	c2,s38	; 2F
+	db_c_s	c1,s38	; 2G
 
-lcd_d3	.equ lcd_d2+7
-	db_c_s	c3,s8					;3a
-	db_c_s	c2,s8					;3b
-	db_c_s	c1,s8					;3c
-	db_c_s	c0,s8					;3d
-	db_c_s	c0,s7					;3e
-	db_c_s	c2,s7					;3f
-	db_c_s	c1,s7					;3g
+lcd_d3:	equ	$-lcd_table1
+	db_c_s	c3,s35	; 3A
+	db_c_s	c2,s35	; 3B
+	db_c_s	c1,s35	; 3C
+	db_c_s	c0,s35	; 3D
+	db_c_s	c0,s36	; 3E
+	db_c_s	c2,s36	; 3F
+	db_c_s	c1,s36	; 3G
 
-lcd_d4	.equ lcd_d3+7
-	db_c_s	c3,s9					;4a
-	db_c_s	c2,s9					;4b
-	db_c_s	c1,s9					;4c
-	db_c_s	c0,s9					;4d
-	db_c_s	c0,s10					;4e
-	db_c_s	c2,s10					;4f
-	db_c_s	c1,s10					;4g
+lcd_d4:	equ	$-lcd_table1
+	db_c_s	c3,s34	; 4A
+	db_c_s	c2,s34	; 4B
+	db_c_s	c1,s34	; 4C
+	db_c_s	c0,s34	; 4D
+	db_c_s	c0,s33	; 4E
+	db_c_s	c2,s33	; 4F
+	db_c_s	c1,s33	; 4G
 
-lcd_d5	.equ lcd_d4+7
-	db_c_s	c3,s11					;5a
-	db_c_s	c2,s11					;5b
-	db_c_s	c1,s11					;5c
-	db_c_s	c0,s11					;5d
-	db_c_s	c0,s12					;5e
-	db_c_s	c2,s12					;5f
-	db_c_s	c1,s12					;5g
+lcd_d5:	equ	$-lcd_table1
+	db_c_s	c3,s32	; 5A
+	db_c_s	c2,s32	; 5B
+	db_c_s	c1,s32	; 5C
+	db_c_s	c0,s32	; 5D
+	db_c_s	c0,s15	; 5E
+	db_c_s	c2,s15	; 5F
+	db_c_s	c1,s15	; 5G
 
-lcd_d6	.equ lcd_d5+7
-	db_c_s	c3,s13					;6a
-	db_c_s	c2,s13					;6b
-	db_c_s	c1,s13					;6c
-	db_c_s	c0,s13					;6d
-	db_c_s	c0,s14					;6e
-	db_c_s	c2,s14					;6f
-	db_c_s	c1,s14					;6g
+lcd_d6:	equ	$-lcd_table1
+	db_c_s	c3,s14	; 6A
+	db_c_s	c2,s14	; 6B
+	db_c_s	c1,s14	; 6C
+	db_c_s	c0,s14	; 6D
+	db_c_s	c0,s13	; 6E
+	db_c_s	c2,s13	; 6F
+	db_c_s	c1,s13	; 6G
 
-lcd_d7	.equ lcd_d6+7
-	db_c_s	c3,s16					;7a
-	db_c_s	c2,s16					;7b
-	db_c_s	c1,s16					;7c
-	db_c_s	c0,s16					;7d
-	db_c_s	c0,s17					;7e
-	db_c_s	c2,s17					;7f
-	db_c_s	c1,s17					;7g
+lcd_d7:	equ	$-lcd_table1
+	db_c_s	c3,s11	; 7A
+	db_c_s	c2,s11	; 7B
+	db_c_s	c1,s11	; 7C
+	db_c_s	c0,s11	; 7D
+	db_c_s	c0,s10	; 7E
+	db_c_s	c2,s10	; 7F
+	db_c_s	c1,s10	; 7G
 
-lcd_d8	.equ lcd_d7+7
-	db_c_s	c3,s18					;8a
-	db_c_s	c2,s18					;8b
-	db_c_s	c1,s18					;8c
-	db_c_s	c0,s18					;8d
-	db_c_s	c0,s19					;8e
-	db_c_s	c1,s19					;8g
+lcd_d8:	equ	$-lcd_table1
+	db_c_s	c3,s9	; 8A
+	db_c_s	c2,s9	; 8B
+	db_c_s	c1,s9	; 8C
+	db_c_s	c0,s9	; 8D
+	db_c_s	c0,s8	; 8E
+	db_c_s	c1,s8	; 8G
 
-lcd_d9	.equ lcd_d8+6
-	db_c_s	c3,s20					;9a
-	db_c_s	c2,s20					;9b
-	db_c_s	c1,s20					;9c
-	db_c_s	c0,s20					;9d
-	db_c_s	c0,s21					;9e
-	db_c_s	c2,s21					;9f
-	db_c_s	c1,s21					;9g
+lcd_d9:	equ	$-lcd_table1
+	db_c_s	c3,s7	; 9A
+	db_c_s	c2,s7	; 9B
+	db_c_s	c1,s7	; 9C
+	db_c_s	c0,s7	; 9D
+	db_c_s	c0,s6	; 9E
+	db_c_s	c2,s6	; 9F
+	db_c_s	c1,s6	; 9G
 
-lcd_d10	.equ lcd_d9+7
-	db_c_s	c1,s1					;10aced
-	db_c_s	c2,s1					;10b
-	db_c_s	c0,s1					;10c
+lcd_d10:	equ	$-lcd_table1
+	db_c_s	c1,s42	; 10AGED
+	db_c_s	c2,s42	; 10B
+	db_c_s	c0,s42	; 10C
 
-lcd_d11	.equ lcd_d10+3
-	db_c_s	c1,s16					;11aced
-	db_c_s	c2,s16					;11b
-	db_c_s	c0,s16					;11c
+lcd_d11:	equ	$-lcd_table1
+	db_c_s	c1,s12	; 11AGED
+	db_c_s	c2,s12	; 11B
+	db_c_s	c0,s12	; 11C
 
-lcd_dot:
-lcd_AM .equ lcd_dot-lcd_table1
-	db_c_s	c1,s0					;AM
-lcd_PM .equ lcd_AM+1
-	db_c_s	c0,s0					;PM
-lcd_Bell .equ lcd_PM+1
-	db_c_s	c2,s4					;Bell
-lcd_DotC .equ lcd_Bell+1
-	db_c_s	c1,s4					;DotC
-lcd_Zz .equ lcd_DotC+1
-	db_c_s	c0,s4					;Zz
-lcd_Mo .equ lcd_Zz+1
-	db_c_s	c3,s17					;Mo
-lcd_Da .equ lcd_Mo+1
-	db_c_s	c0,s4					;Da
-lcd_Alm .equ lcd_Da+1
-	db_c_s	c0,s4					;Alm
-lcd_DotA .equ lcd_Alm+1
-	db_c_s	c0,s4					;DotA
-lcd_Slh	.equ lcd_DotA+1
-	db_c_s	c0,s4					;Slh
-lcd_T9	.equ lcd_slh+1
-	db_c_s	c0,s4					;T9
+lcd_dot:	equ	$-lcd_table1
+	db_c_s	c1,s43	; AM
+	db_c_s	c0,s43	; PM
+	db_c_s	c2,s39	; T1
+	db_c_s	c1,s39	; T2
+	db_c_s	c0,s39	; T3
+	db_c_s	c3,s10	; T4
+	db_c_s	c3,s33	; T6
+	db_c_s	c3,s15	; T7
+	db_c_s	c3,s8	; T8
+	db_c_s	c3,s6	; T9
+	db_c_s	c3,s13	; PM2
 
 
 ;==========================================================
 ;==========================================================
 
 Lcd_bit:
-	db_c_y	c4,s0					;A1
-	db_c_y	c4,s1					;A2
-	db_c_y	c4,s2					;A3
-	db_c_y	c3,s0					;A4
-	db_c_y	c3,s1					;A5
-	db_c_y	c4,s3					;A6
-	db_c_y	c2,s0					;A7
-	db_c_y	c3,s2					;A8
-	db_c_y	c3,s3					;A9
-	db_c_y	c2,s1					;A10
-	db_c_y	c2,s2					;A11
-	db_c_y	c2,s3					;A12
-	db_c_y	c1,s0					;A13
-	db_c_y	c1,s3					;A14
-	db_c_y	c1,s4					;A15
-	db_c_y	c1,s1					;A16
-	db_c_y	c1,s2					;A17
-	db_c_y	c0,s3					;A18
-	db_c_y	c0,s0					;A19
-	db_c_y	c0,s1					;A20
-	db_c_y	c0,s2					;A21
+	db_c_y	c3,s40	; 1A
+	db_c_y	c2,s40	; 1B
+	db_c_y	c1,s40	; 1C
+	db_c_y	c0,s40	; 1D
+	db_c_y	c0,s41	; 1E
+	db_c_y	c2,s41	; 1F
+	db_c_y	c1,s41	; 1G
 
-	db_c_y	c4,s5					;B1
-	db_c_y	c4,s6					;B2
-	db_c_y	c4,s7					;B3
-	db_c_y	c4,s4					;B4
-	db_c_y	c3,s6					;B5
-	db_c_y	c3,s7					;B6
-	db_c_y	c3,s4					;B7
-	db_c_y	c3,s5					;B8
-	db_c_y	c2,s8					;B9
-	db_c_y	c2,s4					;B10
-	db_c_y	c2,s6					;B11
-	db_c_y	c2,s7					;B12
-	db_c_y	c2,s5					;B13
-	db_c_y	c1,s7					;B14
-	db_c_y	c1,s8					;B15
-	db_c_y	c1,s5					;B16
-	db_c_y	c1,s6					;B17
-	db_c_y	c0,s7					;B18
-	db_c_y	c0,s4					;B19
-	db_c_y	c0,s5					;B20
-	db_c_y	c0,s6					;B21
+	db_c_y	c3,s37	; 2A 
+	db_c_y	c2,s37	; 2B
+	db_c_y	c1,s37	; 2C
+	db_c_y	c0,s37	; 2D
+	db_c_y	c0,s38	; 2E
+	db_c_y	c2,s38	; 2F
+	db_c_y	c1,s38	; 2G
 
-	db_c_y	c4,s8					;C1
-	db_c_y	c4,s9					;C2
-	db_c_y	c4,s10					;C3
-	db_c_y	c3,s8					;C4
-	db_c_y	c3,s11					;C5
-	db_c_y	c4,s11					;C6
-	db_c_y	c3,s9					;C7
-	db_c_y	c3,s10					;C8
-	db_c_y	c3,s12					;C9
-	db_c_y	c2,s9					;C10
-	db_c_y	c2,s10					;C11
-	db_c_y	c2,s11					;C12
-	db_c_y	c1,s9					;C13
-	db_c_y	c1,s10					;C14
-	db_c_y	c2,s12					;C15
-	db_c_y	c0,s8					;C16
-	db_c_y	c1,s11					;C17
-	db_c_y	c1,s12					;C18
-	db_c_y	c0,s9					;C19
-	db_c_y	c0,s10					;C20
-	db_c_y	c0,s11					;C21
+	db_c_y	c3,s35	; 3A
+	db_c_y	c2,s35	; 3B
+	db_c_y	c1,s35	; 3C
+	db_c_y	c0,s35	; 3D
+	db_c_y	c0,s36	; 3E
+	db_c_y	c2,s36	; 3F
+	db_c_y	c1,s36	; 3G
 
-	db_c_y	c4,s13					;D1
-	db_c_y	c4,s14					;D2
-	db_c_y	c4,s15					;D3
-	db_c_y	c4,s12					;D4
-	db_c_y	c3,s15					;D5
-	db_c_y	c3,s40					;D6
-	db_c_y	c3,s13					;D7
-	db_c_y	c3,s14					;D8
-	db_c_y	c2,s40					;D9
-	db_c_y	c2,s13					;D10
-	db_c_y	c2,s14					;D11
-	db_c_y	c2,s15					;D12
-	db_c_y	c1,s14					;D13
-	db_c_y	c1,s15					;D14
-	db_c_y	c1,s40					;D15
-	db_c_y	c1,s13					;D16
-	db_c_y	c0,s14					;D17
-	db_c_y	c0,s15					;D18
-	db_c_y	c0,s12					;D19
-	db_c_y	c0,s13					;D20
-	db_c_y	c0,s40					;D21
+	db_c_y	c3,s34	; 4A
+	db_c_y	c2,s34	; 4B
+	db_c_y	c1,s34	; 4C
+	db_c_y	c0,s34	; 4D
+	db_c_y	c0,s33	; 4E
+	db_c_y	c2,s33	; 4F
+	db_c_y	c1,s33	; 4G
 
-	db_c_y	c4,s40					;MS
+	db_c_y	c3,s32	; 5A
+	db_c_y	c2,s32	; 5B
+	db_c_y	c1,s32	; 5C
+	db_c_y	c0,s32	; 5D
+	db_c_y	c0,s15	; 5E
+	db_c_y	c2,s15	; 5F
+	db_c_y	c1,s15	; 5G
+
+	db_c_y	c3,s14	; 6A
+	db_c_y	c2,s14	; 6B
+	db_c_y	c1,s14	; 6C
+	db_c_y	c0,s14	; 6D
+	db_c_y	c0,s13	; 6E
+	db_c_y	c2,s13	; 6F
+	db_c_y	c1,s13	; 6G
+
+	db_c_y	c3,s11	; 7A
+	db_c_y	c2,s11	; 7B
+	db_c_y	c1,s11	; 7C
+	db_c_y	c0,s11	; 7D
+	db_c_y	c0,s10	; 7E
+	db_c_y	c2,s10	; 7F
+	db_c_y	c1,s10	; 7G
+
+	db_c_y	c3,s9	; 8A
+	db_c_y	c2,s9	; 8B
+	db_c_y	c1,s9	; 8C
+	db_c_y	c0,s9	; 8D
+	db_c_y	c0,s8	; 8E
+	db_c_y	c1,s8	; 8G
+
+	db_c_y	c3,s7	; 9A
+	db_c_y	c2,s7	; 9B
+	db_c_y	c1,s7	; 9C
+	db_c_y	c0,s7	; 9D
+	db_c_y	c0,s6	; 9E
+	db_c_y	c2,s6	; 9F
+	db_c_y	c1,s6	; 9G
+
+	db_c_y	c1,s42	; 10AGED
+	db_c_y	c2,s42	; 10B
+	db_c_y	c0,s42	; 10C
+
+	db_c_y	c1,s12	; 11AGED
+	db_c_y	c2,s12	; 11B
+	db_c_y	c0,s12	; 11C
+
+	db_c_y	c1,s43	; AM
+	db_c_y	c0,s43	; PM
+	db_c_y	c2,s39	; T1
+	db_c_y	c1,s39	; T2
+	db_c_y	c0,s39	; T3
+	db_c_y	c3,s10	; T4
+	db_c_y	c3,s33	; T6
+	db_c_y	c3,s15	; T7
+	db_c_y	c3,s8	; T8
+	db_c_y	c3,s6	; T9
+	db_c_y	c3,s13	; PM2
 ;=========================================

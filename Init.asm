@@ -28,13 +28,12 @@ F_LCD_Init:
 	jsr		F_ClearScreen						; LCD初始化
 	CHECK_LCD
 
-	PC45_SEG									; 配置IO口为SEG线模式
-	PC67_SEG
+	PC67_SEG									; 配置IO口为SEG线模式
 	PD03_SEG
 	PD47_SEG
 
-	RMB0	LCD_COM								; 配置COM线数量
-	SMB1	LCD_COM
+	lda		#C_COM_4_40_36						; 配置COM线数量
+	sta		LCD_COM
 
 	LCD_ON
 	jsr		F_ClearScreen						; 清屏
@@ -43,14 +42,18 @@ F_LCD_Init:
 
 
 F_Port_Init:
-	LDA		#$A4								; PA2\5\7作按键输入
-	STA		PA_WAKE
-	STA		PA_DIR
-	LDA		#$FF
-	STA		PA
+	lda		#$fc								; PA2~7作按键中断输入
+	sta		PA_WAKE
+	sta		PA_DIR
+	lda		#$FF
+	sta		PA
 	EN_PA_IRQ									; 打开PA口外部中断
 
-	PB3_PB3_COMS
+	PB3_PB3_COMS								; PB口作背光输出
+
+	lda		PC_DIR								; PC0/2~5作拨键输入
+	and		#$c2
+	sta		PC_DIR
 
 	rts
 

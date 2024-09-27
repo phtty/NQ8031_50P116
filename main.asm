@@ -26,21 +26,21 @@ STACK_BOT		EQU		FFH						;堆栈底部
 ;***************************************
 	.PROG										;程序开始
 V_RESET:
-	NOP
-	NOP
-	NOP
-	LDX		#STACK_BOT  
-	TXS											; 使用这个值初始化堆栈指针，这通常是为了设置堆栈的底部地址，确保程序运行中堆栈的正确使用。
-	LDA		#$B7								; #$07    
-	STA		SYSCLK								; 设置系统时钟
+	nop
+	nop
+	nop
+	ldx		#STACK_BOT  
+	txs											; 使用这个值初始化堆栈指针，这通常是为了设置堆栈的底部地址，确保程序运行中堆栈的正确使用。
+	lda		#$B7								; #$07    
+	sta		SYSCLK								; 设置系统时钟
 	ClrAllRam									; 清RAM
-	LDA		#$0
-	STA		DIVC								; 分频控制器，定时器与DICV异步
-	STA		IER									; 除能中断
-	STA		IFR									; 初始化中断标志位
-	STA		PB
-	LDA		FUSE
-	STA		MF0									;为内部RC振荡器提供校准数据
+	lda		#$0
+	sta		DIVC								; 分频控制器，定时器与DICV异步
+	sta		IER									; 除能中断
+	sta		IFR									; 初始化中断标志位
+	sta		PB
+	lda		FUSE
+	sta		MF0									;为内部RC振荡器提供校准数据
 
 	jsr		F_Beep_Init
 	jsr		L_Init_SystemRam_Prog				;初始化系统RAM并禁用所有断电保留的RAM
@@ -119,19 +119,19 @@ V_IRQ:
 	PHA
 	LDA		P_IER
 	AND		P_IFR
-	STA		R_Int_Backup	
+	sta		R_Int_Backup	
 
-	BBS6	R_Int_Backup,L_LcdIrq
-	BBS3	R_Int_Backup,L_Timer2Irq
-	BBS4	R_Int_Backup,L_PaIrp
-	BBS0	R_Int_Backup,L_DivIrq
-	BBS2	R_Int_Backup,L_Timer1Irq
-	BBS1	R_Int_Backup,L_Timer0Irq
-	BRA		L_EndIrq
+	bbs6	R_Int_Backup,L_LcdIrq
+	bbs3	R_Int_Backup,L_Timer2Irq
+	bbs4	R_Int_Backup,L_PaIrp
+	bbs0	R_Int_Backup,L_DivIrq
+	bbs2	R_Int_Backup,L_Timer1Irq
+	bbs1	R_Int_Backup,L_Timer0Irq
+	bra		L_EndIrq
 
 L_DivIrq:
 	CLR_DIV_IRQ_FLAG
-	BRA		L_EndIrq
+	bra		L_EndIrq
 
 L_Timer2Irq:
 	CLR_TMR2_IRQ_FLAG
@@ -150,12 +150,12 @@ L_Timer0Irq:
 	bra		L_EndIrq
 L_16Hz_Count_Out:
 	inc		Counter_16Hz
-	BRA		L_EndIrq
+	bra		L_EndIrq
 
 L_Timer1Irq:
 	CLR_TMR1_IRQ_FLAG
 	smb5	Timer_Flag
-	BRA		L_EndIrq
+	bra		L_EndIrq
 
 L_PaIrp:
 	CLR_KEY_IRQ_FLAG
@@ -167,7 +167,7 @@ L_PaIrp:
 
 	EN_LCD_IRQ
 
-	BRA		L_EndIrq
+	bra		L_EndIrq
 
 L_LcdIrq:
 	CLR_LCD_IRQ_FLAG
@@ -182,7 +182,7 @@ L_LCD_4Hz_Out:
 	inc		Counter_4Hz
 
 L_EndIrq:
-;	BBS3	IFR,L_Timer2Irq
+;	bbs3	IFR,L_Timer2Irq
 	PLA
 	RTI
 

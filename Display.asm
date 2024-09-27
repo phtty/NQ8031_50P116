@@ -1,36 +1,36 @@
 F_Display_Time:
     ; 调用显示函数显示当前时间
-	JSR 	F_ClearScreen
-    JSR 	L_DisTimer_Sec
-    JSR 	L_DisTimer_Min
-    RTS
+	jsr 	F_ClearScreen
+    jsr 	L_DisTimer_Sec
+    jsr 	L_DisTimer_Min
+    rts
 L_DisTimer_Sec:
-	LDA		R_Time_Sec
-	TAX
-	LDA		Table_Sec_DataDot,X
-	PHA
-	AND		#$0F
-	LDX		#lcd_d4
-	JSR		L_Dis_21Bit_DigitDot_Prog
-	PLA
-	JSR		L_ROR_4Bit_Prog
-	LDX		#lcd_d3
-	JSR		L_Dis_21Bit_DigitDot_Prog
-	RTS	
+	lda		R_Time_Sec
+	tax
+	lda		Table_Sec_DataDot,X
+	pha
+	and		#$0F
+	ldx		#lcd_d4
+	jsr		L_Dis_21Bit_DigitDot_Prog
+	pla
+	jsr		L_ROR_4Bit_Prog
+	ldx		#lcd_d3
+	jsr		L_Dis_21Bit_DigitDot_Prog
+	rts	
 L_DisTimer_Min:
-	LDA		R_Time_Min
-	TAX
-	LDA		Table_Min_DataDot,X
-	PHA
-	AND		#$0F
-	LDX		#lcd_d2
-	JSR		L_Dis_21Bit_DigitDot_Prog
-	PLA
-	AND		#$F0
-	JSR		L_ROR_4Bit_Prog
-	LDX		#lcd_d1
-	JSR		L_Dis_21Bit_DigitDot_Prog
-	RTS 
+	lda		R_Time_Min
+	tax
+	lda		Table_Min_DataDot,X
+	pha
+	and		#$0F
+	ldx		#lcd_d2
+	jsr		L_Dis_21Bit_DigitDot_Prog
+	pla
+	and		#$F0
+	jsr		L_ROR_4Bit_Prog
+	ldx		#lcd_d1
+	jsr		L_Dis_21Bit_DigitDot_Prog
+	rts 
 
 F_DisFrame_Sec_d4:
 	lda		R_Time_Sec
@@ -97,32 +97,32 @@ F_DisFrame_Min_d1:
 
 
 L_ROR_4Bit_Prog:
-	ROR		
-	ROR		
-	ROR		
-	ROR		
-	AND		#$0F
+	ror		
+	ror		
+	ror		
+	ror		
+	and		#$0F
 	
-	RTS
+	rts
 
 ;a = num
 L_Multi_24_Prog:
-	CLC									; 清除进位标志，确保进位为0
-	TAX									; 将A保存到X中
+	clc									; 清除进位标志，确保进位为0
+	tax									; 将A保存到X中
     ; 进行乘以 8 的操作
-	ROL									; A = A * 2
-	ROL									; A = A * 4
-	ROL									; A = A * 8
+	rol									; A = A * 2
+	rol									; A = A * 4
+	rol									; A = A * 8
 	STA		P_Temp+1
 	; 进行乘以 16 的操作
-	TXA									; 恢复X中的原始A值
-	CLC
-	ROL									; A = A * 2
-	ROL									; A = A * 4
-	ROL									; A = A * 8
-	ROL									; A = A * 16
-	CLC
-	ADC		P_Temp+1					; 乘24得到表中0-9数字
+	txa									; 恢复X中的原始A值
+	clc
+	rol									; A = A * 2
+	rol									; A = A * 4
+	rol									; A = A * 8
+	rol									; A = A * 16
+	clc
+	adc		P_Temp+1					; 乘24得到表中0-9数字
 	rts
 ;================================================
 ;********************************************	

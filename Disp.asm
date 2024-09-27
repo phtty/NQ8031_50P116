@@ -2,28 +2,37 @@
 ; LCD_RamAddr		.equ	0200H
 ;===========================================================
 F_FillScreen:
-	LDA		#FFH
-	BNE		L_FillLcd
+	lda		#$ff
+	bne		L_FillLcd
 F_ClearScreen:
-	LDA		#0
+	lda		#0
 L_FillLcd:
-	STA		1800H
-	STA		1801H
-	STA		1805H
-	STA		1806H
-	STA		1807H	
-	STA		180BH
-	STA		180CH	
-	STA		180DH
-	STA		1811H
-	STA		1812H
-	STA		1813H
-	STA		1817H
-	STA		1818H
-	STA		1819H
-	STA		181DH
+	sta		$1800
+	sta		$1801
+	sta		$1804
+	sta		$1805
+	sta		$1806
+	sta		$1807
+	sta		$180A
+	sta		$180B
+	sta		$180C
+	sta		$180D
+	sta		$1810
+	sta		$1811
+	sta		$1812
+	sta		$1813
+	sta		$1816
+	sta		$1817
+	sta		$1818
+	sta		$1819
+	sta		$181C
+	sta		$181D
+	sta		$181E
+	sta		$181F
+	sta		$1822
+	sta		$1823
 
-	RTS
+	rts
 ;===========================================================
 ;@brief		显示完整的一个数字
 ;@para:		A = 0~9
@@ -31,50 +40,50 @@ L_FillLcd:
 ;@impact:	P_Temp，P_Temp+1，P_Temp+2，P_Temp+3, P_Temp+4, P_Temp+5, X，A
 ;===========================================================
 L_Dis_21Bit_DigitDot_Prog:
-;	STA		P_Temp
-;	LDA		Table_Digit_Addr_Offset,X
-	STX		P_Temp+3					; 偏移量暂存进P_Temp+3, 腾出X来做变址寻址
-	STA		P_Temp						; 将显示的数字转换为内存偏移量
+;	sta		P_Temp
+;	lda		Table_Digit_Addr_Offset,X
+	stx		P_Temp+3					; 偏移量暂存进P_Temp+3, 腾出X来做变址寻址
+	sta		P_Temp						; 将显示的数字转换为内存偏移量
 	jsr		L_Multi_24_Prog				; 乘24得到正确的偏移量
 
-	TAX
-	LDA		Table_Digit_Anim,X			; 将显示的数字通过查表找到对应的段码存进A
-	STA		P_Temp						; 暂存低八位段码值到P_Temp
-	INX
-	LDA		Table_Digit_Anim,X			; 将显示的数字通过查表找到对应的段码存进A
-	STA		P_Temp+1					; 暂存段码中8位值到P_Temp+1
-	INX
-	LDA		Table_Digit_Anim,X			; 将显示的数字通过查表找到对应的段码存进A
-	STA		P_Temp+2					; 暂存高8位段码值到P_Temp+2
+	tax
+	lda		Table_Digit_Anim,X			; 将显示的数字通过查表找到对应的段码存进A
+	sta		P_Temp						; 暂存低八位段码值到P_Temp
+	inx
+	lda		Table_Digit_Anim,X			; 将显示的数字通过查表找到对应的段码存进A
+	sta		P_Temp+1					; 暂存段码中8位值到P_Temp+1
+	inx
+	lda		Table_Digit_Anim,X			; 将显示的数字通过查表找到对应的段码存进A
+	sta		P_Temp+2					; 暂存高8位段码值到P_Temp+2
 
-	LDX		P_Temp+3					; 将偏移量取回
-	STX		P_Temp+3					; 暂存偏移量到P_Temp+3
-	LDA		#21
-	STA		P_Temp+4					; 设置显示段数为21
+	ldx		P_Temp+3					; 将偏移量取回
+	stx		P_Temp+3					; 暂存偏移量到P_Temp+3
+	lda		#21
+	sta		P_Temp+4					; 设置显示段数为21
 L_Judge_Dis_21Bit_DigitDot:				; 显示循环的开始
-	LDX		P_Temp+3					; 取回偏移量作为索引
-	LDA		Lcd_bit,X					; 查表定位目标段的bit位
-	STA		P_Temp+5	
-	LDA		Lcd_byte,X					; 查表定位目标段的显存地址
-	TAX
-	ROR		P_Temp						; 循环右移取得目标段是亮或者灭
-	ROR		P_Temp+1
-	ROR		P_Temp+2
-	BCC		L_CLR						; 当前段的值若是0则进清点子程序
-	LDA		LCD_RamAddr,X				; 将目标段的显存的特定bit位置1来打亮
-	ORA		P_Temp+5
-	STA		LCD_RamAddr,X
-	BRA		L_Inc_Dis_Index_Prog		; 跳转到显示索引增加的子程序。
+	ldx		P_Temp+3					; 取回偏移量作为索引
+	lda		Lcd_bit,X					; 查表定位目标段的bit位
+	sta		P_Temp+5	
+	lda		Lcd_byte,X					; 查表定位目标段的显存地址
+	tax
+	ror		P_Temp						; 循环右移取得目标段是亮或者灭
+	ror		P_Temp+1
+	ror		P_Temp+2
+	bcc		L_CLR						; 当前段的值若是0则进清点子程序
+	lda		LCD_RamAddr,X				; 将目标段的显存的特定bit位置1来打亮
+	ora		P_Temp+5
+	sta		LCD_RamAddr,X
+	bra		L_Inc_Dis_Index_Prog		; 跳转到显示索引增加的子程序。
 L_CLR:	
-	LDA		LCD_RamAddr,X				; 加载LCD RAM的地址
-	ORA		P_Temp+5					; 将COM和SEG信息与LCD RAM地址进行逻辑或操作
-	EOR		P_Temp+5					; 进行异或操作，用于清除对应的段。
-	STA		LCD_RamAddr,X				; 将结果写回LCD RAM，清除对应位置。
+	lda		LCD_RamAddr,X				; 加载LCD RAM的地址
+	ora		P_Temp+5					; 将COM和SEG信息与LCD RAM地址进行逻辑或操作
+	eor		P_Temp+5					; 进行异或操作，用于清除对应的段。
+	sta		LCD_RamAddr,X				; 将结果写回LCD RAM，清除对应位置。
 L_Inc_Dis_Index_Prog:
-	INC		P_Temp+3					; 递增偏移量，处理下一个段
-	DEC		P_Temp+4					; 递减剩余要显示的段数
-	BNE		L_Judge_Dis_21Bit_DigitDot	; 剩余段数为0则返回
-	RTS
+	inc		P_Temp+3					; 递增偏移量，处理下一个段
+	dec		P_Temp+4					; 递减剩余要显示的段数
+	bne		L_Judge_Dis_21Bit_DigitDot	; 剩余段数为0则返回
+	rts
 
 ;-----------------------------------------
 ;@brief:	单独的画点、清点函数,一般用于MS显示
@@ -82,124 +91,124 @@ L_Inc_Dis_Index_Prog:
 ;@impact:	A, X, P_Temp+2
 ;-----------------------------------------
 F_DispSymbol:
-	JSR		F_DispSymbol_Com	
-	STA		LCD_RamAddr,X				; 画点
-	RTS
+	jsr		F_DispSymbol_Com	
+	sta		LCD_RamAddr,X				; 画点
+	rts
 
 F_ClrpSymbol:
-	JSR		F_DispSymbol_Com			; 清点
-	EOR		P_Temp+2
-	STA		LCD_RamAddr,X
-	RTS
+	jsr		F_DispSymbol_Com			; 清点
+	eor		P_Temp+2
+	sta		LCD_RamAddr,X
+	rts
 
 F_DispSymbol_Com:	
-	LDA		Lcd_bit,X					; 查表得知目标段的bit位
-	STA		P_Temp+2	
-	LDA		Lcd_byte,X					; 查表得知目标段的地址
-	TAX
-	LDA		LCD_RamAddr,X				; 将目标段的显存的特定bit位置1来打亮
-	ORA		P_Temp+2
-	RTS
+	lda		Lcd_bit,X					; 查表得知目标段的bit位
+	sta		P_Temp+2	
+	lda		Lcd_byte,X					; 查表得知目标段的地址
+	tax
+	lda		LCD_RamAddr,X				; 将目标段的显存的特定bit位置1来打亮
+	ora		P_Temp+2
+	rts
 
 ;============================================================
 
 L_Dis_21Bit_DigitFrame_Prog:
-	STX		P_Temp+3					; 偏移量暂存进P_Temp+3, 腾出X来做变址寻址
-	STA		P_Temp						; 将显示的数字转换为内存偏移量
-	CLC
-	ROL
-	CLC
-	ADC		P_Temp
+	stx		P_Temp+3					; 偏移量暂存进P_Temp+3, 腾出X来做变址寻址
+	sta		P_Temp						; 将显示的数字转换为内存偏移量
+	clc
+	rol
+	clc
+	adc		P_Temp
 
-	TAX
-	LDA		Table_Digit_Anim,X			; 将显示的数字通过查表找到对应的段码存进A
-	STA		P_Temp						; 暂存低八位段码值到P_Temp
-	INX
-	LDA		Table_Digit_Anim,X			; 将显示的数字通过查表找到对应的段码存进A
-	STA		P_Temp+1					; 暂存段码中8位值到P_Temp+1
-	INX
-	LDA		Table_Digit_Anim,X			; 将显示的数字通过查表找到对应的段码存进A
-	STA		P_Temp+2					; 暂存高8位段码值到P_Temp+2
+	tax
+	lda		Table_Digit_Anim,X			; 将显示的数字通过查表找到对应的段码存进A
+	sta		P_Temp						; 暂存低八位段码值到P_Temp
+	inx
+	lda		Table_Digit_Anim,X			; 将显示的数字通过查表找到对应的段码存进A
+	sta		P_Temp+1					; 暂存段码中8位值到P_Temp+1
+	inx
+	lda		Table_Digit_Anim,X			; 将显示的数字通过查表找到对应的段码存进A
+	sta		P_Temp+2					; 暂存高8位段码值到P_Temp+2
 
-	LDX		P_Temp+3					; 将偏移量取回
+	ldx		P_Temp+3					; 将偏移量取回
 
-	STX		P_Temp+3					; 暂存偏移量到P_Temp+3
-	LDA		#21
-	STA		P_Temp+4					; 设置显示段数为21
+	stx		P_Temp+3					; 暂存偏移量到P_Temp+3
+	lda		#21
+	sta		P_Temp+4					; 设置显示段数为21
 L_Judge_Dis_21Bit_DigitFrame:				; 显示循环的开始
-	LDX		P_Temp+3					; 取回偏移量作为索引
-	LDA		Lcd_bit,X					; 查表定位目标段的bit位
-	STA		P_Temp+5	
-	LDA		Lcd_byte,X					; 查表定位目标段的显存地址
-	TAX
-	ROR		P_Temp						; 循环右移取得目标段是亮或者灭
-	ROR		P_Temp+1
-	ROR		P_Temp+2
-	BCC		L_CLR_Frame					; 当前段的值若是0则进清点子程序
-	LDA		LCD_RamAddr,X				; 将目标段的显存的特定bit位置1来打亮
-	ORA		P_Temp+5
-	STA		LCD_RamAddr,X
-	BRA		L_Inc_Dis_FrameIndex_Prog		; 跳转到显示索引增加的子程序。
+	ldx		P_Temp+3					; 取回偏移量作为索引
+	lda		Lcd_bit,X					; 查表定位目标段的bit位
+	sta		P_Temp+5	
+	lda		Lcd_byte,X					; 查表定位目标段的显存地址
+	tax
+	ror		P_Temp						; 循环右移取得目标段是亮或者灭
+	ror		P_Temp+1
+	ror		P_Temp+2
+	bcc		L_CLR_Frame					; 当前段的值若是0则进清点子程序
+	lda		LCD_RamAddr,X				; 将目标段的显存的特定bit位置1来打亮
+	ora		P_Temp+5
+	sta		LCD_RamAddr,X
+	bra		L_Inc_Dis_FrameIndex_Prog		; 跳转到显示索引增加的子程序。
 L_CLR_Frame:	
-	LDA		LCD_RamAddr,X				; 加载LCD RAM的地址
-	ORA		P_Temp+5					; 将COM和SEG信息与LCD RAM地址进行逻辑或操作
-	EOR		P_Temp+5					; 进行异或操作，用于清除对应的段。
-	STA		LCD_RamAddr,X				; 将结果写回LCD RAM，清除对应位置。
+	lda		LCD_RamAddr,X				; 加载LCD RAM的地址
+	ora		P_Temp+5					; 将COM和SEG信息与LCD RAM地址进行逻辑或操作
+	eor		P_Temp+5					; 进行异或操作，用于清除对应的段。
+	sta		LCD_RamAddr,X				; 将结果写回LCD RAM，清除对应位置。
 L_Inc_Dis_FrameIndex_Prog:
-	INC		P_Temp+3					; 递增偏移量，处理下一个段
-	DEC		P_Temp+4					; 递减剩余要显示的段数
-	BNE		L_Judge_Dis_21Bit_DigitFrame	; 剩余段数为0则返回
-	RTS
+	inc		P_Temp+3					; 递增偏移量，处理下一个段
+	dec		P_Temp+4					; 递减剩余要显示的段数
+	bne		L_Judge_Dis_21Bit_DigitFrame	; 剩余段数为0则返回
+	rts
 
 ;================================================================================
 
 L_Dis_21Bit_DigitFrame_Prog_1:
-	STX		P_Temp+3					; 偏移量暂存进P_Temp+3, 腾出X来做变址寻址
-	STA		P_Temp						; 将显示的数字转换为内存偏移量
-	CLC
-	ROL
-	CLC
-	ADC		P_Temp
+	stx		P_Temp+3					; 偏移量暂存进P_Temp+3, 腾出X来做变址寻址
+	sta		P_Temp						; 将显示的数字转换为内存偏移量
+	clc
+	rol
+	clc
+	adc		P_Temp
 
-	TAX
-	LDA		Table_Digit_Anim_2,X		; 将显示的数字通过查表找到对应的段码存进A
-	STA		P_Temp						; 暂存低八位段码值到P_Temp
-	INX
-	LDA		Table_Digit_Anim_2,X			; 将显示的数字通过查表找到对应的段码存进A
-	STA		P_Temp+1					; 暂存段码中8位值到P_Temp+1
-	INX
-	LDA		Table_Digit_Anim_2,X			; 将显示的数字通过查表找到对应的段码存进A
-	STA		P_Temp+2					; 暂存高8位段码值到P_Temp+2
+	tax
+	lda		Table_Digit_Anim_2,X		; 将显示的数字通过查表找到对应的段码存进A
+	sta		P_Temp						; 暂存低八位段码值到P_Temp
+	inx
+	lda		Table_Digit_Anim_2,X			; 将显示的数字通过查表找到对应的段码存进A
+	sta		P_Temp+1					; 暂存段码中8位值到P_Temp+1
+	inx
+	lda		Table_Digit_Anim_2,X			; 将显示的数字通过查表找到对应的段码存进A
+	sta		P_Temp+2					; 暂存高8位段码值到P_Temp+2
 
-	LDX		P_Temp+3					; 将偏移量取回
+	ldx		P_Temp+3					; 将偏移量取回
 
-	STX		P_Temp+3					; 暂存偏移量到P_Temp+3
-	LDA		#21
-	STA		P_Temp+4					; 设置显示段数为21
+	stx		P_Temp+3					; 暂存偏移量到P_Temp+3
+	lda		#21
+	sta		P_Temp+4					; 设置显示段数为21
 L_Judge_Dis_21Bit_DigitFrame_1:				; 显示循环的开始
-	LDX		P_Temp+3					; 取回偏移量作为索引
-	LDA		Lcd_bit,X					; 查表定位目标段的bit位
-	STA		P_Temp+5	
-	LDA		Lcd_byte,X					; 查表定位目标段的显存地址
-	TAX
-	ROR		P_Temp						; 循环右移取得目标段是亮或者灭
-	ROR		P_Temp+1
-	ROR		P_Temp+2
-	BCC		L_CLR_Frame_1				; 当前段的值若是0则进清点子程序
-	LDA		LCD_RamAddr,X				; 将目标段的显存的特定bit位置1来打亮
-	ORA		P_Temp+5
-	STA		LCD_RamAddr,X
-	BRA		L_Inc_Dis_FrameIndex_Prog_1	; 跳转到显示索引增加的子程序。
+	ldx		P_Temp+3					; 取回偏移量作为索引
+	lda		Lcd_bit,X					; 查表定位目标段的bit位
+	sta		P_Temp+5	
+	lda		Lcd_byte,X					; 查表定位目标段的显存地址
+	tax
+	ror		P_Temp						; 循环右移取得目标段是亮或者灭
+	ror		P_Temp+1
+	ror		P_Temp+2
+	bcc		L_CLR_Frame_1				; 当前段的值若是0则进清点子程序
+	lda		LCD_RamAddr,X				; 将目标段的显存的特定bit位置1来打亮
+	ora		P_Temp+5
+	sta		LCD_RamAddr,X
+	bra		L_Inc_Dis_FrameIndex_Prog_1	; 跳转到显示索引增加的子程序。
 L_CLR_Frame_1:	
-	LDA		LCD_RamAddr,X				; 加载LCD RAM的地址
-	ORA		P_Temp+5					; 将COM和SEG信息与LCD RAM地址进行逻辑或操作
-	EOR		P_Temp+5					; 进行异或操作，用于清除对应的段。
-	STA		LCD_RamAddr,X				; 将结果写回LCD RAM，清除对应位置。
+	lda		LCD_RamAddr,X				; 加载LCD RAM的地址
+	ora		P_Temp+5					; 将COM和SEG信息与LCD RAM地址进行逻辑或操作
+	eor		P_Temp+5					; 进行异或操作，用于清除对应的段。
+	sta		LCD_RamAddr,X				; 将结果写回LCD RAM，清除对应位置。
 L_Inc_Dis_FrameIndex_Prog_1:
-	INC		P_Temp+3					; 递增偏移量，处理下一个段
-	DEC		P_Temp+4					; 递减剩余要显示的段数
-	BNE		L_Judge_Dis_21Bit_DigitFrame_1	; 剩余段数为0则返回
-	RTS
+	inc		P_Temp+3					; 递增偏移量，处理下一个段
+	dec		P_Temp+4					; 递减剩余要显示的段数
+	bne		L_Judge_Dis_21Bit_DigitFrame_1	; 剩余段数为0则返回
+	rts
 
 ;============================================================
 
