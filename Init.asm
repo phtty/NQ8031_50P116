@@ -1,4 +1,4 @@
-L_Init_SystemRam_Prog:							; ϵͳ��ʼ��
+L_Init_SystemRam_Prog:							; 系统初始化
 	lda		#0
 	sta		Key_Flag
 	sta		Beep_Serial
@@ -25,52 +25,51 @@ L_Init_SystemRam_Prog:							; ϵͳ��ʼ��
 
 
 F_LCD_Init:
-	jsr		F_ClearScreen						; LCD��ʼ��
+	jsr		F_ClearScreen						; LCD初始化
 	CHECK_LCD
 
-	PC45_SEG									; ����IO��ΪSEG��ģʽ
+	PC45_SEG									; 配置IO口为SEG线模式
 	PC67_SEG
 	PD03_SEG
 	PD47_SEG
 
-	RMB0	LCD_COM								; ����COM������
+	RMB0	LCD_COM								; 配置COM线数量
 	SMB1	LCD_COM
 
 	LCD_ON
-	jsr		F_ClearScreen						; ����
+	jsr		F_ClearScreen						; 清屏
 
 	rts
 
 
 F_Port_Init:
-	LDA		#$A4								; PA2\5\7����������
+	LDA		#$A4								; PA2\5\7作按键输入
 	STA		PA_WAKE
 	STA		PA_DIR
 	LDA		#$FF
 	STA		PA
-	EN_PA_IRQ									; ��PA���ⲿ�ж�
+	EN_PA_IRQ									; 打开PA口外部中断
 
-	PB2_PWM
 	PB3_PB3_COMS
 
 	rts
 
 
 F_Timer_Init:
-	TMR1_CLK_512Hz								; TIM1ʱ��ԴFsub/64(512Hz)
-	TMR0_CLK_FSUB								; TIM0ʱ��ԴFsub(32768Hz)
-	DIV_256HZ									; DIV��Ƶ512Hz
+	TMR1_CLK_512Hz								; TIM1时钟源Fsub/64(512Hz)
+	TMR0_CLK_FSUB								; TIM0时钟源Fsub(32768Hz)
+	DIV_256HZ									; DIV分频512Hz
 
-	lda		#$0									; ��װ�ؼ�������Ϊ0
+	lda		#$0									; 重装载计数设置为0
 	sta		TMR0
 	sta		TMR2
 
 	lda		#$ef
 	sta		TMR1
 
-	rmb6	DIVC								; �رն�ʱ��ͬ��
+	rmb6	DIVC								; 关闭定时器同步
 
-	EN_TMR1_IRQ									; ����ʱ���ж�
+	EN_TMR1_IRQ									; 开定时器终端
 	EN_TMR2_IRQ
 	EN_TMR0_IRQ
 	TMR0_OFF
@@ -81,7 +80,7 @@ F_Timer_Init:
 
 
 F_Beep_Init:
-	TONE_2KHZ									; ���÷���������Ƶ��
+	TONE_2KHZ									; 配置蜂鸣音调频率
 	lda		#$0
 	sta		AUDCR
 	lda		#$ff

@@ -1,7 +1,7 @@
 F_Sec_Pos_Counter:
 	lda		Timer_Flag
 	and		#$81
-	cmp		#$81								; ½ø¶¯»­ĞèÒªÍ¬Ê±Âú×ãÓĞ°ëÃëºÍÓĞ16Hz±êÖ¾
+	cmp		#$81								; è¿›åŠ¨ç”»éœ€è¦åŒæ—¶æ»¡è¶³æœ‰åŠç§’å’Œæœ‰16Hzæ ‡å¿—
 	beq		Count_Start_Pos
 	rts
 
@@ -11,24 +11,24 @@ Count_Start_Pos:
 	lda		R_Time_Sec
 	cmp		#59
 	bne		Set_CarryFlag_Out
-	smb2	Frame_Flag							; ÖÃ½è(½ø)Î»·¢Éú±êÖ¾
+	smb2	Frame_Flag							; ç½®å€Ÿ(è¿›)ä½å‘ç”Ÿæ ‡å¿—
 Set_CarryFlag_Out:
-	bbr2	Frame_Flag,Carry_Out				; ÅĞ¶ÏÊÇ·ñ´æÔÚ·ÖÖÓ½øÎ»
+	bbr2	Frame_Flag,Carry_Out				; åˆ¤æ–­æ˜¯å¦å­˜åœ¨åˆ†é’Ÿè¿›ä½
 	bra		L_CarryToMin
 Carry_Out:
-	jsr		F_DisFrame_Sec_d4					; sec¸öÎ»×ßÊ±¶¯»­
+	jsr		F_DisFrame_Sec_d4					; secä¸ªä½èµ°æ—¶åŠ¨ç”»
 
-	lda		R_Time_Sec							; ¼ì²âsecÊ®Î»ÓĞÎŞ½øÎ»
+	lda		R_Time_Sec							; æ£€æµ‹secåä½æœ‰æ— è¿›ä½
 	clc
-	adc		#$01								; ÅĞ¶ÏÏÂ1SĞè²»ĞèÒª×ßÊ®Î»
+	adc		#$01								; åˆ¤æ–­ä¸‹1Séœ€ä¸éœ€è¦èµ°åä½
 	jsr		F_DivideBy10
-	cmp		#0									; ÉÌÎª0ÔòÒ»¶¨ÎŞÊ®Î»£¬Ê®Î»²»×ßÊ±
+	cmp		#0									; å•†ä¸º0åˆ™ä¸€å®šæ— åä½ï¼Œåä½ä¸èµ°æ—¶
 	beq		L_Sec_D3_Out
-	lda		P_Temp								; ÓàÊı²»Îª0Ò²²»¸üĞÂÊ®Î»
+	lda		P_Temp								; ä½™æ•°ä¸ä¸º0ä¹Ÿä¸æ›´æ–°åä½
 	cmp		#0
 	bne		L_Sec_D3_Out
 
-	jsr		F_DisFrame_Sec_d3					; secÊ®Î»×ßÊ±¶¯»­
+	jsr		F_DisFrame_Sec_d3					; secåä½èµ°æ—¶åŠ¨ç”»
 
 L_Sec_D3_Out:
 	lda		Frame_Counter
@@ -38,14 +38,14 @@ L_Sec_D3_Out:
 	ldx		#lcd_MS
 	jsr		F_ClrpSymbol
 
-	rmb7	Timer_Flag							; Çå16Hz£¬±ÜÃâÖØ¸´²¥¶¯»­
+	rmb7	Timer_Flag							; æ¸…16Hzï¼Œé¿å…é‡å¤æ’­åŠ¨ç”»
 
 	rts
 
 L_Sec_Pos_Out:
-	rmb0	Timer_Flag							; ¶¯»­×ßÍê¼´Îªºó°ëS
-	rmb7	Timer_Flag							; Çå³ıÏà¹Ø±êÖ¾Î»±ÜÃâ´íÎó½øÈë
-	inc		R_Time_Sec							; ÔöÃë·ÅÔÚ¶¯»­Íê³É²¿·Ö±£Ö¤Ö»Ôö1´Î
+	rmb0	Timer_Flag							; åŠ¨ç”»èµ°å®Œå³ä¸ºååŠS
+	rmb7	Timer_Flag							; æ¸…é™¤ç›¸å…³æ ‡å¿—ä½é¿å…é”™è¯¯è¿›å…¥
+	inc		R_Time_Sec							; å¢ç§’æ”¾åœ¨åŠ¨ç”»å®Œæˆéƒ¨åˆ†ä¿è¯åªå¢1æ¬¡
 	ldx		#lcd_MS
 	jsr		F_DispSymbol
 	lda		#0
@@ -59,23 +59,23 @@ L_CarryToMin:
 
 	lda		R_Time_Min
 	cmp		#99
-	beq		L_Time_Overflow						; ¼Æµ½99:59Í£Ö¹
+	beq		L_Time_Overflow						; è®¡åˆ°99:59åœæ­¢
 
-	jsr		F_DisFrame_Sec_d4					; Sec¸öÎ»×ßÊ±
-	jsr		F_DisFrame_Sec_d3					; SecÊ®Î»×ßÊ±
-	jsr		F_DisFrame_Min_d2					; Min¸öÎ»×ßÊ±
+	jsr		F_DisFrame_Sec_d4					; Secä¸ªä½èµ°æ—¶
+	jsr		F_DisFrame_Sec_d3					; Secåä½èµ°æ—¶
+	jsr		F_DisFrame_Min_d2					; Minä¸ªä½èµ°æ—¶
 
-	lda		R_Time_Min							; ¼ì²âMinÊ®Î»ÓĞÎŞ½øÎ»
+	lda		R_Time_Min							; æ£€æµ‹Minåä½æœ‰æ— è¿›ä½
 	clc
-	adc		#$01								; ÅĞ¶ÏÏÂ1MinĞè²»ĞèÒª×ßÊ®Î»
-	jsr		F_DivideBy10						; ³ı10ÅĞ¶ÏÊ®Î»ÊÇ·ñĞèÒª¶¯»­
+	adc		#$01								; åˆ¤æ–­ä¸‹1Minéœ€ä¸éœ€è¦èµ°åä½
+	jsr		F_DivideBy10						; é™¤10åˆ¤æ–­åä½æ˜¯å¦éœ€è¦åŠ¨ç”»
 	cmp		#0
 	beq		L_Min_D1_Out_Pos
 	lda		P_Temp
 	cmp		#0
 	bne		L_Min_D1_Out_Pos
 
-	jsr		F_DisFrame_Min_d1					; MinÊ®Î»×ßÊ±¶¯»­
+	jsr		F_DisFrame_Min_d1					; Minåä½èµ°æ—¶åŠ¨ç”»
 
 L_Min_D1_Out_Pos:
 	lda		Frame_Counter
@@ -86,13 +86,13 @@ L_Min_D1_Out_Pos:
 	rts
 
 L_Min_Pos_Out:
-	rmb2	Frame_Flag							; ½øÎ»¶¯»­²¥·ÅÍê±Ï
-	rmb0	Timer_Flag							; Çå³ıÏà¹ØµÄ±êÖ¾Î»
+	rmb2	Frame_Flag							; è¿›ä½åŠ¨ç”»æ’­æ”¾å®Œæ¯•
+	rmb0	Timer_Flag							; æ¸…é™¤ç›¸å…³çš„æ ‡å¿—ä½
 	rmb7	Timer_Flag
 
 	lda		#$00
-	sta		R_Time_Sec							; Çå¿ÕÃëÊı
-	inc		R_Time_Min							; Ôö·Ö
+	sta		R_Time_Sec							; æ¸…ç©ºç§’æ•°
+	inc		R_Time_Min							; å¢åˆ†
 
 	ldx		#lcd_MS
 	jsr		F_DispSymbol
@@ -101,19 +101,19 @@ L_Min_Pos_Out:
 	rts
 
 L_Time_Overflow:
-	lda		#$1100B								; Õı¼ÆÊ±Íê³ÉÔò»Øµ½µ¹¼ÆÊ±ÔİÍ£
+	lda		#$1100B								; æ­£è®¡æ—¶å®Œæˆåˆ™å›åˆ°å€’è®¡æ—¶æš‚åœ
 	sta		Sys_Status_Flag
-	TMR0_OFF									; ÔİÍ£Ì¬²»ĞèÒªÊ±ÖÓ
+	TMR0_OFF									; æš‚åœæ€ä¸éœ€è¦æ—¶é’Ÿ
 	TMR2_OFF
 	lda		#99
 	sta		R_Time_Min
 	lda		#59
 	sta		R_Time_Sec
 
-	smb0	Overflow_Flag						; ÖÃÎ»Õı¼ÆÊ±Òç³ö±êÖ¾Î»
+	smb0	Overflow_Flag						; ç½®ä½æ­£è®¡æ—¶æº¢å‡ºæ ‡å¿—ä½
 
 	lda		#$00
-	sta		Frame_Flag							; ¸´Î»Ïà¹Ø±êÖ¾Î»
+	sta		Frame_Flag							; å¤ä½ç›¸å…³æ ‡å¿—ä½
 	rmb0	Timer_Flag
 	rmb7	Timer_Flag
 
@@ -122,17 +122,17 @@ L_Time_Overflow:
 
 
 F_DivideBy10:
-	ldx		#0									; ³õÊ¼»¯X¼Ä´æÆ÷Îª0
-	sta		P_Temp								; ÁÙÊ±±£´æÓàÊı
+	ldx		#0									; åˆå§‹åŒ–Xå¯„å­˜å™¨ä¸º0
+	sta		P_Temp								; ä¸´æ—¶ä¿å­˜ä½™æ•°
 DivideBy10:
-	cmp		#10									; ¼ì²éAÊÇ·ñ´óÓÚµÈÓÚ10
-	bcc		Done								; Èç¹ûAĞ¡ÓÚ10£¬Ìø×ªDone
-	sec											; ÉèÖÃ½øÎ»£¬×¼±¸¼õ·¨
+	cmp		#10									; æ£€æŸ¥Aæ˜¯å¦å¤§äºç­‰äº10
+	bcc		Done								; å¦‚æœAå°äº10ï¼Œè·³è½¬Done
+	sec											; è®¾ç½®è¿›ä½ï¼Œå‡†å¤‡å‡æ³•
 	sbc		#10									; A=A-10
-	inx											; X=X+1¼ÆËãÉÌ
-	bra		DivideBy10							; Èç¹ûÃ»ÓĞ½èÎ»¾Í¼ÌĞøÑ­»·
+	inx											; X=X+1è®¡ç®—å•†
+	bra		DivideBy10							; å¦‚æœæ²¡æœ‰å€Ÿä½å°±ç»§ç»­å¾ªç¯
 Done:
-	sta		P_Temp								; ÓàÊı
+	sta		P_Temp								; ä½™æ•°
 	txa
 	rts
 
@@ -141,63 +141,63 @@ Done:
 
 
 
-; µ¹¼ÆÊ±²¿·Ö
+; å€’è®¡æ—¶éƒ¨åˆ†
 F_Sec_Des_Counter:
-	bbs0	Timer_Flag, Is_Frame_Come_Des		; °ëÃëÎª1Ê±£¬ÅĞ¶ÏÖ¡¼ÆÊ±
+	bbs0	Timer_Flag, Is_Frame_Come_Des		; åŠç§’ä¸º1æ—¶ï¼Œåˆ¤æ–­å¸§è®¡æ—¶
 	rts
-; ÅĞ¶ÏÊÇ·ñĞèÒª¼õÊ±£¬»¹ÊÇµ¥´¿µÄ¶¯»­Ö¡
+; åˆ¤æ–­æ˜¯å¦éœ€è¦å‡æ—¶ï¼Œè¿˜æ˜¯å•çº¯çš„åŠ¨ç”»å¸§
 Is_Frame_Come_Des:
-	bbr1	Timer_Flag,Add_Sec_Out_Des			; ÓĞ×ßÊ±±êÖ¾Ôò¼õÊ±
+	bbr1	Timer_Flag,Add_Sec_Out_Des			; æœ‰èµ°æ—¶æ ‡å¿—åˆ™å‡æ—¶
 	dec		R_Time_Sec
-	rmb1	Timer_Flag							; ¶¯»­·Å8Ö¡£¬¼õÃëÖ»¼õÒ»´Î
-; Ã»ÓĞ16HzÔò²»½ø¶¯»­
+	rmb1	Timer_Flag							; åŠ¨ç”»æ”¾8å¸§ï¼Œå‡ç§’åªå‡ä¸€æ¬¡
+; æ²¡æœ‰16Hzåˆ™ä¸è¿›åŠ¨ç”»
 Add_Sec_Out_Des:
 	bbs7	Timer_Flag, Count_Start_Des
 	rts
 
 Count_Start_Des:
-	dec		Frame_Counter						; Ö¡¼ÆÊı
-	lda		R_Time_Sec							; ÅĞ¶ÏÊÇ·ñ´æÔÚ·ÖÖÓ½èÎ»
+	dec		Frame_Counter						; å¸§è®¡æ•°
+	lda		R_Time_Sec							; åˆ¤æ–­æ˜¯å¦å­˜åœ¨åˆ†é’Ÿå€Ÿä½
 	clc
 	adc		#$01
 	cmp		#$00
-	bne		Set_BorrowFlag_Out					; ÖÃ½è(½ø)Î»·¢Éú±êÖ¾
+	bne		Set_BorrowFlag_Out					; ç½®å€Ÿ(è¿›)ä½å‘ç”Ÿæ ‡å¿—
 	smb2	Frame_Flag
 Set_BorrowFlag_Out:
 	bbr2	Frame_Flag,Borrow_Out
 	bra		L_BorrowToMin
 Borrow_Out:
-	jsr		F_DisFrame_Sec_d4					; sec¸öÎ»×ßÊ±¶¯»­
+	jsr		F_DisFrame_Sec_d4					; secä¸ªä½èµ°æ—¶åŠ¨ç”»
 
-	lda		R_Time_Sec							; ¼ì²âsecÊ®Î»ÓĞÎŞ½èÎ»
+	lda		R_Time_Sec							; æ£€æµ‹secåä½æœ‰æ— å€Ÿä½
 	clc
-	adc		#$01								; ÏÈ¼õÃëÔÙ½ø¶¯»­£¬Ğè²¹³¥1Ãë
+	adc		#$01								; å…ˆå‡ç§’å†è¿›åŠ¨ç”»ï¼Œéœ€è¡¥å¿1ç§’
 	jsr		F_DivideBy10
-	cmp		#0									; ÉÌÎª0ÔòÒ»¶¨ÎŞÊ®Î»£¬Ê®Î»²»×ßÊ±
+	cmp		#0									; å•†ä¸º0åˆ™ä¸€å®šæ— åä½ï¼Œåä½ä¸èµ°æ—¶
 	beq		L_Sec_D3_Out_Des
-	lda		P_Temp								; ÓàÊı²»Îª0Ò²²»¸üĞÂÊ®Î»
+	lda		P_Temp								; ä½™æ•°ä¸ä¸º0ä¹Ÿä¸æ›´æ–°åä½
 	cmp		#0
 	bne		L_Sec_D3_Out_Des
 
-	jsr		F_DisFrame_Sec_d3					; secÊ®Î»×ßÊ±¶¯»­
+	jsr		F_DisFrame_Sec_d3					; secåä½èµ°æ—¶åŠ¨ç”»
 
 
 L_Sec_D3_Out_Des:
-	lda		Frame_Counter						; µÚ8Ö¡ÖØÖÃÖ¡¼ÆÊı
+	lda		Frame_Counter						; ç¬¬8å¸§é‡ç½®å¸§è®¡æ•°
 	cmp		#$0
 	beq		L_Sec_Des_Out
 
 	ldx		#lcd_MS
-	jsr		F_ClrpSymbol						; Ã»×ßÍê¶¯»­ÔòÏ¨ÃğMS
+	jsr		F_ClrpSymbol						; æ²¡èµ°å®ŒåŠ¨ç”»åˆ™ç†„ç­MS
 
-	rmb7	Timer_Flag							; Çå16Hz£¬±ÜÃâÖØ¸´²¥¶¯»­
+	rmb7	Timer_Flag							; æ¸…16Hzï¼Œé¿å…é‡å¤æ’­åŠ¨ç”»
 
 	rts
 
 L_Sec_Des_Out:
-	rmb0	Timer_Flag							; ¶¯»­×ßÍê¼´Îªºó°ëS
-	rmb7	Timer_Flag							; Í¬ÑùÇå16Hz
-	ldx		#lcd_MS								; ÁÁMS²¢ÖØÖÃÖ¡¼ÆÊı
+	rmb0	Timer_Flag							; åŠ¨ç”»èµ°å®Œå³ä¸ºååŠS
+	rmb7	Timer_Flag							; åŒæ ·æ¸…16Hz
+	ldx		#lcd_MS								; äº®MSå¹¶é‡ç½®å¸§è®¡æ•°
 	jsr		F_DispSymbol
 	lda		#$8
 	sta		Frame_Counter
@@ -207,7 +207,7 @@ L_Sec_Des_rts:
 
 L_BorrowToMin:
 	smb2	Frame_Flag
-	bbs1	Frame_Flag,Dec_Once_Min				; ½èÎ»·ÖÖÓ£¬¶¯»­8Ö¡µ«¼õ·ÖÖ»¼õ1´Î
+	bbs1	Frame_Flag,Dec_Once_Min				; å€Ÿä½åˆ†é’Ÿï¼ŒåŠ¨ç”»8å¸§ä½†å‡åˆ†åªå‡1æ¬¡
 	dec		R_Time_Min
 	lda		#59
 	sta		R_Time_Sec
@@ -217,26 +217,26 @@ Dec_Once_Min:
 	clc
 	adc		#$01
 	cmp		#$00
-	beq		L_Time_Stop							; ¼Æµ½00:00Í£Ö¹
+	beq		L_Time_Stop							; è®¡åˆ°00:00åœæ­¢
 
-	jsr		F_DisFrame_Sec_d4					; Sec¸öÎ»×ßÊ±
-	jsr		F_DisFrame_Sec_d3					; SecÊ®Î»×ßÊ±
-	jsr		F_DisFrame_Min_d2					; Min¸öÎ»×ßÊ±
+	jsr		F_DisFrame_Sec_d4					; Secä¸ªä½èµ°æ—¶
+	jsr		F_DisFrame_Sec_d3					; Secåä½èµ°æ—¶
+	jsr		F_DisFrame_Min_d2					; Minä¸ªä½èµ°æ—¶
 
-	lda		R_Time_Min							; ¼ì²âMinÊ®Î»ÓĞÎŞ½èÎ»
+	lda		R_Time_Min							; æ£€æµ‹Minåä½æœ‰æ— å€Ÿä½
 	clc
 	adc		#$01
-	jsr		F_DivideBy10						; ³ı10ÅĞ¶ÏÊ®Î»ÊÇ·ñĞèÒª¶¯»­
+	jsr		F_DivideBy10						; é™¤10åˆ¤æ–­åä½æ˜¯å¦éœ€è¦åŠ¨ç”»
 	cmp		#0
 	beq		L_Min_D1_Out_Des
 	lda		P_Temp
 	cmp		#0
 	bne		L_Min_D1_Out_Des
 
-	jsr		F_DisFrame_Min_d1					; MinÊ®Î»×ßÊ±¶¯»­
+	jsr		F_DisFrame_Min_d1					; Minåä½èµ°æ—¶åŠ¨ç”»
 
 L_Min_D1_Out_Des:
-	lda		Frame_Counter						; ÓĞ¶¯»­¾ÍÏ¨ÃğMS
+	lda		Frame_Counter						; æœ‰åŠ¨ç”»å°±ç†„ç­MS
 	cmp		#$0
 	beq		L_Min_Des_Out
 	ldx		#lcd_MS
@@ -244,21 +244,21 @@ L_Min_D1_Out_Des:
 	rts
 
 L_Min_Des_Out:
-	rmb1	Frame_Flag							; ¼õ·Ö±êÖ¾Î»
-	rmb2	Frame_Flag							; ½è(½ø)Î»±êÖ¾Î»
-	ldx		#lcd_MS								; ÖØÖÃÖ¡¼ÆÊı
-	jsr		F_DispSymbol						; ÎŞ¶¯»­¾ÍÁÁMS
+	rmb1	Frame_Flag							; å‡åˆ†æ ‡å¿—ä½
+	rmb2	Frame_Flag							; å€Ÿ(è¿›)ä½æ ‡å¿—ä½
+	ldx		#lcd_MS								; é‡ç½®å¸§è®¡æ•°
+	jsr		F_DispSymbol						; æ— åŠ¨ç”»å°±äº®MS
 	lda		#$8
 	sta		Frame_Counter
 	rts
 
 L_Time_Stop:
-	lda		#10000B								; µ¹¼ÆÊ±Íê³ÉÔò½øÈëµ¹¼ÆÊ±Íê³ÉÌ¬½øĞĞÏìÁå
+	lda		#10000B								; å€’è®¡æ—¶å®Œæˆåˆ™è¿›å…¥å€’è®¡æ—¶å®Œæˆæ€è¿›è¡Œå“é“ƒ
 	sta		Sys_Status_Flag
-	TMR0_OFF									; ÏÈ²»¹ØTime2£¬µ¹¼ÆÊ±Íê³ÉÌ¬Ò²ĞèÒªÓÃËü¼Æ30S
+	TMR0_OFF									; å…ˆä¸å…³Time2ï¼Œå€’è®¡æ—¶å®Œæˆæ€ä¹Ÿéœ€è¦ç”¨å®ƒè®¡30S
 	
 	lda		#$00
-	sta		Frame_Flag							; ¸´Î»Ïà¹Ø±êÖ¾Î»
+	sta		Frame_Flag							; å¤ä½ç›¸å…³æ ‡å¿—ä½
 	sta		R_Time_Min
 	sta		R_Time_Sec
 	rmb0	Timer_Flag
@@ -269,29 +269,29 @@ L_Time_Stop:
 
 
 F_Des_Counter_Finish:
-	bbs0	Timer_Flag,Beep_Start				; Ã¿¸ô1Ãë½øÒ»´Î
+	bbs0	Timer_Flag,Beep_Start				; æ¯éš”1ç§’è¿›ä¸€æ¬¡
 	rts
 Beep_Start:
 	lda		CC2
 	cmp		#29
 	beq		Finish_Time_Out
 
-	lda		#01001001B							; ÉèÖÃÏìÁåĞòÁĞ
+	lda		#01001001B							; è®¾ç½®å“é“ƒåºåˆ—
 	sta		Beep_Serial
 	lda		#10B
 	sta		Beep_Serial+1
 
-	smb3	Timer_Flag							; ¼ÆÊ±Íê³ÉÏìÁå±êÖ¾Î»
-	rmb0	Timer_Flag							; Çå1Ãë±êÖ¾·ÀÖ¹ÖØ¸´½øÈë
+	smb3	Timer_Flag							; è®¡æ—¶å®Œæˆå“é“ƒæ ‡å¿—ä½
+	rmb0	Timer_Flag							; æ¸…1ç§’æ ‡å¿—é˜²æ­¢é‡å¤è¿›å…¥
 	inc		CC2
 	rts
 
 Finish_Time_Out:
-	lda		R_SetTime_Min						; ¼ÆÊıÖØÖÃÎªµ¹¼ÆÊ±³õÊ¼Öµ
+	lda		R_SetTime_Min						; è®¡æ•°é‡ç½®ä¸ºå€’è®¡æ—¶åˆå§‹å€¼
 	sta		R_Time_Min
 	lda		R_SetTime_Sec
 	sta		R_Time_Sec
-	lda		#1100B								; ×´Ì¬ÇĞ»»Îªµ¹¼ÆÊ±ÔİÍ£Ì¬
+	lda		#1100B								; çŠ¶æ€åˆ‡æ¢ä¸ºå€’è®¡æ—¶æš‚åœæ€
 	sta		Sys_Status_Flag
 	rmb7	TMRC
 	TMR1_OFF

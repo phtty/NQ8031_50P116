@@ -5,56 +5,56 @@
 ; High OSC CLK  : Internal RC 4.4MHz	Fcpu = Fosc/2	*
 ; Function	: 											*
 ;********************************************************************************
-	.CHIP	W65C02S		;cpuµÄÑ¡ĞÍ
-	;.INCLIST	ON		;ºê¶¨ÒåºÍÎÄ¼ş
+	.CHIP	W65C02S		;cpuçš„é€‰å‹
+	;.INCLIST	ON		;å®å®šä¹‰å’Œæ–‡ä»¶
 	.MACLIST	ON
 ;***************************************
-CODE_BEG	EQU		F000H ;C000H(4K*4´Î)		;ÆğÊ¼µØÖ·
+CODE_BEG	EQU		F000H ;C000H(4K*4æ¬¡)		;èµ·å§‹åœ°å€
 ;***************************************
 
-PROG	SECTION	OFFSET	CODE_BEG				;¶¨Òå´úÂë¶ÎµÄÆ«ÒÆÁ¿´ÓCODE_BEG¿ªÊ¼£¬ÓÃÓÚ×éÖ¯³ÌĞò´úÂë¡£
+PROG	SECTION	OFFSET	CODE_BEG				;å®šä¹‰ä»£ç æ®µçš„åç§»é‡ä»CODE_BEGå¼€å§‹ï¼Œç”¨äºç»„ç»‡ç¨‹åºä»£ç ã€‚
 
 ;***************************************
-;*	header include								;Í·ÎÄ¼ş
+;*	header include								;å¤´æ–‡ä»¶
 ;***************************************
 	.include	50Px1x.h
 	.include	RAM.INC	
 	.include	50P116.mac
 	.include	MACRO.mac
 ;***************************************
-STACK_BOT		EQU		FFH						;¶ÑÕ»µ×²¿
+STACK_BOT		EQU		FFH						;å †æ ˆåº•éƒ¨
 ;***************************************
-	.PROG										;³ÌĞò¿ªÊ¼
+	.PROG										;ç¨‹åºå¼€å§‹
 V_RESET:
 	NOP
 	NOP
 	NOP
 	LDX		#STACK_BOT  
-	TXS											; Ê¹ÓÃÕâ¸öÖµ³õÊ¼»¯¶ÑÕ»Ö¸Õë£¬ÕâÍ¨³£ÊÇÎªÁËÉèÖÃ¶ÑÕ»µÄµ×²¿µØÖ·£¬È·±£³ÌĞòÔËĞĞÖĞ¶ÑÕ»µÄÕıÈ·Ê¹ÓÃ¡£
+	TXS											; ä½¿ç”¨è¿™ä¸ªå€¼åˆå§‹åŒ–å †æ ˆæŒ‡é’ˆï¼Œè¿™é€šå¸¸æ˜¯ä¸ºäº†è®¾ç½®å †æ ˆçš„åº•éƒ¨åœ°å€ï¼Œç¡®ä¿ç¨‹åºè¿è¡Œä¸­å †æ ˆçš„æ­£ç¡®ä½¿ç”¨ã€‚
 	LDA		#$B7								; #$07    
-	STA		SYSCLK								; ÉèÖÃÏµÍ³Ê±ÖÓ
-	ClrAllRam									; ÇåRAM
+	STA		SYSCLK								; è®¾ç½®ç³»ç»Ÿæ—¶é’Ÿ
+	ClrAllRam									; æ¸…RAM
 	LDA		#$0
-	STA		DIVC								; ·ÖÆµ¿ØÖÆÆ÷£¬¶¨Ê±Æ÷ÓëDICVÒì²½
-	STA		IER									; ³ıÄÜÖĞ¶Ï
-	STA		IFR									; ³õÊ¼»¯ÖĞ¶Ï±êÖ¾Î»
+	STA		DIVC								; åˆ†é¢‘æ§åˆ¶å™¨ï¼Œå®šæ—¶å™¨ä¸DICVå¼‚æ­¥
+	STA		IER									; é™¤èƒ½ä¸­æ–­
+	STA		IFR									; åˆå§‹åŒ–ä¸­æ–­æ ‡å¿—ä½
 	STA		PB
 	LDA		FUSE
-	STA		MF0									;ÎªÄÚ²¿RCÕñµ´Æ÷Ìá¹©Ğ£×¼Êı¾İ
+	STA		MF0									;ä¸ºå†…éƒ¨RCæŒ¯è¡å™¨æä¾›æ ¡å‡†æ•°æ®
 
 	jsr		F_Beep_Init
-	jsr		L_Init_SystemRam_Prog				;³õÊ¼»¯ÏµÍ³RAM²¢½ûÓÃËùÓĞ¶Ïµç±£ÁôµÄRAM
+	jsr		L_Init_SystemRam_Prog				;åˆå§‹åŒ–ç³»ç»ŸRAMå¹¶ç¦ç”¨æ‰€æœ‰æ–­ç”µä¿ç•™çš„RAM
 
 	jsr		F_LCD_Init
 	jsr		F_Port_Init
 
-	lda		#$07								;ÏµÍ³Ê±ÖÓºÍÖĞ¶ÏÊ¹ÄÜ
+	lda		#$07								;ç³»ç»Ÿæ—¶é’Ÿå’Œä¸­æ–­ä½¿èƒ½
 	sta		SYSCLK
 
 	jsr		F_Timer_Init
 	jsr		F_Display_Time
 
-	cli											; ¿ª×ÜÖĞ¶Ï
+	cli											; å¼€æ€»ä¸­æ–­
 
 	; test Code
 
@@ -62,16 +62,16 @@ V_RESET:
 ;***********************************************************************
 MainLoop:
 main:
-	lda		Timer_Flag							; ÅĞ¶ÏÊÇ·ñĞèÒªÏìÁå
+	lda		Timer_Flag							; åˆ¤æ–­æ˜¯å¦éœ€è¦å“é“ƒ
 	and		#1100B
 	cmp		#$00
 	beq		Beep_Out
 	jsr		F_Beep_Manage
 
 Beep_Out:
-	bbs1	Key_Flag,Key_QA_Out					; Ê×´Î´¥·¢±Ø¶¨½øÉ¨¼ü
-	bbr6	Timer_Flag,Key_Out					; ±ØĞëÓĞ4Hz¼ÆÊ±±êÖ¾²ÅÄÜ½øÉ¨¼ü
-	rmb6	Timer_Flag							; Çå4Hz±êÖ¾
+	bbs1	Key_Flag,Key_QA_Out					; é¦–æ¬¡è§¦å‘å¿…å®šè¿›æ‰«é”®
+	bbr6	Timer_Flag,Key_Out					; å¿…é¡»æœ‰4Hzè®¡æ—¶æ ‡å¿—æ‰èƒ½è¿›æ‰«é”®
+	rmb6	Timer_Flag							; æ¸…4Hzæ ‡å¿—
 	bbs4	Timer_Flag,Key_QA_Out
 	inc		Counter_1Hz
 	lda		Counter_1Hz
@@ -79,17 +79,17 @@ Beep_Out:
 	bcc		Key_QA_Out
 	lda		#$0
 	sta		Counter_1Hz
-	smb4	Timer_Flag							; ³¤°´1s¾Í¸ø¿ì¼Ó±êÖ¾
+	smb4	Timer_Flag							; é•¿æŒ‰1så°±ç»™å¿«åŠ æ ‡å¿—
 
 Key_QA_Out:
-	smb0	Key_Flag							; É¨¼ü±êÖ¾Î»
+	smb0	Key_Flag							; æ‰«é”®æ ‡å¿—ä½
 
 Key_Flag_Out:
 	bbr0	Key_Flag,Key_Out
-	jsr		F_Key_Trigger						; ÓĞ°´¼ü°´ÏÂºÍ³¤°´ÑÓÊ±µ½ÁË²ÅÉ¨¼ü
+	jsr		F_Key_Trigger						; æœ‰æŒ‰é”®æŒ‰ä¸‹å’Œé•¿æŒ‰å»¶æ—¶åˆ°äº†æ‰æ‰«é”®
 
 Key_Out:
-	; ÅĞ¶Ï´¦ÓÚÄÇÖÖ×´Ì¬£¬²¢½øÈë¶ÔÓ¦×´Ì¬µÄ´¦Àí
+	; åˆ¤æ–­å¤„äºé‚£ç§çŠ¶æ€ï¼Œå¹¶è¿›å…¥å¯¹åº”çŠ¶æ€çš„å¤„ç†
 	bbs0	Sys_Status_Flag, Status_Init
 	bbs3	Sys_Status_Flag, Status_Pause
 	bbs1	Sys_Status_Flag, Status_Pos
@@ -135,13 +135,13 @@ L_DivIrq:
 
 L_Timer2Irq:
 	CLR_TMR2_IRQ_FLAG
-	smb0	Timer_Flag							; °ëÃë±êÖ¾£¬¶¨Ê±Æ÷±¾ÉíÊÇ1Ãë
-	smb1	Timer_Flag							; ×ßÊ±±êÖ¾£¬µÚÒ»´Î½ø¼ÆÊı×Ó³ÌĞòĞèÒª×ßÊ±
-	bra		L_EndIrq							; ÏÂ°ëÃëÓÉ¶¯»­Íê³ÉÊ±¶¨Òå
+	smb0	Timer_Flag							; åŠç§’æ ‡å¿—ï¼Œå®šæ—¶å™¨æœ¬èº«æ˜¯1ç§’
+	smb1	Timer_Flag							; èµ°æ—¶æ ‡å¿—ï¼Œç¬¬ä¸€æ¬¡è¿›è®¡æ•°å­ç¨‹åºéœ€è¦èµ°æ—¶
+	bra		L_EndIrq							; ä¸‹åŠç§’ç”±åŠ¨ç”»å®Œæˆæ—¶å®šä¹‰
 
 L_Timer0Irq:
 	CLR_TMR0_IRQ_FLAG
-	lda		Counter_16Hz						; Ö¡¼ÆÊ±
+	lda		Counter_16Hz						; å¸§è®¡æ—¶
 	cmp		#8
 	bcc		L_16Hz_Count_Out
 	lda		#0
@@ -161,8 +161,8 @@ L_PaIrp:
 	CLR_KEY_IRQ_FLAG
 
 	smb0	Key_Flag
-	smb1	Key_Flag							; Ê×´Î´¥·¢
-	rmb4	Timer_Flag							; ¿ì¼Ó±êÖ¾Î»
+	smb1	Key_Flag							; é¦–æ¬¡è§¦å‘
+	rmb4	Timer_Flag							; å¿«åŠ æ ‡å¿—ä½
 	rmb6	Timer_Flag
 
 	EN_LCD_IRQ

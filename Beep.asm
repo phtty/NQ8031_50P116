@@ -1,14 +1,14 @@
 F_Beep_Manage:
 	TMR1_ON
 	
-	bbr5	Timer_Flag,L_Beep_rts			; ÏìÁåµÄ³ÖĞøºÍ¼ä¸ô¶¼ÊÇ1/32Ãë
-	rmb5	Timer_Flag						; Çåµô1/32Ãë±êÖ¾Î»
+	bbr5	Timer_Flag,L_Beep_rts			; å“é“ƒçš„æŒç»­å’Œé—´éš”éƒ½æ˜¯1/32ç§’
+	rmb5	Timer_Flag						; æ¸…æ‰1/32ç§’æ ‡å¿—ä½
 
-	lda		Beep_Serial						; ÏìÁåĞòÁĞÈ«Îª0ÔòÏìÁå½áÊø
+	lda		Beep_Serial						; å“é“ƒåºåˆ—å…¨ä¸º0åˆ™å“é“ƒç»“æŸ
 	cmp		#$0
 	beq		L_Beep_Over
 	
-	bbr0	Beep_Serial,L_No_Beep			; ÅĞ¶ÏÏìÁåĞòÁĞµÚ1Î»£¬Îª1¾ÍÏì£¬Îª0¾Í²»Ïì
+	bbr0	Beep_Serial,L_No_Beep			; åˆ¤æ–­å“é“ƒåºåˆ—ç¬¬1ä½ï¼Œä¸º1å°±å“ï¼Œä¸º0å°±ä¸å“
 	smb7	TMRC
 	clc
 	ror		Beep_Serial
@@ -25,7 +25,7 @@ L_No_Beep:
 L_Beep_rts:
 	rts
 
-L_Beep_Over:								; ¹Ø±Õ¶¨Ê±Æ÷ºÍ·äÃùÊä³ö£¬¸´Î»ÏàÓ¦±êÖ¾Î»
+L_Beep_Over:								; å…³é—­å®šæ—¶å™¨å’Œèœ‚é¸£è¾“å‡ºï¼Œå¤ä½ç›¸åº”æ ‡å¿—ä½
 	TMR1_OFF
 	rmb7	TMRC
 	rmb2	Timer_Flag

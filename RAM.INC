@@ -2,15 +2,15 @@
 ;***************************************
 ; RAM Address
 ;***************************************
-RamStarAddr		EQU		1800H			;RAMµÄ¿ªÊ¼µØÖ·
-LCD_RamAddr		EQU		RamStarAddr		;LCD RAMµÄµØÖ·
-Time_Addr		EQU		RamStarAddr+Time_Str_Addr-Page0RamStarAddr ;ÊÂ¼şÏà¹ØÊı¾İµÄµØÖ·
+RamStarAddr		EQU		1800H			;RAMçš„å¼€å§‹åœ°å€
+LCD_RamAddr		EQU		RamStarAddr		;LCD RAMçš„åœ°å€
+Time_Addr		EQU		RamStarAddr+Time_Str_Addr-Page0RamStarAddr ;äº‹ä»¶ç›¸å…³æ•°æ®çš„åœ°å€
 
 
 ;***************************************
 ;Time_Addr		EUQ		B0H
 ;***************************************
-.PAGE0     ;page 0µÄÄÚ´æ²¼¾Ö
+.PAGE0     ;page 0çš„å†…å­˜å¸ƒå±€
 ;***************************************
 ;	ORG	0098H
 ;---------------------------------------------------------------------
@@ -32,34 +32,34 @@ Frame_Counter			DS		1
 Beep_Serial				DS		2
 
 Timer_Flag				DS		1
-;bit0 = 1 Tim2°ëÃë±êÖ¾
-;bit1 = 1 ×ßÊ±±êÖ¾
-;bit2 = 1 °´¼üÌáÊ¾Òô±êÖ¾Î»
-;bit3 = 1 ¼ÆÊ±Íê³ÉÏìÁå±êÖ¾Î»
-;bit4 = 1 ¿ì¼Ó±êÖ¾Î»
-;bit5 = 1 Tim1 32Hz¼ÆÊ±±êÖ¾Î»
-;bit6 = 1 LCD 4Hz¼ÆÊ±
-;bit7 = 1 Tim0 16Hz¼ÆÊ±
+;bit0 = 1 Tim2åŠç§’æ ‡å¿—
+;bit1 = 1 èµ°æ—¶æ ‡å¿—
+;bit2 = 1 æŒ‰é”®æç¤ºéŸ³æ ‡å¿—ä½
+;bit3 = 1 è®¡æ—¶å®Œæˆå“é“ƒæ ‡å¿—ä½
+;bit4 = 1 å¿«åŠ æ ‡å¿—ä½
+;bit5 = 1 Tim1 32Hzè®¡æ—¶æ ‡å¿—ä½
+;bit6 = 1 LCD 4Hzè®¡æ—¶
+;bit7 = 1 Tim0 16Hzè®¡æ—¶
 
 Sys_Status_Flag			DS		1
-;bit0 = 1 ³õÊ¼×´Ì¬£¬ÉÏµç½øÈë
-;bit1 = 1 Õı¼ÆÊ±Ì¬
-;bit2 = 1 µ¹¼ÆÊ±Ì¬
-;bit3 = 1 ÔİÍ£Ì¬
-;bit4 = 1 µ¹¼ÆÊ±Íê³ÉÌ¬
+;bit0 = 1 åˆå§‹çŠ¶æ€ï¼Œä¸Šç”µè¿›å…¥
+;bit1 = 1 æ­£è®¡æ—¶æ€
+;bit2 = 1 å€’è®¡æ—¶æ€
+;bit3 = 1 æš‚åœæ€
+;bit4 = 1 å€’è®¡æ—¶å®Œæˆæ€
 
 Key_Flag				DS		1
-;bit0 = 1 É¨¼ü±êÖ¾Î»
-;bit1 = 1 Ê×´Î´¥·¢
-;bit2 = 1 °´¼ü´¦Àí
+;bit0 = 1 æ‰«é”®æ ‡å¿—ä½
+;bit1 = 1 é¦–æ¬¡è§¦å‘
+;bit2 = 1 æŒ‰é”®å¤„ç†
 
 Frame_Flag				DS		1
-;bit0 = 1 ¼ÆÊ±¿ªÊ¼
-;bit1 = 1 ·ÖÖÓ¼õÊ±
-;bit2 = 1 ½è(½ø)Î»·¢Éú
+;bit0 = 1 è®¡æ—¶å¼€å§‹
+;bit1 = 1 åˆ†é’Ÿå‡æ—¶
+;bit2 = 1 å€Ÿ(è¿›)ä½å‘ç”Ÿ
 
 Overflow_Flag			DS		1
-;bit0 = 1 Õı¼ÆÊ±Òç³ö
+;bit0 = 1 æ­£è®¡æ—¶æº¢å‡º
 
 
 P_PA_IO_Backup      	DS	1	;B
@@ -69,10 +69,10 @@ P_PC_IO_Backup      	DS	1	;E
 P_PC_Backup         	DS	1	;F
 ;---------------------------------------
 Time_Str_Addr	EQU		$
-R_Time_Sec				DS	1	;Ê±¼äÃë
-R_Time_Min				DS	1	;Ê±¼ä·Ö
-R_SetTime_Sec			DS	1	;µ¹¼ÆÊ±³õÖµÊ±¼äÃë
-R_SetTime_Min			DS	1	;µ¹¼ÆÊ±³õÖµÊ±¼ä·Ö
+R_Time_Sec				DS	1	;æ—¶é—´ç§’
+R_Time_Min				DS	1	;æ—¶é—´åˆ†
+R_SetTime_Sec			DS	1	;å€’è®¡æ—¶åˆå€¼æ—¶é—´ç§’
+R_SetTime_Min			DS	1	;å€’è®¡æ—¶åˆå€¼æ—¶é—´åˆ†
 
 ;---------------------------------------       
 P_Temp					DS	16	

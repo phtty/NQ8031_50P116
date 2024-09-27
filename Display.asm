@@ -1,5 +1,5 @@
 F_Display_Time:
-    ; µ÷ÓÃÏÔÊ¾º¯ÊıÏÔÊ¾µ±Ç°Ê±¼ä
+    ; è°ƒç”¨æ˜¾ç¤ºå‡½æ•°æ˜¾ç¤ºå½“å‰æ—¶é—´
 	JSR 	F_ClearScreen
     JSR 	L_DisTimer_Sec
     JSR 	L_DisTimer_Min
@@ -36,9 +36,9 @@ F_DisFrame_Sec_d4:
 	lda		R_Time_Sec
 	tax
 	lda		Table_Sec_DataDot,X
-	and		#$0f								; ¸öÎ»Êı×Ö
+	and		#$0f								; ä¸ªä½æ•°å­—
 	clc
-	rol											; ³Ë8
+	rol											; ä¹˜8
 	rol
 	rol
 	clc
@@ -51,10 +51,10 @@ F_DisFrame_Sec_d3:
 	lda		R_Time_Sec
 	tax
 	lda		Table_Sec_DataDot,X
-	and		#$f0								; Ê®Î»Êı×Ö
+	and		#$f0								; åä½æ•°å­—
 	jsr		L_ROR_4Bit_Prog
 	clc
-	rol											; ³Ë8
+	rol											; ä¹˜8
 	rol
 	rol
 	clc
@@ -69,7 +69,7 @@ F_DisFrame_Min_d2:
 	lda		Table_Min_DataDot,X
 	and		#$0f
 	clc
-	rol											; ³Ë8
+	rol											; ä¹˜8
 	rol
 	rol
 	clc
@@ -85,9 +85,9 @@ F_DisFrame_Min_d1:
 	and		#$f0
 	jsr		L_ROR_4Bit_Prog
 	clc
-	rol											; ³Ë8
+	rol											; ä¹˜8
 	rol
-	rol											; ÓÒÒÆ4Î»ÔÙ³Ë8,¾ÍÊÇÓÒÒÆ1Î»
+	rol											; å³ç§»4ä½å†ä¹˜8,å°±æ˜¯å³ç§»1ä½
 	clc
 	adc		Frame_Counter
 	ldx		#lcd_d1
@@ -107,26 +107,26 @@ L_ROR_4Bit_Prog:
 
 ;a = num
 L_Multi_24_Prog:
-	CLC									; Çå³ı½øÎ»±êÖ¾£¬È·±£½øÎ»Îª0
-	TAX									; ½«A±£´æµ½XÖĞ
-    ; ½øĞĞ³ËÒÔ 8 µÄ²Ù×÷
+	CLC									; æ¸…é™¤è¿›ä½æ ‡å¿—ï¼Œç¡®ä¿è¿›ä½ä¸º0
+	TAX									; å°†Aä¿å­˜åˆ°Xä¸­
+    ; è¿›è¡Œä¹˜ä»¥ 8 çš„æ“ä½œ
 	ROL									; A = A * 2
 	ROL									; A = A * 4
 	ROL									; A = A * 8
 	STA		P_Temp+1
-	; ½øĞĞ³ËÒÔ 16 µÄ²Ù×÷
-	TXA									; »Ö¸´XÖĞµÄÔ­Ê¼AÖµ
+	; è¿›è¡Œä¹˜ä»¥ 16 çš„æ“ä½œ
+	TXA									; æ¢å¤Xä¸­çš„åŸå§‹Aå€¼
 	CLC
 	ROL									; A = A * 2
 	ROL									; A = A * 4
 	ROL									; A = A * 8
 	ROL									; A = A * 16
 	CLC
-	ADC		P_Temp+1					; ³Ë24µÃµ½±íÖĞ0-9Êı×Ö
+	ADC		P_Temp+1					; ä¹˜24å¾—åˆ°è¡¨ä¸­0-9æ•°å­—
 	rts
 ;================================================
 ;********************************************	
-Table_Sec_DataDot:		;ÏÔÊ¾Ãë¶ÔÓ¦ÏÔÊ¾µÄ16½øÖÆ
+Table_Sec_DataDot:		;æ˜¾ç¤ºç§’å¯¹åº”æ˜¾ç¤ºçš„16è¿›åˆ¶
 	.BYTE 	00h	;0
 	.BYTE 	01h	;1
 	.BYTE	02h	;2
@@ -189,7 +189,7 @@ Table_Sec_DataDot:		;ÏÔÊ¾Ãë¶ÔÓ¦ÏÔÊ¾µÄ16½øÖÆ
 	.BYTE 	59h	;59
 	.BYTE 	60h	;60
 
-Table_Min_DataDot:		;ÏÔÊ¾·ÖÖÓ¶ÔÓ¦ÏÔÊ¾µÄ16½øÖÆ
+Table_Min_DataDot:		;æ˜¾ç¤ºåˆ†é’Ÿå¯¹åº”æ˜¾ç¤ºçš„16è¿›åˆ¶
 	.BYTE 	00h	;0
 	.BYTE 	01h	;1
 	.BYTE	02h	;2

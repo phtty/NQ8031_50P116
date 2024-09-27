@@ -40,7 +40,7 @@ MS_dot .equ	1
 	      .BYTE 1.shl.(seg-seg/8*8)
 .ENDMACRO
 
-Lcd_byte:							;∂Œ¬Î<==>SEG/COM±Ì
+Lcd_byte:							;ÊÆµÁ†Å<==>SEG/COMË°®
 lcd_table1:
 lcd_d1 .equ	lcd_table1-lcd_table1
 	db_c_s	c3,s3					;1a
@@ -151,8 +151,8 @@ lcd_Alm .equ lcd_Da+1
 	db_c_s	c0,s4					;Alm
 lcd_DotA .equ lcd_Alm+1
 	db_c_s	c0,s4					;DotA
-lcd_slh	.equ lcd_DotA+1
-	db_c_s	c0,s4					;slh
+lcd_Slh	.equ lcd_DotA+1
+	db_c_s	c0,s4					;Slh
 lcd_T9	.equ lcd_slh+1
 	db_c_s	c0,s4					;T9
 
