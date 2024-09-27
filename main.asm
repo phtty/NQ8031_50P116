@@ -116,9 +116,9 @@ Status_Finish:
 ;***********************************************************************
 ;***********************************************************************
 V_IRQ:
-	PHA
-	LDA		P_IER
-	AND		P_IFR
+	pha
+	lda		IER
+	and		IFR
 	sta		R_Int_Backup	
 
 	bbs6	R_Int_Backup,L_LcdIrq

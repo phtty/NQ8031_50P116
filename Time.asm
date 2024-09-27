@@ -35,7 +35,7 @@ L_Sec_D3_Out:
 	cmp		#$08
 	beq		L_Sec_Pos_Out
 	
-	ldx		#lcd_MS
+	ldx		#lcd_dot
 	jsr		F_ClrpSymbol
 
 	rmb7	Timer_Flag							; 清16Hz，避免重复播动画
@@ -46,7 +46,7 @@ L_Sec_Pos_Out:
 	rmb0	Timer_Flag							; 动画走完即为后半S
 	rmb7	Timer_Flag							; 清除相关标志位避免错误进入
 	inc		R_Time_Sec							; 增秒放在动画完成部分保证只增1次
-	ldx		#lcd_MS
+	ldx		#lcd_dot
 	jsr		F_DispSymbol
 	lda		#0
 	sta		Frame_Counter
@@ -81,7 +81,7 @@ L_Min_D1_Out_Pos:
 	lda		Frame_Counter
 	cmp		#$08
 	beq		L_Min_Pos_Out
-	ldx		#lcd_MS
+	ldx		#lcd_dot
 	jsr		F_ClrpSymbol
 	rts
 
@@ -94,7 +94,7 @@ L_Min_Pos_Out:
 	sta		R_Time_Sec							; 清空秒数
 	inc		R_Time_Min							; 增分
 
-	ldx		#lcd_MS
+	ldx		#lcd_dot
 	jsr		F_DispSymbol
 	lda		#0
 	sta		Frame_Counter
@@ -187,7 +187,7 @@ L_Sec_D3_Out_Des:
 	cmp		#$0
 	beq		L_Sec_Des_Out
 
-	ldx		#lcd_MS
+	ldx		#lcd_dot
 	jsr		F_ClrpSymbol						; 没走完动画则熄灭MS
 
 	rmb7	Timer_Flag							; 清16Hz，避免重复播动画
@@ -197,7 +197,7 @@ L_Sec_D3_Out_Des:
 L_Sec_Des_Out:
 	rmb0	Timer_Flag							; 动画走完即为后半S
 	rmb7	Timer_Flag							; 同样清16Hz
-	ldx		#lcd_MS								; 亮MS并重置帧计数
+	ldx		#lcd_dot								; 亮MS并重置帧计数
 	jsr		F_DispSymbol
 	lda		#$8
 	sta		Frame_Counter
@@ -239,14 +239,14 @@ L_Min_D1_Out_Des:
 	lda		Frame_Counter						; 有动画就熄灭MS
 	cmp		#$0
 	beq		L_Min_Des_Out
-	ldx		#lcd_MS
+	ldx		#lcd_dot
 	jsr		F_ClrpSymbol
 	rts
 
 L_Min_Des_Out:
 	rmb1	Frame_Flag							; 减分标志位
 	rmb2	Frame_Flag							; 借(进)位标志位
-	ldx		#lcd_MS								; 重置帧计数
+	ldx		#lcd_dot								; 重置帧计数
 	jsr		F_DispSymbol						; 无动画就亮MS
 	lda		#$8
 	sta		Frame_Counter

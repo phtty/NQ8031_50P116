@@ -47,7 +47,7 @@ s0		.equ	0
 
 Lcd_byte:							;段码<==>SEG/COM表
 lcd_table1:
-lcd_d1:	equ	$-lcd_table1
+lcd_d1	equ	$-lcd_table1
 	db_c_s	c3,s40	; 1A
 	db_c_s	c2,s40	; 1B
 	db_c_s	c1,s40	; 1C
@@ -56,7 +56,7 @@ lcd_d1:	equ	$-lcd_table1
 	db_c_s	c2,s41	; 1F
 	db_c_s	c1,s41	; 1G
 
-lcd_d2:	equ	$-lcd_table1
+lcd_d2	equ	$-lcd_table1
 	db_c_s	c3,s37	; 2A 
 	db_c_s	c2,s37	; 2B
 	db_c_s	c1,s37	; 2C
@@ -65,7 +65,7 @@ lcd_d2:	equ	$-lcd_table1
 	db_c_s	c2,s38	; 2F
 	db_c_s	c1,s38	; 2G
 
-lcd_d3:	equ	$-lcd_table1
+lcd_d3	equ	$-lcd_table1
 	db_c_s	c3,s35	; 3A
 	db_c_s	c2,s35	; 3B
 	db_c_s	c1,s35	; 3C
@@ -74,7 +74,7 @@ lcd_d3:	equ	$-lcd_table1
 	db_c_s	c2,s36	; 3F
 	db_c_s	c1,s36	; 3G
 
-lcd_d4:	equ	$-lcd_table1
+lcd_d4	equ	$-lcd_table1
 	db_c_s	c3,s34	; 4A
 	db_c_s	c2,s34	; 4B
 	db_c_s	c1,s34	; 4C
@@ -83,7 +83,7 @@ lcd_d4:	equ	$-lcd_table1
 	db_c_s	c2,s33	; 4F
 	db_c_s	c1,s33	; 4G
 
-lcd_d5:	equ	$-lcd_table1
+lcd_d5	equ	$-lcd_table1
 	db_c_s	c3,s32	; 5A
 	db_c_s	c2,s32	; 5B
 	db_c_s	c1,s32	; 5C
@@ -92,7 +92,7 @@ lcd_d5:	equ	$-lcd_table1
 	db_c_s	c2,s15	; 5F
 	db_c_s	c1,s15	; 5G
 
-lcd_d6:	equ	$-lcd_table1
+lcd_d6	equ	$-lcd_table1
 	db_c_s	c3,s14	; 6A
 	db_c_s	c2,s14	; 6B
 	db_c_s	c1,s14	; 6C
@@ -101,7 +101,7 @@ lcd_d6:	equ	$-lcd_table1
 	db_c_s	c2,s13	; 6F
 	db_c_s	c1,s13	; 6G
 
-lcd_d7:	equ	$-lcd_table1
+lcd_d7	equ	$-lcd_table1
 	db_c_s	c3,s11	; 7A
 	db_c_s	c2,s11	; 7B
 	db_c_s	c1,s11	; 7C
@@ -110,7 +110,7 @@ lcd_d7:	equ	$-lcd_table1
 	db_c_s	c2,s10	; 7F
 	db_c_s	c1,s10	; 7G
 
-lcd_d8:	equ	$-lcd_table1
+lcd_d8	equ	$-lcd_table1
 	db_c_s	c3,s9	; 8A
 	db_c_s	c2,s9	; 8B
 	db_c_s	c1,s9	; 8C
@@ -118,7 +118,7 @@ lcd_d8:	equ	$-lcd_table1
 	db_c_s	c0,s8	; 8E
 	db_c_s	c1,s8	; 8G
 
-lcd_d9:	equ	$-lcd_table1
+lcd_d9	equ	$-lcd_table1
 	db_c_s	c3,s7	; 9A
 	db_c_s	c2,s7	; 9B
 	db_c_s	c1,s7	; 9C
@@ -127,17 +127,17 @@ lcd_d9:	equ	$-lcd_table1
 	db_c_s	c2,s6	; 9F
 	db_c_s	c1,s6	; 9G
 
-lcd_d10:	equ	$-lcd_table1
+lcd_d10	equ	$-lcd_table1
 	db_c_s	c1,s42	; 10AGED
 	db_c_s	c2,s42	; 10B
 	db_c_s	c0,s42	; 10C
 
-lcd_d11:	equ	$-lcd_table1
+lcd_d11	equ	$-lcd_table1
 	db_c_s	c1,s12	; 11AGED
 	db_c_s	c2,s12	; 11B
 	db_c_s	c0,s12	; 11C
 
-lcd_dot:	equ	$-lcd_table1
+lcd_dot	equ	$-lcd_table1
 	db_c_s	c1,s43	; AM
 	db_c_s	c0,s43	; PM
 	db_c_s	c2,s39	; T1

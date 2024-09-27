@@ -11,11 +11,11 @@ L_DisTimer_Sec:
 	pha
 	and		#$0F
 	ldx		#lcd_d4
-	jsr		L_Dis_21Bit_DigitDot_Prog
+	jsr		L_Dis_7Bit_DigitDot_Prog
 	pla
 	jsr		L_ROR_4Bit_Prog
 	ldx		#lcd_d3
-	jsr		L_Dis_21Bit_DigitDot_Prog
+	jsr		L_Dis_7Bit_DigitDot_Prog
 	rts	
 L_DisTimer_Min:
 	lda		R_Time_Min
@@ -24,12 +24,12 @@ L_DisTimer_Min:
 	pha
 	and		#$0F
 	ldx		#lcd_d2
-	jsr		L_Dis_21Bit_DigitDot_Prog
+	jsr		L_Dis_7Bit_DigitDot_Prog
 	pla
 	and		#$F0
 	jsr		L_ROR_4Bit_Prog
 	ldx		#lcd_d1
-	jsr		L_Dis_21Bit_DigitDot_Prog
+	jsr		L_Dis_7Bit_DigitDot_Prog
 	rts 
 
 F_DisFrame_Sec_d4:
@@ -44,7 +44,7 @@ F_DisFrame_Sec_d4:
 	clc
 	adc		Frame_Counter
 	ldx		#lcd_d4
-	jsr		L_Dis_21Bit_DigitFrame_Prog  
+;	jsr		L_Dis_21Bit_DigitFrame_Prog  
 	rts
 
 F_DisFrame_Sec_d3:
@@ -60,7 +60,7 @@ F_DisFrame_Sec_d3:
 	clc
 	adc		Frame_Counter
 	ldx		#lcd_d3
-	jsr		L_Dis_21Bit_DigitFrame_Prog_1
+;	jsr		L_Dis_21Bit_DigitFrame_Prog_1
 	rts
 
 F_DisFrame_Min_d2:
@@ -75,7 +75,7 @@ F_DisFrame_Min_d2:
 	clc
 	adc		Frame_Counter
 	ldx		#lcd_d2
-	jsr		L_Dis_21Bit_DigitFrame_Prog
+;	jsr		L_Dis_21Bit_DigitFrame_Prog
 	rts
 
 F_DisFrame_Min_d1:
@@ -91,7 +91,7 @@ F_DisFrame_Min_d1:
 	clc
 	adc		Frame_Counter
 	ldx		#lcd_d1
-	jsr		L_Dis_21Bit_DigitFrame_Prog
+;	jsr		L_Dis_21Bit_DigitFrame_Prog
 
 	rts
 

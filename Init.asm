@@ -26,7 +26,6 @@ L_Init_SystemRam_Prog:							; 系统初始化
 
 F_LCD_Init:
 	jsr		F_ClearScreen						; LCD初始化
-	CHECK_LCD
 
 	PC67_SEG									; 配置IO口为SEG线模式
 	PD03_SEG
