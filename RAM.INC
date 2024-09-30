@@ -71,8 +71,11 @@ P_PC_Backup         	DS	1	;F
 Time_Str_Addr	EQU		$
 R_Time_Sec				DS	1	;时间秒
 R_Time_Min				DS	1	;时间分
-R_SetTime_Sec			DS	1	;倒计时初值时间秒
-R_SetTime_Min			DS	1	;倒计时初值时间分
+R_Time_Hour				DS	1	;时间小时
+R_AlarmTime_Min			DS	1	;闹钟分钟
+R_AlarmTime_Hour		DS	1	;闹钟小时
+R_Date					DS	1	;日期
+R_Month					DS	1	;月份
 
 ;---------------------------------------       
 P_Temp					DS	16	

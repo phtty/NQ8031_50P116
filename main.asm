@@ -56,70 +56,15 @@ V_RESET:
 	cli											; 开总中断
 
 	; test Code
-	lda		#8
-	ldx		#lcd_d10
-	jsr		L_Dis_7Bit_DigitDot_Prog
-	lda		#3
-	ldx		#lcd_d9
-	jsr		L_Dis_6Bit_DigitDot_Prog
-	lda		#2
-	ldx		#lcd_d7
-	jsr		L_Dis_3Bit_DigitDot_Prog
-	ldx		#lcd_PM2
-	jsr		F_DispSymbol
 
 ;***********************************************************************
 ;***********************************************************************
 MainLoop:
 main:
-	lda		Timer_Flag							; 判断是否需要响铃
-	and		#1100B
-	cmp		#$00
-	beq		Beep_Out
-	jsr		F_Beep_Manage
-
-Beep_Out:
-	bbs1	Key_Flag,Key_QA_Out					; 首次触发必定进扫键
-	bbr6	Timer_Flag,Key_Out					; 必须有4Hz计时标志才能进扫键
-	rmb6	Timer_Flag							; 清4Hz标志
-	bbs4	Timer_Flag,Key_QA_Out
-	inc		Counter_1Hz
-	lda		Counter_1Hz
-	cmp		#$8
-	bcc		Key_QA_Out
-	lda		#$0
-	sta		Counter_1Hz
-	smb4	Timer_Flag							; 长按1s就给快加标志
-
-Key_QA_Out:
-	smb0	Key_Flag							; 扫键标志位
-
-Key_Flag_Out:
-	bbr0	Key_Flag,Key_Out
-	jsr		F_Key_Trigger						; 有按键按下和长按延时到了才扫键
-
-Key_Out:
-	; 判断处于那种状态，并进入对应状态的处理
-	bbs0	Sys_Status_Flag, Status_Init
-	bbs3	Sys_Status_Flag, Status_Pause
-	bbs1	Sys_Status_Flag, Status_Pos
-	bbs2	Sys_Status_Flag, Status_Des
-	bbs4	Sys_Status_Flag, Status_Finish
-
-Status_Init:
-
-	bra		MainLoop
-Status_Pos:
-	jsr		F_Sec_Pos_Counter
-	bra		MainLoop
-Status_Des:
-	jsr		F_Sec_Des_Counter
-	bra		MainLoop
-Status_Pause:
-
-	bra		MainLoop
-Status_Finish:
-	jsr		F_Des_Counter_Finish
+	jsr		F_Switch_Scan
+	bbr0	Key_Flag,MainLoop
+	rmb0	Key_Flag
+	jsr		F_Key_Trigger
 	bra		MainLoop
 
 
@@ -205,13 +150,12 @@ L_EndIrq:
 .INCLUDE	Disp.asm
 .INCLUDE	Lcdtab.asm
 .INCLUDE	Display.asm
-.INCLUDE	Delay.asm
 ;--------------------------------------------------------	
 ;***********************************************************************
 .BLKB	0FFF8H-$,0FFH
 	
 .ORG	0FFF8H
-	DB		C_RST_SEL + C_OMS0 + C_ROM1+ C_PAIM 	;+ C_ROM0
+	DB		C_RST_SEL + C_OMS0 + C_PAIM
 	DB		C_PB32IS + C_PROTB
 	DW		0FFFFH
 ;***********************************************************************

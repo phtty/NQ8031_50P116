@@ -43,18 +43,28 @@ F_LCD_Init:
 
 
 F_Port_Init:
-	lda		#$fc								; PA2~7作按键中断输入
+	lda		PA_WAKE								; PA4~7做唤醒
+	ora		#$f0
 	sta		PA_WAKE
+	lda		PA_DIR								; 配置为输入
+	ora		#$f0
 	sta		PA_DIR
-	lda		#$FF
+	lda		PA									; 设置下拉
+	ora		#$f0
 	sta		PA
 	EN_PA_IRQ									; 打开PA口外部中断
 
 	PB3_PB3_COMS								; PB口作背光输出
-
+	
+	lda		PC_SEG								; 配置PC0~5为普通IO口
+	and		#$e0
+	sta		PC_SEG
 	lda		PC_DIR								; PC0/2~5作拨键输入
-	and		#$c2
+	ora		#$3d
 	sta		PC_DIR
+	lda		PC									; PC0/2~5配置为下拉
+	ora		#$3d
+	sta		PC
 
 	rts
 
