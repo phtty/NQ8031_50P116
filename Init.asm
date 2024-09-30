@@ -1,15 +1,11 @@
 L_Init_SystemRam_Prog:							; 系统初始化
 	lda		#0
-	sta		Key_Flag
-	sta		Beep_Serial
-	sta		Beep_Serial+1
 	sta		Counter_4Hz
 	sta		Counter_1Hz
 	sta		Counter_16Hz
-	sta		Frame_Counter
-	sta		Frame_Flag
+	sta		Key_Flag
 	sta		Timer_Flag
-	sta		Overflow_Flag
+	sta		Clock_Flag
 	sta		CC1
 	sta		CC2
 

@@ -20,6 +20,27 @@ L_DisTime_Min:
 	rts	
 L_DisTime_Hour:
 	lda		R_Time_Hour
+	bbr0	Clock_Flag, L_24h_Mode
+	cmp		#13
+	bcs		L_ClockPM
+	pha
+	ldx		#lcd_AM
+	jsr		F_DispSymbol
+	pla
+	bra		L_24h_Mode
+L_ClockPM:
+	sec
+	sbc		#12
+	pha
+	ldx		#lcd_PM
+	jsr		F_DispSymbol
+	pla
+L_24h_Mode:
+	bbr0	Clock_Flag,L_Start_DisHour
+	cmp		#24
+	bcc		L_Start_DisHour
+	lda		#0
+L_Start_DisHour:
 	tax
 	lda		Table_DataDot,X
 	pha
@@ -29,8 +50,11 @@ L_DisTime_Hour:
 	pla
 	and		#$F0
 	jsr		L_ROR_4Bit_Prog
+	cmp		#0
+	beq		L_DisTime_Hour_rts
 	ldx		#lcd_d0
-	jsr		L_Dis_7Bit_DigitDot_Prog
+	jsr		L_Dis_3Bit_DigitDot_Prog
+L_DisTime_Hour_rts:
 	rts 
 
 L_DisTime_Date:

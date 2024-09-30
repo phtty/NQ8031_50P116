@@ -75,7 +75,7 @@ L_Inc_Dis_Index_Prog:
 	rts
 
 
-; 6bit数显
+; 6bit数显	lcd_d9
 L_Dis_6Bit_DigitDot_Prog:
 	stx		P_Temp+3					; 偏移量暂存进P_Temp+3, 腾出X来做变址寻址
 	sta		P_Temp						; 将显示的数字转换为内存偏移量
@@ -111,7 +111,7 @@ L_Inc_Dis_Index_Prog_6bit:
 	bne		L_Judge_Dis_6Bit_DigitDot	; 剩余段数为0则返回
 	rts
 
-; 3bit数显
+; 3bit数显 lcd_d0&lcd_d7
 L_Dis_3Bit_DigitDot_Prog:
 	stx		P_Temp+3					; 偏移量暂存进P_Temp+3, 腾出X来做变址寻址
 	sta		P_Temp						; 将显示的数字转换为内存偏移量

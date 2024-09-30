@@ -27,9 +27,8 @@ Counter_16Hz			DS		1
 CC1						DS		1
 CC2						DS		1
 
-Frame_Counter			DS		1
-
-Beep_Serial				DS		2
+Clock_Flag				DS		1
+;bit0 = 1 12h模式
 
 Timer_Flag				DS		1
 ;bit0 = 1 Tim2半秒标志
@@ -52,15 +51,6 @@ Key_Flag				DS		1
 ;bit0 = 1 扫键标志位
 ;bit1 = 1 首次触发
 ;bit2 = 1 按键处理
-
-Frame_Flag				DS		1
-;bit0 = 1 计时开始
-;bit1 = 1 分钟减时
-;bit2 = 1 借(进)位发生
-
-Overflow_Flag			DS		1
-;bit0 = 1 正计时溢出
-
 
 P_PA_IO_Backup      	DS	1	;B
 P_PA_Backup         	DS	1	;C

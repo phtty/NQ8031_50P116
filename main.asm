@@ -56,6 +56,12 @@ V_RESET:
 	cli											; 开总中断
 
 	; test Code
+	smb0	Clock_Flag
+	lda		#13
+	sta		R_Time_Hour
+	lda		#32
+	sta		R_Time_Min
+	jsr		F_Display_Time
 
 ;***********************************************************************
 ;***********************************************************************
@@ -96,20 +102,12 @@ L_Timer2Irq:
 
 L_Timer0Irq:
 	CLR_TMR0_IRQ_FLAG
-	lda		Counter_16Hz						; 帧计时
-	cmp		#8
-	bcc		L_16Hz_Count_Out
-	lda		#0
-	sta		Counter_16Hz
-	smb7	Timer_Flag
-	bra		L_EndIrq
-L_16Hz_Count_Out:
-	inc		Counter_16Hz
+
 	bra		L_EndIrq
 
 L_Timer1Irq:
 	CLR_TMR1_IRQ_FLAG
-	smb5	Timer_Flag
+
 	bra		L_EndIrq
 
 L_PaIrp:
@@ -137,15 +135,15 @@ L_LCD_4Hz_Out:
 	inc		Counter_4Hz
 
 L_EndIrq:
-;	bbs3	IFR,L_Timer2Irq
-	PLA
-	RTI
+	pla
+	rti
 
 
 ;***********************************************************************
 .INCLUDE	ScanKey.asm
 .INCLUDE	Time.asm
-.INCLUDE	Beep.asm
+.INCLUDE	Alarm.asm
+.INCLUDE	Calendar.asm
 .INCLUDE	Init.asm
 .INCLUDE	Disp.asm
 .INCLUDE	Lcdtab.asm
