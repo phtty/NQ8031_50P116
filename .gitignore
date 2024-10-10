@@ -6,3 +6,4 @@
 *.lst
 *.map
 /.vscode
+*.code-workspace

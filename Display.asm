@@ -64,7 +64,55 @@ L_Start_DisHour:
 L_DisTime_Hour_rts:
 	rts 
 
-L_DisTime_Date:
+
+F_Display_Date:
+	jsr		F_ClearScreen
+	jsr		L_DisDate_Symbol
+	jsr		L_DisDate_Day
+	jsr		L_DisDate_Month
+	rts
+
+L_DisDate_Symbol:
+	ldx		#lcd_MD
+	jsr		F_DispSymbol
+	ldx		#lcd_SLH
+	jsr		F_DispSymbol
+	rts
+
+L_DisDate_Day:
+	lda		R_Date_Day
+	tax
+	lda		Table_DataDot,X
+	pha
+	and		#$0F
+	ldx		#lcd_d8
+	jsr		L_Dis_7Bit_DigitDot_Prog
+	pla
+	jsr		L_ROR_4Bit_Prog
+	ldx		#lcd_d9
+	jsr		L_Dis_6Bit_DigitDot_Prog
+	rts
+
+L_DisDate_Month:
+	lda		R_Date_Month
+	tax
+	lda		Table_DataDot,X
+	pha
+	and		#$0F
+	ldx		#lcd_d10
+	jsr		L_Dis_7Bit_DigitDot_Prog
+	pla
+	jsr		L_ROR_4Bit_Prog
+	cmp		#$0
+	beq		No_Month_Tens
+	ldx		#lcd_d11
+	jsr		F_DispSymbol
+	rts
+No_Month_Tens:
+	ldx		#lcd_d11
+	jsr		F_ClrpSymbol
+L_DisDate_Month_rts:
+	rts
 
 
 L_ROR_4Bit_Prog:

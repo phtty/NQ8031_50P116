@@ -31,21 +31,9 @@ Clock_Flag				DS		1
 ;bit0 = 1 12h模式
 
 Timer_Flag				DS		1
-;bit0 = 1 Tim2半秒标志
-;bit1 = 1 走时标志
-;bit2 = 1 按键提示音标志位
-;bit3 = 1 计时完成响铃标志位
-;bit4 = 1 快加标志位
-;bit5 = 1 Tim1 32Hz计时标志位
-;bit6 = 1 LCD 4Hz计时
-;bit7 = 1 Tim0 16Hz计时
 
 Sys_Status_Flag			DS		1
-;bit0 = 1 初始状态，上电进入
-;bit1 = 1 正计时态
-;bit2 = 1 倒计时态
-;bit3 = 1 暂停态
-;bit4 = 1 倒计时完成态
+
 
 Key_Flag				DS		1
 ;bit0 = 1 扫键标志位
@@ -62,10 +50,11 @@ Time_Str_Addr	EQU		$
 R_Time_Sec				DS	1	;时间秒
 R_Time_Min				DS	1	;时间分
 R_Time_Hour				DS	1	;时间小时
-R_AlarmTime_Min			DS	1	;闹钟分钟
-R_AlarmTime_Hour		DS	1	;闹钟小时
-R_Date					DS	1	;日期
-R_Month					DS	1	;月份
+R_Alarm_Min				DS	1	;闹钟分钟
+R_Alarm_Hour			DS	1	;闹钟小时
+R_Date_Day				DS	1	;日期
+R_Date_Month			DS	1	;月份
+R_Date_Year				DS	1	;年份
 
 ;---------------------------------------       
 P_Temp					DS	16	

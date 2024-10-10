@@ -56,12 +56,17 @@ V_RESET:
 	cli											; 开总中断
 
 	; test Code
-	smb0	Clock_Flag
+	lda		#27
+	sta		R_Date_Day
+	lda		#12
+	sta		R_Date_Month
+	jsr		F_Display_Date
+
 	lda		#13
-	sta		R_Time_Hour
-	lda		#32
-	sta		R_Time_Min
-	jsr		F_Display_Time
+	sta		R_Date_Day
+	lda		#9
+	sta		R_Date_Month
+	jsr		F_Display_Date
 
 ;***********************************************************************
 ;***********************************************************************
