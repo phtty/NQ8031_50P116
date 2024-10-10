@@ -1,6 +1,5 @@
 F_Display_Time:
     ; 调用显示函数显示当前时间
-	jsr 	F_ClearScreen
     jsr 	L_DisTime_Min
     jsr 	L_DisTime_Hour
     rts
@@ -37,7 +36,7 @@ L_ClockPM:
 	jsr		F_DispSymbol
 	pla
 L_24h_Mode:
-	bbr0	Clock_Flag,L_Start_DisHour
+	bbs0	Clock_Flag,L_Start_DisHour			; 12h模式不能熄灭AM、PM标识
 	pha
 	ldx		#lcd_AM
 	jsr		F_ClrpSymbol						; 24h模式需要熄掉AM、PM标识
@@ -57,16 +56,13 @@ L_Start_DisHour:
 	pla
 	and		#$F0
 	jsr		L_ROR_4Bit_Prog
-	cmp		#0
-	beq		L_DisTime_Hour_rts
 	ldx		#lcd_d0
 	jsr		L_Dis_3Bit_DigitDot_Prog
 L_DisTime_Hour_rts:
 	rts 
 
-
+; 显示日期函数
 F_Display_Date:
-	jsr		F_ClearScreen
 	jsr		L_DisDate_Symbol
 	jsr		L_DisDate_Day
 	jsr		L_DisDate_Month
@@ -90,7 +86,7 @@ L_DisDate_Day:
 	pla
 	jsr		L_ROR_4Bit_Prog
 	ldx		#lcd_d9
-	jsr		L_Dis_6Bit_DigitDot_Prog
+	jsr		L_Dis_6Bit_DigitDot_Prog			; 日期的十位是6段
 	rts
 
 L_DisDate_Month:
@@ -103,7 +99,7 @@ L_DisDate_Month:
 	jsr		L_Dis_7Bit_DigitDot_Prog
 	pla
 	jsr		L_ROR_4Bit_Prog
-	cmp		#$0
+	cmp		#$0									; 月份的十位只有1段，所以选择用symbol显示
 	beq		No_Month_Tens
 	ldx		#lcd_d11
 	jsr		F_DispSymbol
@@ -113,6 +109,66 @@ No_Month_Tens:
 	jsr		F_ClrpSymbol
 L_DisDate_Month_rts:
 	rts
+
+; 显示闹钟设定值函数
+F_Display_Alarm:
+	jsr		L_DisAlarm_Symbol
+	jsr		L_DisAlarm_Min
+	jsr		L_DisAlarm_Hour
+	rts
+
+L_DisAlarm_Symbol:
+	ldx		#lcd_ALM
+	jsr		F_DispSymbol
+
+L_DisAlarm_Min:
+	lda		R_Alarm_Min
+	tax
+	lda		Table_DataDot,X
+	pha
+	and		#$0F
+	ldx		#lcd_d4
+	jsr		L_Dis_7Bit_DigitDot_Prog
+	pla
+	jsr		L_ROR_4Bit_Prog
+	ldx		#lcd_d5
+	jsr		L_Dis_7Bit_DigitDot_Prog
+	rts	
+
+L_DisAlarm_Hour:								; 显示闹钟小时
+	lda		R_Alarm_Hour
+	bbr0	Clock_Flag, L_24h_Mode_Alarm
+	cmp		#13
+	bcc		L_24h_Mode_Alarm
+	sec
+	sbc		#12
+	pha
+	ldx		#lcd_PM2
+	jsr		F_DispSymbol
+	pla
+L_24h_Mode_Alarm:
+	bbs0	Clock_Flag,L_Start_DisAlarm_Hour
+	pha
+	ldx		#lcd_PM2
+	jsr		F_ClrpSymbol						; 24h模式需要熄掉AM、PM标识
+	pla
+	cmp		#24
+	bcc		L_Start_DisAlarm_Hour
+	lda		#0
+L_Start_DisAlarm_Hour:
+	tax
+	lda		Table_DataDot,X
+	pha
+	and		#$0F
+	ldx		#lcd_d6
+	jsr		L_Dis_7Bit_DigitDot_Prog
+	pla
+	and		#$F0
+	jsr		L_ROR_4Bit_Prog
+	ldx		#lcd_d7
+	jsr		L_Dis_3Bit_DigitDot_Prog
+L_DisAlarm_Hour_rts:
+	rts 
 
 
 L_ROR_4Bit_Prog:

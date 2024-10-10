@@ -131,16 +131,16 @@ L_Judge_Dis_3Bit_DigitDot				; 显示循环的开始
 	lda		Lcd_byte,X					; 查表定位目标段的显存地址
 	tax
 	ror		P_Temp						; 循环右移取得目标段是亮或者灭
-	bcc		L_CLR_6bit					; 当前段的值若是0则进清点子程序
+	bcc		L_CLR_3bit					; 当前段的值若是0则进清点子程序
 	lda		LCD_RamAddr,X				; 将目标段的显存的特定bit位置1来打亮
 	ora		P_Temp+5
 	sta		LCD_RamAddr,X
-	bra		L_Inc_Dis_Index_Prog_3bit	; 跳转到显示索引增加的子程序。
+	bra		L_Inc_Dis_Index_Prog_3bit	; 跳转到显示索引增加的子程序
 L_CLR_3bit:
 	lda		LCD_RamAddr,X				; 加载LCD RAM的地址
 	ora		P_Temp+5					; 将COM和SEG信息与LCD RAM地址进行逻辑或操作
-	eor		P_Temp+5					; 进行异或操作，用于清除对应的段。
-	sta		LCD_RamAddr,X				; 将结果写回LCD RAM，清除对应位置。
+	eor		P_Temp+5					; 进行异或操作，用于清除对应的段
+	sta		LCD_RamAddr,X				; 将结果写回LCD RAM，清除对应位置
 L_Inc_Dis_Index_Prog_3bit:
 	inc		P_Temp+3					; 递增偏移量，处理下一个段
 	dec		P_Temp+4					; 递减剩余要显示的段数

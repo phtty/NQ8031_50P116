@@ -56,17 +56,7 @@ V_RESET:
 	cli											; 开总中断
 
 	; test Code
-	lda		#27
-	sta		R_Date_Day
-	lda		#12
-	sta		R_Date_Month
-	jsr		F_Display_Date
-
-	lda		#13
-	sta		R_Date_Day
-	lda		#9
-	sta		R_Date_Month
-	jsr		F_Display_Date
+	
 
 ;***********************************************************************
 ;***********************************************************************
