@@ -18,11 +18,12 @@ L_DisTime_Min:
 	ldx		#lcd_d2
 	jsr		L_Dis_7Bit_DigitDot_Prog
 	rts	
-L_DisTime_Hour:
+
+L_DisTime_Hour:									; 显示小时
 	lda		R_Time_Hour
-	bbr0	Clock_Flag, L_24h_Mode
-	cmp		#13
-	bcs		L_ClockPM
+	bbr0	Clock_Flag, L_24h_Mode				; 24h模式处理
+	cmp		#13									; 12h处理
+	bcs		L_ClockPM							; 判断是PM还是AM
 	pha
 	ldx		#lcd_AM
 	jsr		F_DispSymbol
@@ -37,6 +38,12 @@ L_ClockPM:
 	pla
 L_24h_Mode:
 	bbr0	Clock_Flag,L_Start_DisHour
+	pha
+	ldx		#lcd_AM
+	jsr		F_ClrpSymbol						; 24h模式需要熄掉AM、PM标识
+	ldx		#lcd_PM
+	jsr		F_ClrpSymbol
+	pla
 	cmp		#24
 	bcc		L_Start_DisHour
 	lda		#0
@@ -66,7 +73,7 @@ L_ROR_4Bit_Prog:
 	ror		
 	ror		
 	and		#$0F
-	
+
 	rts
 
 
