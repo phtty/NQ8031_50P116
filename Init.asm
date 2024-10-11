@@ -11,6 +11,8 @@ L_Init_SystemRam_Prog:							; 系统初始化
 
 	lda		#$01
 	sta		Sys_Status_Flag
+	sta		R_Date_Day
+	sta		R_Date_Month
 
 	lda		#00
 	sta		R_Time_Min
@@ -73,7 +75,7 @@ F_Port_Init:
 F_Timer_Init:
 	TMR0_CLK_FSUB								; TIM0时钟源Fsub(32768Hz)
 	TMR1_CLK_512Hz								; TIM1时钟源Fsub/64(512Hz)
-	DIV_512HZ									; TIM2时钟源DIV分频(512Hz)
+	DIV_512HZ									; TIM2时钟源DIV分频
 
 	lda		#$0									; 重装载计数设置为0
 	sta		TMR0

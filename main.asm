@@ -54,7 +54,7 @@ V_RESET:
 	jsr		F_Timer_Init
 
 	cli											; 开总中断
-
+	jsr		F_Display_All
 	; test Code
 	
 
@@ -63,13 +63,18 @@ V_RESET:
 MainLoop:
 main:
 	jsr		F_Switch_Scan
-	bbr0	Key_Flag,MainLoop
+	bbr0	Key_Flag,Status_Juge
 	rmb0	Key_Flag
 	jsr		F_Key_Trigger
+	
+Status_Juge:
+	bbs0	Sys_Status_Flag,Status_Runtime
+	bbs1	Sys_Status_Flag,Status_Calendar_Set
+	bbs2	Sys_Status_Flag,Status_Time_Set
+	bbs3	Sys_Status_Flag,Status_Alarm_Set
 	bra		MainLoop
-
 Status_Runtime:
-
+	jsr		F_Time_Run
 	bra		MainLoop
 Status_Calendar_Set:
 

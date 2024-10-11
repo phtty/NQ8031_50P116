@@ -63,17 +63,11 @@ L_DisTime_Hour_rts:
 
 ; 显示日期函数
 F_Display_Date:
-	jsr		L_DisDate_Symbol
 	jsr		L_DisDate_Day
 	jsr		L_DisDate_Month
 	rts
 
-L_DisDate_Symbol:
-	ldx		#lcd_MD
-	jsr		F_DispSymbol
-	ldx		#lcd_SLH
-	jsr		F_DispSymbol
-	rts
+
 
 L_DisDate_Day:
 	lda		R_Date_Day
@@ -110,16 +104,12 @@ No_Month_Tens:
 L_DisDate_Month_rts:
 	rts
 
+
 ; 显示闹钟设定值函数
 F_Display_Alarm:
-	jsr		L_DisAlarm_Symbol
 	jsr		L_DisAlarm_Min
 	jsr		L_DisAlarm_Hour
 	rts
-
-L_DisAlarm_Symbol:
-	ldx		#lcd_ALM
-	jsr		F_DispSymbol
 
 L_DisAlarm_Min:
 	lda		R_Alarm_Min
@@ -168,7 +158,27 @@ L_Start_DisAlarm_Hour:
 	ldx		#lcd_d7
 	jsr		L_Dis_3Bit_DigitDot_Prog
 L_DisAlarm_Hour_rts:
-	rts 
+	rts
+
+;显示常亮的符号
+F_Display_Symbol:
+	ldx		#lcd_ALM
+	jsr		F_DispSymbol
+	ldx		#lcd_DotA
+	jsr		F_DispSymbol
+	ldx		#lcd_MD
+	jsr		F_DispSymbol
+	ldx		#lcd_SLH
+	jsr		F_DispSymbol
+	rts
+
+
+F_Display_All:
+	jsr		F_Display_Symbol
+	jsr		F_Display_Date
+	jsr		F_Display_Alarm
+	jsr		F_Display_Time
+	rts
 
 
 L_ROR_4Bit_Prog:
