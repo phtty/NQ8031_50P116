@@ -58,10 +58,10 @@ L_KeyS_Trigger:
 	rts
 
 
-F_Switch_Scan:									; 拨键部分处理
+F_Switch_Scan:									; 拨键部分需要扫描处理
 	lda		PC
-	cmp		P_PC_IO_Backup
-	bne		L_Switch_Delay
+	cmp		P_PC_IO_Backup						; 判断IO口状态是否与上次相同
+	bne		L_Switch_Delay						; 如果不同说明拨键状态有改变，进消抖
 	rts
 L_Switch_Delay:
 	lda		#$00
@@ -77,7 +77,7 @@ L_Delay_S:										; 消抖延时循环用标签
 	rts
 L_Switched:										; 检测到IO口状态与上次的不同，则进入拨键处理
 	lda		PC
-	sta		P_PC_IO_Backup
+	sta		P_PC_IO_Backup						; 更新保存的IO口状态
 
 	and		#$04
 	cmp		#$04
@@ -86,7 +86,16 @@ L_Switched:										; 检测到IO口状态与上次的不同，则进入拨键�
 	bra		Alarm_ON
 Alarm_OFF:
 	jsr		Switch_Alarm_OFF
+	bra		Sys_Mode_Process
 Alarm_ON:
+	jsr		Switch_Alarm_ON
+Sys_Mode_Process:
+	lda		PC
+	and		#$38
+	cmp		#$00
+	bne		No_Runtime_Mode
+	jmp		Switch_Runtime_Mode
+No_Runtime_Mode:
 	lda		PC
 	and		#$08
 	cmp		#$08
@@ -108,14 +117,27 @@ No_Alarm_Set_Mode:
 
 	rts 
 
+; 闹钟开启或关闭拨键处理
 Switch_Alarm_ON:
+	smb1	Clock_Flag
 	rts
 Switch_Alarm_OFF:
+	rmb1	Clock_Flag
 	rts
 
+Switch_Runtime_Mode:
+	lda		#0001B
+	sta		Sys_Status_Flag
+	rts
 Switch_Date_Set_Mode:
+	lda		#0010B
+	sta		Sys_Status_Flag
 	rts
 Switch_Time_Set_Mode:
+	lda		#0100B
+	sta		Sys_Status_Flag
 	rts
 Switch_Alarm_Set_Mode:
+	lda		#1000B
+	sta		Sys_Status_Flag
 	rts

@@ -29,11 +29,17 @@ CC2						DS		1
 
 Clock_Flag				DS		1
 ;bit0 = 1 12h模式
+;bit1 = 1 闹钟开启模式
 
 Timer_Flag				DS		1
+;bit0 = 1 半S计时
+;bit1 = 1 1S计时
 
 Sys_Status_Flag			DS		1
-
+;bit0 = 1 正常走时
+;bit1 = 1 设置日历
+;bit2 = 1 设置时间
+;bit3 = 1 设置闹钟
 
 Key_Flag				DS		1
 ;bit0 = 1 扫键标志位

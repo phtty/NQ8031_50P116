@@ -68,6 +68,19 @@ main:
 	jsr		F_Key_Trigger
 	bra		MainLoop
 
+Status_Runtime:
+
+	bra		MainLoop
+Status_Calendar_Set:
+
+	bra		MainLoop
+Status_Time_Set:
+
+	bra		MainLoop
+Status_Alarm_Set:
+
+	bra		MainLoop
+
 
 ;***********************************************************************
 ;***********************************************************************
@@ -91,9 +104,17 @@ L_DivIrq:
 
 L_Timer2Irq:
 	CLR_TMR2_IRQ_FLAG
-	smb0	Timer_Flag							; 半秒标志，定时器本身是1秒
-	smb1	Timer_Flag							; 走时标志，第一次进计数子程序需要走时
-	bra		L_EndIrq							; 下半秒由动画完成时定义
+	smb0	Timer_Flag							; 半秒标志
+	lda		Counter_1Hz
+	cmp		#01
+	bcs		L_1Hz_Out
+	inc		Counter_1Hz
+	bra		L_EndIrq
+L_1Hz_Out:
+	lda		#$0
+	sta		Counter_1Hz
+	smb1	Timer_Flag							; 1Hz标志
+	bra		L_EndIrq
 
 L_Timer0Irq:
 	CLR_TMR0_IRQ_FLAG

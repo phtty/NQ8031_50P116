@@ -12,10 +12,12 @@ L_Init_SystemRam_Prog:							; 系统初始化
 	lda		#$01
 	sta		Sys_Status_Flag
 
-	lda		#99
+	lda		#00
 	sta		R_Time_Min
-	lda		#55
+	lda		#12
 	sta		R_Time_Sec
+
+	lda		#2000
 
 	rts
 
@@ -62,13 +64,16 @@ F_Port_Init:
 	ora		#$3d
 	sta		PC
 
+	lda		#$00
+	sta		P_PC_IO_Backup
+
 	rts
 
 
 F_Timer_Init:
-	TMR1_CLK_512Hz								; TIM1时钟源Fsub/64(512Hz)
 	TMR0_CLK_FSUB								; TIM0时钟源Fsub(32768Hz)
-	DIV_256HZ									; DIV分频512Hz
+	TMR1_CLK_512Hz								; TIM1时钟源Fsub/64(512Hz)
+	DIV_512HZ									; TIM2时钟源DIV分频(512Hz)
 
 	lda		#$0									; 重装载计数设置为0
 	sta		TMR0
@@ -84,7 +89,7 @@ F_Timer_Init:
 	EN_TMR0_IRQ
 	TMR0_OFF
 	TMR1_OFF
-	TMR2_OFF
+	TMR2_ON
 
 	rts
 
