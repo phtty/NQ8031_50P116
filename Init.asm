@@ -1,14 +1,13 @@
 L_Init_SystemRam_Prog:							; 系统初始化
 	lda		#0
-	sta		Counter_4Hz
 	sta		Counter_1Hz
 	sta		Counter_16Hz
 	sta		Key_Flag
 	sta		Timer_Flag
 	sta		Clock_Flag
+	sta		Calendar_Flag
 	sta		CC1
 	sta		CC2
-	sta		Calendar_Flag
 
 	lda		#$01
 	sta		Sys_Status_Flag
@@ -87,7 +86,7 @@ F_Timer_Init:
 	sta		TMR0
 	sta		TMR2
 
-	lda		#$ef
+	lda		#$bf								; 8Hz一次中断
 	sta		TMR1
 
 	rmb6	DIVC								; 关闭定时器同步
@@ -97,7 +96,9 @@ F_Timer_Init:
 	EN_TMR0_IRQ
 	TMR0_OFF
 	TMR1_OFF
-	TMR2_OFF
+	TMR2_ON
+
+	DIS_LCD_IRQ
 
 	rts
 

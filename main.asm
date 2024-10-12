@@ -62,13 +62,9 @@ V_RESET:
 ;***********************************************************************
 ;***********************************************************************
 MainLoop:
-	smb0	Timer_Flag
-	smb1	Timer_Flag
-
 	jsr		F_Switch_Scan
 	bbr0	Key_Flag,Status_Juge
 	rmb0	Key_Flag
-	jsr		F_Key_Trigger
 	
 Status_Juge:
 	bbs0	Sys_Status_Flag,Status_Runtime
@@ -77,16 +73,17 @@ Status_Juge:
 	bbs3	Sys_Status_Flag,Status_Alarm_Set
 	bra		MainLoop
 Status_Runtime:
+	jsr		F_KeyTrigger_RunTimeMode
 	jsr		F_Time_Run
 	bra		MainLoop
 Status_Calendar_Set:
-
+	jsr		F_KeyTrigger_DateSet_Mode
 	bra		MainLoop
 Status_Time_Set:
-
+	jsr		F_KeyTrigger_TimeSet_Mode
 	bra		MainLoop
 Status_Alarm_Set:
-
+	jsr		F_KeyTrigger_AlarmSet_Mode
 	bra		MainLoop
 
 
@@ -121,17 +118,25 @@ L_Timer2Irq:
 L_1Hz_Out:
 	lda		#$0
 	sta		Counter_1Hz
-	smb1	Timer_Flag							; 1Hz标志
+	smb1	Timer_Flag							; 1S标志
 	bra		L_EndIrq
 
-L_Timer0Irq:
+L_Timer0Irq:									; 用于蜂鸣器
 	CLR_TMR0_IRQ_FLAG
-
+	lda		Counter_16Hz						; 16Hz计数
+	cmp		#07
+	bcs		L_16Hz_Out
+	inc		Counter_16Hz
+	bra		L_EndIrq
+L_16Hz_Out:
+	lda		#$0
+	sta		Counter_16Hz
+	smb3	Timer_Flag							; 响铃判断标志
 	bra		L_EndIrq
 
-L_Timer1Irq:
+L_Timer1Irq:									; 用于快加计时
 	CLR_TMR1_IRQ_FLAG
-
+	smb2	Timer_Flag
 	bra		L_EndIrq
 
 L_PaIrp:
@@ -139,24 +144,14 @@ L_PaIrp:
 
 	smb0	Key_Flag
 	smb1	Key_Flag							; 首次触发
-	rmb4	Timer_Flag							; 快加标志位
-	rmb6	Timer_Flag
+	rmb2	Timer_Flag							; 快加标志位
 
-	EN_LCD_IRQ
+	TMR1_ON
 
 	bra		L_EndIrq
 
 L_LcdIrq:
 	CLR_LCD_IRQ_FLAG
-	lda		Counter_4Hz
-	cmp		#$4
-	bcc		L_LCD_4Hz_Out
-	lda		#$0
-	sta		Counter_4Hz
-	smb6	Timer_Flag
-	bra		L_EndIrq
-L_LCD_4Hz_Out:
-	inc		Counter_4Hz
 
 L_EndIrq:
 	pla

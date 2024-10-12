@@ -21,7 +21,6 @@ LCDRAM					DS		6*6
 R_Int_Backup			DS		1
 
 Counter_1Hz				DS		1
-Counter_4Hz				DS		1
 Counter_16Hz			DS		1
 
 CC1						DS		1
@@ -33,10 +32,13 @@ Calendar_Flag			DS		1
 Clock_Flag				DS		1
 ;bit0 = 1 12h模式
 ;bit1 = 1 闹钟开启模式
+;bit2 = 1 响闹模式
 
 Timer_Flag				DS		1
 ;bit0 = 1 半S计时
 ;bit1 = 1 1S计时
+;bit2 = 1 快加标志
+;bit3 = 1 响铃判断标志
 
 Sys_Status_Flag			DS		1
 ;bit0 = 1 正常走时
