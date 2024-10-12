@@ -1,4 +1,4 @@
-F_Calender_Add:
+F_Calendar_Add:
 	jsr		F_Is_Leap_Year
 	ldx		R_Date_Month					; 月份数作为索引，查表
 	dex

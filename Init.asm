@@ -12,18 +12,18 @@ L_Init_SystemRam_Prog:							; 系统初始化
 	lda		#$01
 	sta		Sys_Status_Flag
 
-	lda		#23
+	lda		#00
 	sta		R_Time_Hour
-	lda		#50
+	lda		#00
 	sta		R_Time_Min
 	lda		#00
 	sta		R_Time_Sec
 
-	lda		#31
-	sta		R_Date_Day
 	lda		#12
+	sta		R_Date_Day
+	lda		#5
 	sta		R_Date_Month
-	lda		#00
+	lda		#24
 	sta		R_Date_Year
 
 	rts

@@ -165,7 +165,7 @@ F_ClrpSymbol:
 
 F_DispSymbol_Com:
 	lda		Lcd_bit,X					; 查表得知目标段的bit位
-	sta		P_Temp+2	
+	sta		P_Temp+2
 	lda		Lcd_byte,X					; 查表得知目标段的地址
 	tax
 	lda		LCD_RamAddr,X				; 将目标段的显存的特定bit位置1来打亮

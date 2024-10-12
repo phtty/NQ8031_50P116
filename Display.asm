@@ -1,19 +1,19 @@
 F_Display_Time:
-    ; 调用显示函数显示当前时间
-    jsr 	L_DisTime_Min
-    jsr 	L_DisTime_Hour
-    rts
+	; 调用显示函数显示当前时间
+	jsr		L_DisTime_Min
+	jsr		L_DisTime_Hour
+	rts
 
 L_DisTime_Min:
 	lda		R_Time_Min
 	tax
-	lda		Table_DataDot,X
+	lda		Table_DataDot,x
 	pha
-	and		#$0F
+	and		#$0f
 	ldx		#lcd_d3
 	jsr		L_Dis_7Bit_DigitDot_Prog
 	pla
-	jsr		L_ROR_4Bit_Prog
+	jsr		L_LSR_4Bit_Prog
 	ldx		#lcd_d2
 	jsr		L_Dis_7Bit_DigitDot_Prog
 	rts	
@@ -48,14 +48,14 @@ L_24h_Mode:
 	lda		#0
 L_Start_DisHour:
 	tax
-	lda		Table_DataDot,X
+	lda		Table_DataDot,x
 	pha
-	and		#$0F
+	and		#$0f
 	ldx		#lcd_d1
 	jsr		L_Dis_7Bit_DigitDot_Prog
 	pla
-	and		#$F0
-	jsr		L_ROR_4Bit_Prog
+	and		#$f0
+	jsr		L_LSR_4Bit_Prog
 	ldx		#lcd_d0
 	jsr		L_Dis_3Bit_DigitDot_Prog
 L_DisTime_Hour_rts:
@@ -70,29 +70,27 @@ F_Display_Date:
 	rts
 
 L_DisDate_Day:
-	lda		R_Date_Day
-	tax
-	lda		Table_DataDot,X
+	ldx		R_Date_Day
+	lda		Table_DataDot,x
 	pha
-	and		#$0F
+	and		#$0f
 	ldx		#lcd_d8
 	jsr		L_Dis_7Bit_DigitDot_Prog
 	pla
-	jsr		L_ROR_4Bit_Prog
+	jsr		L_LSR_4Bit_Prog
 	ldx		#lcd_d9
 	jsr		L_Dis_6Bit_DigitDot_Prog			; 日期的十位是6段
 	rts
 
 L_DisDate_Month:
-	lda		R_Date_Month
-	tax
-	lda		Table_DataDot,X
+	ldx		R_Date_Month
+	lda		Table_DataDot,x
 	pha
-	and		#$0F
+	and		#$0f
 	ldx		#lcd_d10
 	jsr		L_Dis_7Bit_DigitDot_Prog
 	pla
-	jsr		L_ROR_4Bit_Prog
+	jsr		L_LSR_4Bit_Prog
 	cmp		#$0									; 月份的十位只有1段，所以选择用symbol显示
 	beq		No_Month_Tens
 	ldx		#lcd_d11
@@ -102,6 +100,29 @@ No_Month_Tens:
 	ldx		#lcd_d11
 	jsr		F_ClrpSymbol
 L_DisDate_Month_rts:
+	rts
+
+L_DisDate_Year:
+	ldx		#00									; 20xx年的开头20是固定的
+	lda		Table_DataDot,x						; 所以20固定会显示
+	ldx		#lcd_d1
+	jsr		L_Dis_7Bit_DigitDot_Prog
+	ldx		#02
+	lda		Table_DataDot,x
+	ldx		#lcd_d0
+	jsr		L_Dis_3Bit_DigitDot_Prog
+
+	ldx		R_Date_Year
+	lda		Table_DataDot,x
+	pha
+	and		#$0f
+	ldx		#lcd_d3
+	jsr		L_Dis_7Bit_DigitDot_Prog
+	pla
+	and		#$f0
+	jsr		L_LSR_4Bit_Prog
+	ldx		#lcd_d2
+	jsr		L_Dis_7Bit_DigitDot_Prog
 	rts
 
 
@@ -114,13 +135,13 @@ F_Display_Alarm:
 L_DisAlarm_Min:
 	lda		R_Alarm_Min
 	tax
-	lda		Table_DataDot,X
+	lda		Table_DataDot,x
 	pha
 	and		#$0F
 	ldx		#lcd_d4
 	jsr		L_Dis_7Bit_DigitDot_Prog
 	pla
-	jsr		L_ROR_4Bit_Prog
+	jsr		L_LSR_4Bit_Prog
 	ldx		#lcd_d5
 	jsr		L_Dis_7Bit_DigitDot_Prog
 	rts	
@@ -147,14 +168,14 @@ L_24h_Mode_Alarm:
 	lda		#0
 L_Start_DisAlarm_Hour:
 	tax
-	lda		Table_DataDot,X
+	lda		Table_DataDot,x
 	pha
 	and		#$0F
 	ldx		#lcd_d6
 	jsr		L_Dis_7Bit_DigitDot_Prog
 	pla
 	and		#$F0
-	jsr		L_ROR_4Bit_Prog
+	jsr		L_LSR_4Bit_Prog
 	ldx		#lcd_d7
 	jsr		L_Dis_3Bit_DigitDot_Prog
 L_DisAlarm_Hour_rts:
@@ -181,7 +202,8 @@ F_Display_All:
 	rts
 
 
-L_ROR_4Bit_Prog:
+L_LSR_4Bit_Prog:
+	clc
 	ror		
 	ror		
 	ror		

@@ -78,12 +78,15 @@ Status_Runtime:
 	bra		MainLoop
 Status_Calendar_Set:
 	jsr		F_KeyTrigger_DateSet_Mode
+	jsr		F_Calendar_Set
 	bra		MainLoop
 Status_Time_Set:
 	jsr		F_KeyTrigger_TimeSet_Mode
+	jsr		F_Time_Set
 	bra		MainLoop
 Status_Alarm_Set:
 	jsr		F_KeyTrigger_AlarmSet_Mode
+	jsr		F_Alarm_Set
 	bra		MainLoop
 
 

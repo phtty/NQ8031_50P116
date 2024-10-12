@@ -31,7 +31,27 @@ L_Dot_Clear:
 	bne		L_Time_SecRun_Exit				; 未发生天进位
 	lda		#0
 	sta		R_Time_Hour
-	jsr		F_Calender_Add
+	jsr		F_Calendar_Add
 L_Time_SecRun_Exit:
 	jsr		F_Display_Time
+	rts
+
+
+F_Calendar_Set:
+	bbs0	Timer_Flag,L_Blink_Date
+	rts
+L_Blink_Date:
+	rmb0	Timer_Flag						; 清半S标志
+	bbs1	Timer_Flag,L_Date_Clear			; 有1S就灭点
+	jsr		L_DisDate_Year
+	jsr		F_Display_Date
+	rts	
+L_Date_Clear:
+	rmb1	Timer_Flag
+	rts
+
+F_Time_Set:
+	rts
+
+F_Alarm_Set:
 	rts
