@@ -55,13 +55,16 @@ V_RESET:
 
 	cli											; 开总中断
 	jsr		F_Display_All
-	; test Code
 	
+	; test Code
+
 
 ;***********************************************************************
 ;***********************************************************************
 MainLoop:
-main:
+	smb0	Timer_Flag
+	smb1	Timer_Flag
+
 	jsr		F_Switch_Scan
 	bbr0	Key_Flag,Status_Juge
 	rmb0	Key_Flag

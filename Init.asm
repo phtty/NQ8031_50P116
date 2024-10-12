@@ -8,18 +8,24 @@ L_Init_SystemRam_Prog:							; 系统初始化
 	sta		Clock_Flag
 	sta		CC1
 	sta		CC2
+	sta		Calendar_Flag
 
 	lda		#$01
 	sta		Sys_Status_Flag
-	sta		R_Date_Day
-	sta		R_Date_Month
 
-	lda		#00
+	lda		#23
+	sta		R_Time_Hour
+	lda		#40
 	sta		R_Time_Min
-	lda		#12
+	lda		#00
 	sta		R_Time_Sec
 
-	lda		#2000
+	lda		#28
+	sta		R_Date_Day
+	lda		#02
+	sta		R_Date_Month
+	lda		#00
+	sta		R_Date_Year
 
 	rts
 
@@ -91,7 +97,7 @@ F_Timer_Init:
 	EN_TMR0_IRQ
 	TMR0_OFF
 	TMR1_OFF
-	TMR2_ON
+	TMR2_OFF
 
 	rts
 

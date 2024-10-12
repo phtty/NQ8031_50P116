@@ -58,6 +58,7 @@ L_KeyS_Trigger:
 	rts
 
 
+; 拨键只发生状态变化，不需要处理额外内容
 F_Switch_Scan:									; 拨键部分需要扫描处理
 	lda		PC
 	cmp		P_PC_IO_Backup						; 判断IO口状态是否与上次相同

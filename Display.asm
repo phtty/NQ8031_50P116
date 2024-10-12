@@ -61,13 +61,13 @@ L_Start_DisHour:
 L_DisTime_Hour_rts:
 	rts 
 
+
+
 ; 显示日期函数
 F_Display_Date:
 	jsr		L_DisDate_Day
 	jsr		L_DisDate_Month
 	rts
-
-
 
 L_DisDate_Day:
 	lda		R_Date_Day
@@ -194,64 +194,64 @@ L_ROR_4Bit_Prog:
 ;================================================
 ;********************************************	
 Table_DataDot:		; 对应显示的16进制
-	.BYTE 	00h	;0
-	.BYTE 	01h	;1
-	.BYTE	02h	;2
-	.BYTE	03h	;3
-	.BYTE	04h	;4
-	.BYTE	05h	;5
-	.BYTE	06h	;6
-	.BYTE	07h	;7
-	.BYTE	08h	;8
-	.BYTE	09h	;9
-	.BYTE	10h	;10
-	.BYTE 	11h	;11
-	.BYTE	12h	;12
-	.BYTE	13h	;13
-	.BYTE	14h	;14
-	.BYTE	15h	;15
-	.BYTE 	16h	;16
-	.BYTE 	17h	;17
-	.BYTE	18h	;18
-	.BYTE	19h	;19
-	.BYTE	20h	;20
-	.BYTE	21h	;21
-	.BYTE	22h	;22
-	.BYTE	23h	;23
-	.BYTE	24h	;24
-	.BYTE	25h	;25
-	.BYTE	26h	;26
-	.BYTE 	27h	;27
-	.BYTE	28h	;28
-	.BYTE	29h	;29
-	.BYTE	30h	;30
-	.BYTE	31h	;31
-	.BYTE 	32h	;32
-	.BYTE 	33h	;33
-	.BYTE	34h	;34
-	.BYTE	35h	;35
-	.BYTE	36h	;36
-	.BYTE	37h	;37
-	.BYTE	38h	;38
-	.BYTE	39h	;39
-	.BYTE	40h	;40
-	.BYTE	41h	;41
-	.BYTE	42h	;42
-	.BYTE 	43h	;43
-	.BYTE	44h	;44
-	.BYTE	45h	;45
-	.BYTE	46h	;46
-	.BYTE	47h	;47
-	.BYTE 	48h	;48
-	.BYTE 	49h	;49
-	.BYTE	50h	;50
-	.BYTE	51h	;51
-	.BYTE	52h	;52
-	.BYTE	53h	;53
-	.BYTE	54h	;54
-	.BYTE	55h	;55
-	.BYTE	56h	;56
-	.BYTE	57h	;57
-	.BYTE	58h	;58
-	.BYTE 	59h	;59
-	.BYTE 	60h	;60
+	.byte 	00h	;0
+	.byte 	01h	;1
+	.byte	02h	;2
+	.byte	03h	;3
+	.byte	04h	;4
+	.byte	05h	;5
+	.byte	06h	;6
+	.byte	07h	;7
+	.byte	08h	;8
+	.byte	09h	;9
+	.byte	10h	;10
+	.byte 	11h	;11
+	.byte	12h	;12
+	.byte	13h	;13
+	.byte	14h	;14
+	.byte	15h	;15
+	.byte 	16h	;16
+	.byte 	17h	;17
+	.byte	18h	;18
+	.byte	19h	;19
+	.byte	20h	;20
+	.byte	21h	;21
+	.byte	22h	;22
+	.byte	23h	;23
+	.byte	24h	;24
+	.byte	25h	;25
+	.byte	26h	;26
+	.byte 	27h	;27
+	.byte	28h	;28
+	.byte	29h	;29
+	.byte	30h	;30
+	.byte	31h	;31
+	.byte 	32h	;32
+	.byte 	33h	;33
+	.byte	34h	;34
+	.byte	35h	;35
+	.byte	36h	;36
+	.byte	37h	;37
+	.byte	38h	;38
+	.byte	39h	;39
+	.byte	40h	;40
+	.byte	41h	;41
+	.byte	42h	;42
+	.byte 	43h	;43
+	.byte	44h	;44
+	.byte	45h	;45
+	.byte	46h	;46
+	.byte	47h	;47
+	.byte 	48h	;48
+	.byte 	49h	;49
+	.byte	50h	;50
+	.byte	51h	;51
+	.byte	52h	;52
+	.byte	53h	;53
+	.byte	54h	;54
+	.byte	55h	;55
+	.byte	56h	;56
+	.byte	57h	;57
+	.byte	58h	;58
+	.byte 	59h	;59
+	.byte 	60h	;60

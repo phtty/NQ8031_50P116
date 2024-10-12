@@ -29,7 +29,9 @@ L_Dot_Clear:
 	lda		R_Time_Hour
 	cmp		#24
 	bne		L_Time_SecRun_Exit				; 未发生天进位
-
+	lda		#0
+	sta		R_Time_Hour
+	jsr		F_Calender_Add
 L_Time_SecRun_Exit:
 	jsr		F_Display_Time
 	rts
