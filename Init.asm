@@ -15,14 +15,14 @@ L_Init_SystemRam_Prog:							; 系统初始化
 
 	lda		#23
 	sta		R_Time_Hour
-	lda		#40
+	lda		#50
 	sta		R_Time_Min
 	lda		#00
 	sta		R_Time_Sec
 
-	lda		#28
+	lda		#31
 	sta		R_Date_Day
-	lda		#02
+	lda		#12
 	sta		R_Date_Month
 	lda		#00
 	sta		R_Date_Year
