@@ -63,11 +63,9 @@ V_RESET:
 ;***********************************************************************
 ;***********************************************************************
 MainLoop:
-	jsr		F_Time_Run
-	jsr		F_Switch_Scan
-	bbr0	Key_Flag,Status_Juge
-	rmb0	Key_Flag
-	
+	jsr		F_Time_Run							; 走时全局生效
+	jsr		F_Switch_Scan						; 拨键扫描全局生效
+
 Status_Juge:
 	bbs0	Sys_Status_Flag,Status_Runtime
 	bbs1	Sys_Status_Flag,Status_Calendar_Set
@@ -79,7 +77,7 @@ Status_Runtime:
 	jsr		F_DisTime_Run
 	bra		MainLoop
 Status_Calendar_Set:
-	jsr		F_KeyTrigger_DateSet_Mode
+	jsr		F_KeyTrigger_DateSetMode
 	jsr		F_DisCalendar_Set
 	bra		MainLoop
 Status_Time_Set:
@@ -104,7 +102,7 @@ V_IRQ:
 	bbs1	R_Int_Backup,L_Timer0Irq
 	bbs2	R_Int_Backup,L_Timer1Irq
 	bbs3	R_Int_Backup,L_Timer2Irq
-	bbs4	R_Int_Backup,L_PaIrp
+	bbs4	R_Int_Backup,L_PaIrq
 	bbs6	R_Int_Backup,L_LcdIrq
 
 	bra		L_EndIrq
@@ -146,14 +144,15 @@ L_Timer1Irq:									; 用于快加计时
 	smb3	Timer_Flag
 	bra		L_EndIrq
 
-L_PaIrp:
+L_PaIrq:
 	CLR_KEY_IRQ_FLAG
 
 	smb0	Key_Flag
 	smb1	Key_Flag							; 首次触发
-	rmb3	Timer_Flag							; 快加标志位
+	rmb3	Timer_Flag							; 如果有新的下降沿到来，清快加标志位
+	rmb4	Timer_Flag							; 8Hz计时
 
-	TMR1_ON
+	TMR1_ON										; 快加定时
 
 	bra		L_EndIrq
 

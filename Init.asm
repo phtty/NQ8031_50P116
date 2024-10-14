@@ -6,8 +6,8 @@ L_Init_SystemRam_Prog:							; 系统初始化
 	sta		Timer_Flag
 	sta		Clock_Flag
 	sta		Calendar_Flag
-	sta		CC1
-	sta		CC2
+	sta		CC1									; 1S标志的计数
+	sta		CC2									; 快加标志的计数
 
 	lda		#$01
 	sta		Sys_Status_Flag
@@ -77,7 +77,7 @@ F_Port_Init:
 	sta		PC
 
 	lda		#$00
-	sta		P_PC_IO_Backup
+	sta		PC_IO_Backup
 
 	rts
 
