@@ -43,7 +43,7 @@ L_Reload_Year:
 F_Is_Leap_Year:
 	lda		R_Date_Year
 	and		#0011B							; 取最后两位
-	beq		L_Set_LeapYear_Flag				; 若为0则能被4整除
+	beq		L_Set_LeapYear_Flag				; 若都为0则能被4整除
 	rmb0	Calendar_Flag
 	rts
 L_Set_LeapYear_Flag:

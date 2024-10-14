@@ -38,7 +38,7 @@ L_Time_SecRun_Exit:
 
 
 F_Calendar_Set:
-	bbs0	Timer_Flag,L_Blink_Date
+	bbs0	Timer_Flag,L_Blink_Date			; 没有半S标志时不闪烁
 	rts
 L_Blink_Date:
 	rmb0	Timer_Flag						; 清半S标志
@@ -48,6 +48,7 @@ L_Blink_Date:
 	rts	
 L_Date_Clear:
 	rmb1	Timer_Flag
+	jsr		F_UnDisplay_Date
 	rts
 
 F_Time_Set:

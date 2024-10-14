@@ -112,7 +112,7 @@ L_DisDate_Year:
 	ldx		#lcd_d0
 	jsr		L_Dis_3Bit_DigitDot_Prog
 
-	ldx		R_Date_Year
+	ldx		R_Date_Year							; 显示当前的年份
 	lda		Table_DataDot,x
 	pha
 	and		#$0f
@@ -124,6 +124,31 @@ L_DisDate_Year:
 	ldx		#lcd_d2
 	jsr		L_Dis_7Bit_DigitDot_Prog
 	rts
+
+F_UnDisplay_Date:
+	lda		#0
+	ldx		#lcd_d0
+	jsr		L_Dis_3Bit_DigitDot_Prog
+	lda		#10
+	ldx		#lcd_d1
+	jsr		L_Dis_7Bit_DigitDot_Prog
+	lda		#10
+	ldx		#lcd_d2
+	jsr		L_Dis_7Bit_DigitDot_Prog
+	lda		#10
+	ldx		#lcd_d3
+	jsr		L_Dis_7Bit_DigitDot_Prog
+	lda		#10
+	ldx		#lcd_d8
+	jsr		L_Dis_7Bit_DigitDot_Prog
+	lda		#0
+	ldx		#lcd_d9
+	jsr		L_Dis_6Bit_DigitDot_Prog
+	lda		#10
+	ldx		#lcd_d10
+	jsr		L_Dis_7Bit_DigitDot_Prog
+	ldx		#lcd_d11
+	jsr		F_ClrpSymbol
 
 
 ; 显示闹钟设定值函数
