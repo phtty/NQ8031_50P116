@@ -120,7 +120,7 @@ L_KeySTrigger_RunTimeMode:
 
 ; 日历设置模式的按键处理
 F_KeyTrigger_DateSet_Mode:
-	bbs2	Timer_Flag,L_QuikAdd1_DateSet_Mode
+	bbs3	Timer_Flag,L_QuikAdd1_DateSet_Mode
 	rmb0	Key_Flag
 	bbr1	Key_Flag,L_KeyWait_DateSet_Mode		; 首次按键触发需要消抖
 	rmb1	Key_Flag							; 清除首次按键触发标志位
@@ -160,7 +160,7 @@ No_KeyBTrigger_DateSet_Mode:
 
 L_QuikAdd2_DateSet_Mode:
 	TMR1_OFF
-	rmb2	Timer_Flag							; 若无有效按键组合，则清掉快加标志位
+	rmb3	Timer_Flag							; 若无有效按键组合，则清掉快加标志位
 
 L_KeyExit_DateSet_Mode:
 	rts									
@@ -177,7 +177,7 @@ L_KeySTrigger_DateSet_Mode:
 
 ; 时间设置模式的按键处理
 F_KeyTrigger_TimeSet_Mode:
-	bbs2	Timer_Flag,L_QuikAdd1_TimeSet_Mode
+	bbs3	Timer_Flag,L_QuikAdd1_TimeSet_Mode
 	rmb0	Key_Flag
 	bbr1	Key_Flag,L_KeyWait_TimeSet_Mode		; 首次按键触发需要消抖
 	rmb1	Key_Flag							; 清除首次按键触发标志位
@@ -217,7 +217,7 @@ No_KeyBTrigger_TimeSet_Mode:
 
 L_QuikAdd2_TimeSet_Mode:
 	TMR1_OFF
-	rmb2	Timer_Flag							; 若无有效按键组合，则清掉快加标志位
+	rmb3	Timer_Flag							; 若无有效按键组合，则清掉快加标志位
 
 L_KeyExit_TimeSet_Mode:
 	rts									
@@ -234,7 +234,7 @@ L_KeySTrigger_TimeSet_Mode:
 
 ; 闹钟设置模式的按键处理
 F_KeyTrigger_AlarmSet_Mode:
-	bbs2	Timer_Flag,L_QuikAdd1_AlarmSet_Mode
+	bbs3	Timer_Flag,L_QuikAdd1_AlarmSet_Mode
 	rmb0	Key_Flag
 	bbr1	Key_Flag,L_KeyWait_AlarmSet_Mode		; 首次按键触发需要消抖
 	rmb1	Key_Flag							; 清除首次按键触发标志位
@@ -274,7 +274,7 @@ No_KeyBTrigger_AlarmSet_Mode:
 
 L_QuikAdd2_AlarmSet_Mode:
 	TMR1_OFF
-	rmb2	Timer_Flag							; 若无有效按键组合，则清掉快加标志位
+	rmb3	Timer_Flag							; 若无有效按键组合，则清掉快加标志位
 
 L_KeyExit_AlarmSet_Mode:
 	rts									

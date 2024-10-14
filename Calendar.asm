@@ -1,4 +1,5 @@
 F_Calendar_Add:
+	smb1	Calendar_Flag
 	jsr		F_Is_Leap_Year
 	ldx		R_Date_Month					; 月份数作为索引，查表
 	dex
@@ -16,12 +17,10 @@ L_Day_Juge:
 	cmp		#12								; 若是月份到已经计到12
 	beq		L_Year_Add						; 月份进位
 	inc		R_Date_Month					; 月份正常加
-	jsr		F_Display_Date
 	rts
 
 L_Day_Add:
 	inc		R_Date_Day
-	jsr		L_DisDate_Day
 	rts
 	
 L_Year_Add:
@@ -31,12 +30,10 @@ L_Year_Add:
 	cmp		#99								; 年份走到2099
 	beq		L_Reload_Year					; 则下一年回到2000
 	inc		R_Date_Year
-	jsr		F_Display_Date
 	rts
 L_Reload_Year:
 	lda		#0
 	sta		R_Date_Year
-	jsr		L_DisDate_Day
 	rts
 	
 ; 判断平闰年函数
@@ -49,6 +46,22 @@ F_Is_Leap_Year:
 L_Set_LeapYear_Flag:
 	smb0	Calendar_Flag
 	rts
+
+
+F_DisCalendar_Set:
+	bbs0	Timer_Flag,L_Blink_Date			; 没有半S标志时不闪烁
+	rts
+L_Blink_Date:
+	rmb0	Timer_Flag						; 清半S标志
+	bbs1	Timer_Flag,L_Date_Clear			; 有1S就灭点
+	jsr		L_DisDate_Year
+	jsr		F_Display_Date
+	rts	
+L_Date_Clear:
+	rmb1	Timer_Flag
+	jsr		F_UnDisplay_Date
+	rts
+
 
 ; 平年的每月份天数表
 L_Table_Month_Common:

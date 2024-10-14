@@ -57,11 +57,13 @@ V_RESET:
 	jsr		F_Display_All
 	
 	; test Code
+	smb0	Clock_Flag
 
 
 ;***********************************************************************
 ;***********************************************************************
 MainLoop:
+	jsr		F_Time_Run
 	jsr		F_Switch_Scan
 	bbr0	Key_Flag,Status_Juge
 	rmb0	Key_Flag
@@ -74,19 +76,19 @@ Status_Juge:
 	bra		MainLoop
 Status_Runtime:
 	jsr		F_KeyTrigger_RunTimeMode
-	jsr		F_Time_Run
+	jsr		F_DisTime_Run
 	bra		MainLoop
 Status_Calendar_Set:
 	jsr		F_KeyTrigger_DateSet_Mode
-	jsr		F_Calendar_Set
+	jsr		F_DisCalendar_Set
 	bra		MainLoop
 Status_Time_Set:
 	jsr		F_KeyTrigger_TimeSet_Mode
-	jsr		F_Time_Set
+	jsr		F_DisTime_Set
 	bra		MainLoop
 Status_Alarm_Set:
 	jsr		F_KeyTrigger_AlarmSet_Mode
-	jsr		F_Alarm_Set
+	jsr		F_DisAlarm_Set
 	bra		MainLoop
 
 
@@ -98,12 +100,13 @@ V_IRQ:
 	and		IFR
 	sta		R_Int_Backup	
 
-	bbs6	R_Int_Backup,L_LcdIrq
+	bbs0	R_Int_Backup,L_DivIrq
+	bbs1	R_Int_Backup,L_Timer0Irq
+	bbs2	R_Int_Backup,L_Timer1Irq
 	bbs3	R_Int_Backup,L_Timer2Irq
 	bbs4	R_Int_Backup,L_PaIrp
-	bbs0	R_Int_Backup,L_DivIrq
-	bbs2	R_Int_Backup,L_Timer1Irq
-	bbs1	R_Int_Backup,L_Timer0Irq
+	bbs6	R_Int_Backup,L_LcdIrq
+
 	bra		L_EndIrq
 
 L_DivIrq:
@@ -121,7 +124,8 @@ L_Timer2Irq:
 L_1Hz_Out:
 	lda		#$0
 	sta		Counter_1Hz
-	smb1	Timer_Flag							; 1S标志
+	smb1	Timer_Flag							; 1S标志，用于闪烁
+	smb2	Timer_Flag							; 增S标志，用于计时
 	bra		L_EndIrq
 
 L_Timer0Irq:									; 用于蜂鸣器
@@ -139,7 +143,7 @@ L_16Hz_Out:
 
 L_Timer1Irq:									; 用于快加计时
 	CLR_TMR1_IRQ_FLAG
-	smb2	Timer_Flag
+	smb3	Timer_Flag
 	bra		L_EndIrq
 
 L_PaIrp:
@@ -147,7 +151,7 @@ L_PaIrp:
 
 	smb0	Key_Flag
 	smb1	Key_Flag							; 首次触发
-	rmb2	Timer_Flag							; 快加标志位
+	rmb3	Timer_Flag							; 快加标志位
 
 	TMR1_ON
 

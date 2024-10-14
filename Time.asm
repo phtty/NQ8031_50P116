@@ -1,17 +1,8 @@
 F_Time_Run:
-	bbs0	Timer_Flag,L_TimeDot_Out
+	bbs2	Timer_Flag,L_TimeRun_Add		; 有增S标志才进处理
 	rts
-L_TimeDot_Out:
-	rmb0	Timer_Flag						; 清半S标志
-	bbs1	Timer_Flag,L_Dot_Clear			; 有1S就灭点
-	ldx		#lcd_DotC						; 没1S亮点
-	jsr		F_DispSymbol
-	rts										; 半S触发时没1S标志不走时，直接返回
-L_Dot_Clear:
-	ldx		#lcd_DotC						; 1S触发后必定进灭点，同时走时
-	jsr		F_ClrpSymbol
-
-	rmb1	Timer_Flag						; 清1S标志
+L_TimeRun_Add:
+	rmb2	Timer_Flag						; 清增S标志
 
 	inc		R_Time_Sec
 	lda		R_Time_Sec
@@ -33,26 +24,40 @@ L_Dot_Clear:
 	sta		R_Time_Hour
 	jsr		F_Calendar_Add
 L_Time_SecRun_Exit:
+	rts
+
+F_DisTime_Run:
+	bbs0	Timer_Flag,L_TimeDot_Out
+	rts
+L_TimeDot_Out:
+	rmb0	Timer_Flag
+	bbs1	Timer_Flag,L_Dot_Clear
+	ldx		#lcd_DotC						; 没1S亮点
+	jsr		F_DispSymbol
+	rts										; 半S触发时没1S标志不走时，直接返回
+L_Dot_Clear:
+	ldx		#lcd_DotC						; 1S触发后必定进灭点，同时走时
+	jsr		F_ClrpSymbol
+	rmb1	Timer_Flag						; 清1S标志
 	jsr		F_Display_Time
-	rts
-
-
-F_Calendar_Set:
-	bbs0	Timer_Flag,L_Blink_Date			; 没有半S标志时不闪烁
-	rts
-L_Blink_Date:
-	rmb0	Timer_Flag						; 清半S标志
-	bbs1	Timer_Flag,L_Date_Clear			; 有1S就灭点
-	jsr		L_DisDate_Year
+	bbr1	Calendar_Flag,No_Date_Add		; 如有增日期，则调用显示日期函数
 	jsr		F_Display_Date
-	rts	
-L_Date_Clear:
+No_Date_Add:
+	rts
+
+F_DisTime_Set:
+	bbs0	Timer_Flag,L_Blink_Time		; 没有半S标志时不闪烁
+	rts
+L_Blink_Time:
+	rmb0	Timer_Flag						; 清半S标志
+	bbs1	Timer_Flag,L_Time_Clear
+	jsr		F_Display_Time					; 半S亮
+	ldx		#lcd_DotC
+	jsr		F_DispSymbol
+	rts
+L_Time_Clear:
 	rmb1	Timer_Flag
-	jsr		F_UnDisplay_Date
-	rts
-
-F_Time_Set:
-	rts
-
-F_Alarm_Set:
+	jsr		F_UnDisplay_Time				; 1S灭
+	ldx		#lcd_DotC
+	jsr		F_ClrpSymbol
 	rts

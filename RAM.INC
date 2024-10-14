@@ -28,6 +28,7 @@ CC2						DS		1
 
 Calendar_Flag			DS		1
 ;bit0 = 1 闰年
+;bit1 = 1 增日期
 
 Clock_Flag				DS		1
 ;bit0 = 1 12h模式
@@ -37,8 +38,9 @@ Clock_Flag				DS		1
 Timer_Flag				DS		1
 ;bit0 = 1 半S计时
 ;bit1 = 1 1S计时
-;bit2 = 1 快加标志
-;bit3 = 1 响铃判断标志
+;bit2 = 1 增S标志
+;bit3 = 1 快加标志
+;bit4 = 1 响铃判断标志
 
 Sys_Status_Flag			DS		1
 ;bit0 = 1 正常走时

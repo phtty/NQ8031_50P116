@@ -61,6 +61,21 @@ L_Start_DisHour:
 L_DisTime_Hour_rts:
 	rts 
 
+F_UnDisplay_Time:
+	lda		#0
+	ldx		#lcd_d0
+	jsr		L_Dis_3Bit_DigitDot_Prog
+	lda		#10
+	ldx		#lcd_d1
+	jsr		L_Dis_7Bit_DigitDot_Prog
+	lda		#10
+	ldx		#lcd_d2
+	jsr		L_Dis_7Bit_DigitDot_Prog
+	lda		#10
+	ldx		#lcd_d3
+	jsr		L_Dis_7Bit_DigitDot_Prog
+	rts
+
 
 
 ; 显示日期函数
@@ -125,7 +140,7 @@ L_DisDate_Year:
 	jsr		L_Dis_7Bit_DigitDot_Prog
 	rts
 
-F_UnDisplay_Date:
+F_UnDisplay_Date:								; 闪烁时取消显示用的函数
 	lda		#0
 	ldx		#lcd_d0
 	jsr		L_Dis_3Bit_DigitDot_Prog
@@ -149,6 +164,7 @@ F_UnDisplay_Date:
 	jsr		L_Dis_7Bit_DigitDot_Prog
 	ldx		#lcd_d11
 	jsr		F_ClrpSymbol
+	rts
 
 
 ; 显示闹钟设定值函数
@@ -205,6 +221,21 @@ L_Start_DisAlarm_Hour:
 	jsr		L_Dis_3Bit_DigitDot_Prog
 L_DisAlarm_Hour_rts:
 	rts
+
+F_UnDisplay_Alarm:
+	lda		#10
+	ldx		#lcd_d4
+	jsr		L_Dis_7Bit_DigitDot_Prog
+	lda		#10
+	ldx		#lcd_d5
+	jsr		L_Dis_7Bit_DigitDot_Prog
+	lda		#10
+	ldx		#lcd_d6
+	jsr		L_Dis_7Bit_DigitDot_Prog
+	lda		#0
+	ldx		#lcd_d7
+	jsr		L_Dis_3Bit_DigitDot_Prog
+
 
 ;显示常亮的符号
 F_Display_Symbol:
