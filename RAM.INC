@@ -34,6 +34,7 @@ Clock_Flag				DS		1
 ;bit0 = 1 12h模式
 ;bit1 = 1 闹钟开启模式
 ;bit2 = 1 响闹模式
+;bit3 = 1 贪睡启动
 
 Timer_Flag				DS		1
 ;bit0 = 1 半S计时
@@ -52,6 +53,7 @@ Key_Flag				DS		1
 ;bit0 = 1 扫键标志位
 ;bit1 = 1 首次触发
 ;bit2 = 1 按键处理
+;bit3 = 1 背光激活
 
 P_PA_IO_Backup      	DS		1	;B
 P_PA_Backup         	DS		1	;C

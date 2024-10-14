@@ -5,14 +5,16 @@ L_Blink_Alarm:
 	rmb0	Timer_Flag						; 清半S标志
 	bbs1	Timer_Flag,L_Alarm_Clear
 	jsr		F_Display_Alarm					; 半S亮
-	jsr		F_Display_Time
 	ldx		#lcd_DotC
 	jsr		F_DispSymbol
 	rts
 L_Alarm_Clear:
 	rmb1	Timer_Flag
 	jsr		F_UnDisplay_Alarm				; 1S灭
-	jsr		F_UnDisplay_Time
 	ldx		#lcd_DotC
 	jsr		F_ClrpSymbol
+	jsr		F_Display_Time
+	bbr1	Calendar_Flag,No_Date_Add1		; 如有增日期，则调用显示日期函数
+	jsr		F_Display_Date
+No_Date_Add1:
 	rts

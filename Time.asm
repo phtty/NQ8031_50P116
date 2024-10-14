@@ -26,6 +26,7 @@ L_TimeRun_Add:
 L_Time_SecRun_Exit:
 	rts
 
+
 F_DisTime_Run:
 	bbs0	Timer_Flag,L_TimeDot_Out
 	rts
@@ -36,14 +37,15 @@ L_TimeDot_Out:
 	jsr		F_DispSymbol
 	rts										; 半S触发时没1S标志不走时，直接返回
 L_Dot_Clear:
+	rmb1	Timer_Flag						; 清1S标志
 	ldx		#lcd_DotC						; 1S触发后必定进灭点，同时走时
 	jsr		F_ClrpSymbol
-	rmb1	Timer_Flag						; 清1S标志
 	jsr		F_Display_Time
 	bbr1	Calendar_Flag,No_Date_Add		; 如有增日期，则调用显示日期函数
 	jsr		F_Display_Date
 No_Date_Add:
 	rts
+
 
 F_DisTime_Set:
 	bbs0	Timer_Flag,L_Blink_Time		; 没有半S标志时不闪烁

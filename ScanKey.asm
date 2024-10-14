@@ -70,18 +70,25 @@ Switch_Alarm_OFF:
 Switch_Runtime_Mode:
 	lda		#0001B
 	sta		Sys_Status_Flag
+	jsr		F_Display_All
 	rts
 Switch_Date_Set_Mode:
 	lda		#0010B
 	sta		Sys_Status_Flag
+	jsr		F_Display_Alarm
+	jsr		F_Display_Date
+	ldx		#lcd_DotC
+	jsr		F_ClrpSymbol
 	rts
 Switch_Time_Set_Mode:
 	lda		#0100B
 	sta		Sys_Status_Flag
+	jsr		F_Display_All
 	rts
 Switch_Alarm_Set_Mode:
 	lda		#1000B
 	sta		Sys_Status_Flag
+	jsr		F_Display_All
 	rts
 
 
@@ -110,11 +117,17 @@ No_KeyBTrigger_RunTimeMode:
 	jmp		L_KeySTrigger_RunTimeMode			; 12/24h & year触发
 
 L_KeyExit_RunTimeMode:
-	rts									
+	rts
 
 L_KeyBTrigger_RunTimeMode:
+	smb3	Key_Flag							; 背光激活，同时启动贪睡
+	smb3	Clock_Flag
 	rts
 L_KeySTrigger_RunTimeMode:
+	lda		Clock_Flag							; 每按一次翻转clock_flag bit0状态
+	eor		#$01
+	sta		Clock_Flag
+	jsr		F_Display_Time
 	rts
 
 
@@ -126,7 +139,7 @@ F_KeyTrigger_DateSet_Mode:
 	rmb1	Key_Flag							; 清除首次按键触发标志位
 	lda		#$00
 	sta		P_Temp
-L_DelayTrigger_DateSet_Mode:						; 消抖延时循环用标签
+L_DelayTrigger_DateSet_Mode:					; 消抖延时循环用标签
 	inc		P_Temp
 	lda		P_Temp
 	bne		L_DelayTrigger_DateSet_Mode			; 软件消抖
@@ -183,7 +196,7 @@ F_KeyTrigger_TimeSet_Mode:
 	rmb1	Key_Flag							; 清除首次按键触发标志位
 	lda		#$00
 	sta		P_Temp
-L_DelayTrigger_TimeSet_Mode:						; 消抖延时循环用标签
+L_DelayTrigger_TimeSet_Mode:					; 消抖延时循环用标签
 	inc		P_Temp
 	lda		P_Temp
 	bne		L_DelayTrigger_TimeSet_Mode			; 软件消抖
@@ -236,14 +249,14 @@ L_KeySTrigger_TimeSet_Mode:
 F_KeyTrigger_AlarmSet_Mode:
 	bbs3	Timer_Flag,L_QuikAdd1_AlarmSet_Mode
 	rmb0	Key_Flag
-	bbr1	Key_Flag,L_KeyWait_AlarmSet_Mode		; 首次按键触发需要消抖
+	bbr1	Key_Flag,L_KeyWait_AlarmSet_Mode	; 首次按键触发需要消抖
 	rmb1	Key_Flag							; 清除首次按键触发标志位
 	lda		#$00
 	sta		P_Temp
-L_DelayTrigger_AlarmSet_Mode:						; 消抖延时循环用标签
+L_DelayTrigger_AlarmSet_Mode:					; 消抖延时循环用标签
 	inc		P_Temp
 	lda		P_Temp
-	bne		L_DelayTrigger_AlarmSet_Mode			; 软件消抖
+	bne		L_DelayTrigger_AlarmSet_Mode		; 软件消抖
 	bra		L_QuikAdd1_AlarmSet_Mode
 
 L_KeyWait_AlarmSet_Mode:	
@@ -257,7 +270,7 @@ L_QuikAdd1_AlarmSet_Mode:
 	lda		PA									; 判断4种按键触发情况
 	and		#$F0
 	cmp		#$80
-	bne		No_KeyMTrigger_AlarmSet_Mode			; 由于跳转指令寻址能力的问题，这里采用jmp进行跳转
+	bne		No_KeyMTrigger_AlarmSet_Mode		; 由于跳转指令寻址能力的问题，这里采用jmp进行跳转
 	jmp		L_KeyMTrigger_AlarmSet_Mode			; Min/Date单独触发
 No_KeyMTrigger_AlarmSet_Mode:
 	cmp		#$40
