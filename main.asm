@@ -141,7 +141,7 @@ L_16Hz_Out:
 
 L_Timer1Irq:									; 用于快加计时
 	CLR_TMR1_IRQ_FLAG
-	smb3	Timer_Flag
+	smb4	Timer_Flag							; 8Hz标志
 	bra		L_EndIrq
 
 L_PaIrq:
@@ -165,14 +165,16 @@ L_EndIrq:
 
 
 ;***********************************************************************
-.INCLUDE	ScanKey.asm
-.INCLUDE	Time.asm
-.INCLUDE	Alarm.asm
-.INCLUDE	Calendar.asm
-.INCLUDE	Init.asm
-.INCLUDE	Disp.asm
-.INCLUDE	Lcdtab.asm
-.INCLUDE	Display.asm
+.include	ScanKey.asm
+.include	Time.asm
+.include	Calendar.asm
+.include	Alarm.asm
+.include	Backlight.asm
+.include	Init.asm
+.include	Disp.asm
+.include	Display.asm
+.include	Lcdtab.asm
+
 ;--------------------------------------------------------	
 ;***********************************************************************
 .BLKB	0FFF8H-$,0FFH

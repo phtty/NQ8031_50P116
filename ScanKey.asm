@@ -136,8 +136,8 @@ L_KeySTrigger_RunTimeMode:
 ; 日历设置模式的按键处理
 F_KeyTrigger_DateSetMode:
 	bbs3	Timer_Flag,L_Key8Hz_DataSetMode		; 有快加则直接判断8Hz标志位
-	bbr1	Key_Flag,L_KeyScan_DateSetMode
-	rmb1	Key_Flag							; 首次按键触发
+	bbr1	Key_Flag,L_KeyScan_DateSetMode		; 首次按键触发
+	rmb1	Key_Flag
 	lda		#$00
 	sta		P_Temp
 L_DelayTrigger_DateSetMode:						; 消抖延时循环用标签
@@ -147,40 +147,34 @@ L_DelayTrigger_DateSetMode:						; 消抖延时循环用标签
 	lda		PA
 	and		#$f0
 	cmp		#$00
-	bne		L_KeyYes_DataSetMode
-	TMR1_OFF									; 关闭快加8Hz计时的定时器
-	rmb0	Key_Flag							; 清相关标志位
-	rmb3	Timer_Flag
+	bne		L_KeyYes_DataSetMode				; 检测是否有按键触发
+	bra		L_KeyExit_DateSetMode
 	rts
 L_KeyYes_DataSetMode:
-	lda		PA
 	sta		PA_IO_Backup
-	bra		L_QuikAdd1_DateSetMode				; 首次触发处理结束
+	bra		L_KeyHandle_DateMode				; 首次触发处理结束
 
-L_KeyScan_DateSetMode:
+L_KeyScan_DateSetMode:							; 长按处理部分
 	bbr0	Key_Flag,L_KeyExit_DateSetMode		; 没有扫键标志直接退出
-	bbr4	Timer_Flag,L_KeyExit_DateSetMode	; 8Hz标志位到来前也不进行按键处理
 L_Key8Hz_DataSetMode:
+	bbr4	Timer_Flag,L_Key8HzExit_DateSetMode	; 8Hz标志位到来前也不进行按键处理(快加下)
 	rmb4	Timer_Flag
 	lda		PA
-	cmp		PA_IO_Backup
+	and		#$f0
+	cmp		PA_IO_Backup						; 若检测到有按键的状态变化则退出快加判断并结束
 	beq		L_8Hz_Count_DateSetMode
-	rmb0	Key_Flag							; 首次触发的按键和当前按键
-	lda		#0
-	sta		PA_IO_Backup						; 清理变量
-	TMR1_OFF									; 关闭快加8Hz计时的定时器
-	rmb0	Key_Flag							; 清相关标志位
-	rmb3	Timer_Flag
+	bra		L_KeyExit_DateSetMode
 	rts
 L_8Hz_Count_DateSetMode:
 	inc		CC2
-	cmp		#08
+	lda		CC2
+	cmp		#12
 	bcs		L_QuikAdd_DateSetMode
-	rts
+	rts											; 长按计时，必须满1S才有快加
 L_QuikAdd_DateSetMode:
 	smb3	Timer_Flag
 
-L_QuikAdd1_DateSetMode:
+L_KeyHandle_DateMode:
 	lda		PA									; 判断4种按键触发情况
 	and		#$f0
 	cmp		#$80
@@ -200,21 +194,91 @@ No_KeyBTrigger_DateSetMode:
 	jmp		L_KeySTrigger_DateSetMode			; 12/24h & year触发
 
 L_KeyExit_DateSetMode:
+	TMR1_OFF									; 关闭快加8Hz计时的定时器
+	rmb0	Key_Flag							; 清相关标志位
+	rmb3	Timer_Flag
+	lda		#0									; 清理相关变量
+	sta		CC2
+L_Key8HzExit_DateSetMode:
 	rts									
 
 L_KeyMTrigger_DateSetMode:
-	inc		R_Date_Day
-	jsr		L_DisDate_Day						; 调整日期
+	jsr		F_Is_Leap_Year
+	ldx		R_Date_Month						; 月份数作为索引，查月份天数表
+	dex											; 表头从0开始，而月份是从1开始
+	bbs0	Calendar_Flag,L_Leap_Year_Set		; 闰年查闰年月份天数表
+	lda		L_Table_Month_Common,x				; 否则查平年月份天数表
+	bra		L_Day_Juge_Set
+L_Leap_Year_Set:
+	lda		L_Table_Month_Leap,x
+L_Day_Juge_Set:
+	cmp		R_Date_Day
+	bne		L_Day_Add_Set
+	lda		#1
+	sta		R_Date_Day							; 日进位，重新回到1
+	jsr		L_DisDate_Day						; 显示调整后的日期
 	rts
+L_Day_Add_Set:
+	inc		R_Date_Day
+	jsr		L_DisDate_Day						; 显示调整后的日期
+	rts
+
 L_KeyHTrigger_DateSetMode:
-	inc		R_Date_Month						; 调整月份
+	lda		R_Date_Month
+	cmp		#12
+	bcc		L_Month_Juge
+	lda		#1
+	sta		R_Date_Month
 	jsr		L_DisDate_Month
 	rts
+L_Month_Juge:
+	inc		R_Date_Month						; 调整月份
+	jsr		F_Is_Leap_Year						; 检查调整后的月份里日期有没有越界
+	ldx		R_Date_Month						; 月份数作为索引，查月份天数表
+	dex											; 表头从0开始，而月份是从1开始
+	bbs0	Calendar_Flag,L_Leap_Year_Set1		; 闰年查闰年月份天数表
+	lda		L_Table_Month_Common,x				; 否则查平年月份天数表
+	bra		L_Day_Juge_Set1
+L_Leap_Year_Set1:
+	lda		L_Table_Month_Leap,x
+L_Day_Juge_Set1:
+	cmp		R_Date_Day
+	bcs		L_Month_Add_Set
+	lda		#1
+	sta		R_Date_Day							; 日期如果和当前月份数不匹配，则初始化日期
+L_Month_Add_Set:
+	jsr		L_DisDate_Month
+	rts
+
 L_KeyBTrigger_DateSetMode:
 	smb3	Key_Flag							; 背光激活
+	smb3	PB
 	rts
+
 L_KeySTrigger_DateSetMode:
+	lda		R_Date_Year
+	cmp		#99
+	bcc		L_Year_Juge
+	lda		#0
+	sta		R_Date_Year
+	jsr		L_DisDate_Year
+	rts
+L_Year_Juge:
 	inc		R_Date_Year							; 调整年份
+	jsr		F_Is_Leap_Year						; 检查调整后的年份里日期有没有越界
+	ldx		R_Date_Month						; 月份数作为索引，查月份天数表
+	dex											; 表头从0开始，而月份是从1开始
+	bbs0	Calendar_Flag,L_Leap_Year_Set2		; 闰年查闰年月份天数表
+	lda		L_Table_Month_Common,x				; 否则查平年月份天数表
+	bra		L_Day_Juge_Set2
+L_Leap_Year_Set2:
+	lda		L_Table_Month_Leap,x
+L_Day_Juge_Set2:
+	cmp		R_Date_Day
+	bcs		L_Year_Add_Set
+	lda		#1
+	sta		R_Date_Day							; 日期如果超过当前月份最大值，则初始化日期
+L_Year_Add_Set:
 	jsr		L_DisDate_Year
 	rts
 

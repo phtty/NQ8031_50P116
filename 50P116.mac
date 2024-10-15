@@ -437,22 +437,6 @@ TMR2_ON MACRO
 TMR2_OFF MACRO
         RMB2    TMRC
         ENDM			
-;TMR2_CLK_1KDIV2    MACRO
-;       RMB4    TMCLK
-;        RMB5    TMCLK
-;        ENDM
-;TMR2_CLK_1KDIV3    MACRO
-;        SMB4    TMCLK
-;        RMB5    TMCLK
-;        ENDM
-;TMR2_CLK_FOSCDIV8  MACRO
-;        RMB4    TMCLK
-;        SMB5    TMCLK
-;        ENDM
-;TMR2_CLK_FSUB      MACRO
-;        SMB4    TMCLK
-;        SMB5    TMCLK
-;        ENDM
 
 
 TONE_2KHZ       MACRO
@@ -619,7 +603,6 @@ SEL_TONE MACRO
 SEL_MELODY  MACRO
         RMB2    AUDCR
         SMB4    AUDCR
-;        SMB5    AUDCR
         RMB5    AUDCR	
         ENDM
 SEL_VOICE   MACRO

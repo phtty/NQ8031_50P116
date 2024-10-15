@@ -333,3 +333,42 @@ Table_DataDot:		; 对应显示的16进制
 	.byte	58h	;58
 	.byte 	59h	;59
 	.byte 	60h	;60
+	.byte	61h	;61
+	.byte	62h	;62
+	.byte	63h	;63
+	.byte	64h	;64
+	.byte	65h	;65
+	.byte	66h	;66
+	.byte	67h	;67
+	.byte	68h	;68
+	.byte 	69h	;69
+	.byte 	70h	;70
+	.byte	71h	;71
+	.byte	72h	;72
+	.byte	73h	;73
+	.byte	74h	;74
+	.byte	75h	;75
+	.byte	76h	;76
+	.byte 	77h	;77
+	.byte	78h	;78
+	.byte	79h	;79
+	.byte	80h	;30
+	.byte	81h	;81
+	.byte 	82h	;82
+	.byte 	83h	;83
+	.byte	84h	;84
+	.byte	85h	;85
+	.byte	86h	;86
+	.byte	87h	;87
+	.byte	88h	;88
+	.byte	89h	;89
+	.byte	90h	;90
+	.byte	91h	;91
+	.byte	92h	;92
+	.byte 	93h	;93
+	.byte	94h	;94
+	.byte	95h	;95
+	.byte	96h	;96
+	.byte	97h	;97
+	.byte 	98h	;98
+	.byte 	99h	;99

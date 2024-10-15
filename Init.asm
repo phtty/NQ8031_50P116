@@ -109,8 +109,10 @@ F_Timer_Init:
 
 
 F_Beep_Init:
-	TONE_2KHZ									; 配置蜂鸣音调频率
-	lda		#$0
-	sta		AUDCR
+	PB2_PWM										; PP(PB2)不作IO用，配置成PWM输出模式
+	rmb2    DIVC								; 配置蜂鸣音调频率(占空比3/4)
+    rmb3    DIVC
+	rmb7	DIVC
+	rmb1	AUDCR								; 配置BP位，选择AUD开启时的模式，这里选择TONE模式				
 	lda		#$ff
-	sta		AUD0
+	sta		AUD0								; TONE模式下其实AUD0没用
