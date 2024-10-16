@@ -65,6 +65,7 @@ V_RESET:
 MainLoop:
 	jsr		F_Time_Run							; 走时全局生效
 	jsr		F_Switch_Scan						; 拨键扫描全局生效
+	jsr		F_Backlight							; 背光全局生效
 
 Status_Juge:
 	bbs0	Sys_Status_Flag,Status_Runtime
@@ -73,19 +74,20 @@ Status_Juge:
 	bbs3	Sys_Status_Flag,Status_Alarm_Set
 	bra		MainLoop
 Status_Runtime:
-	jsr		F_KeyTrigger_RunTimeMode
+	jsr		F_KeyTrigger_RunTimeMode			; RunTime模式下按键逻辑
 	jsr		F_DisTime_Run
+	jsr		F_Alarm_Louding						; 只在RunTime模式下才会响闹
 	bra		MainLoop
 Status_Calendar_Set:
-	jsr		F_KeyTrigger_DateSetMode
+	jsr		F_KeyTrigger_DateSetMode			; DateSet模式下按键逻辑
 	jsr		F_DisCalendar_Set
 	bra		MainLoop
 Status_Time_Set:
-	jsr		F_KeyTrigger_TimeSetMode
+	jsr		F_KeyTrigger_TimeSetMode			; TimeSet模式下按键逻辑
 	jsr		F_DisTime_Set
 	bra		MainLoop
 Status_Alarm_Set:
-	jsr		F_KeyTrigger_AlarmSetMode
+	jsr		F_KeyTrigger_AlarmSetMode			; AlarmSet模式下案件逻辑
 	jsr		F_DisAlarm_Set
 	bra		MainLoop
 
@@ -124,6 +126,7 @@ L_1Hz_Out:
 	sta		Counter_1Hz
 	smb1	Timer_Flag							; 1S标志，用于闪烁
 	smb2	Timer_Flag							; 增S标志，用于计时
+	smb5	Timer_Flag							; 背光1S标志，用于背光计时
 	bra		L_EndIrq
 
 L_Timer0Irq:									; 用于蜂鸣器

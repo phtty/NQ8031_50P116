@@ -25,6 +25,7 @@ Counter_16Hz			DS		1
 
 CC1						DS		1
 CC2						DS		1
+CC3						DS		1
 
 Calendar_Flag			DS		1
 ;bit0 = 1 闰年
@@ -42,6 +43,7 @@ Timer_Flag				DS		1
 ;bit2 = 1 增S标志
 ;bit3 = 1 快加标志
 ;bit4 = 1 Timer1 8Hz计时
+;bit5 = 1 Timer2 背光1S计时
 
 Sys_Status_Flag			DS		1
 ;bit0 = 1 正常走时

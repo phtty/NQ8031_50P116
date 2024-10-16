@@ -22,3 +22,7 @@ L_Alarm_Clear:
 	jsr		F_Display_Date
 No_Date_Add1:
 	rts
+
+F_Alarm_Louding:
+	
+	rts

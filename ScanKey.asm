@@ -61,9 +61,17 @@ No_Alarm_Set_Mode:
 ; 闹钟开启或关闭拨键处理
 Switch_Alarm_ON:
 	smb1	Clock_Flag
+	ldx		#lcd_bell
+	jsr		F_DispSymbol
+	ldx		#lcd_Zz
+	jsr		F_DispSymbol
 	rts
 Switch_Alarm_OFF:
 	rmb1	Clock_Flag
+	ldx		#lcd_bell
+	jsr		F_ClrpSymbol
+	ldx		#lcd_Zz
+	jsr		F_ClrpSymbol
 	rts
 
 ; 四种模式切换的拨键处理
@@ -122,6 +130,9 @@ L_KeyExit_RunTimeMode:
 
 L_KeyBTrigger_RunTimeMode:
 	smb3	Key_Flag							; 背光激活，同时启动贪睡
+	smb3	PB
+	lda		#0									; 每次按背光都会重置计时
+	sta		CC3
 	smb3	Clock_Flag
 	rts
 L_KeySTrigger_RunTimeMode:
@@ -254,6 +265,8 @@ L_Month_Add_Set:
 L_KeyBTrigger_DateSetMode:
 	smb3	Key_Flag							; 背光激活
 	smb3	PB
+	lda		#0
+	sta		CC3									; 每次按背光都会重置计时
 	rts
 
 L_KeySTrigger_DateSetMode:
@@ -356,6 +369,8 @@ L_Key8HzExit_TimeSetMode:
 
 
 L_KeyMTrigger_TimeSetMode:
+	lda		#00
+	sta		R_Time_Sec							; 调时间会清S计数
 	inc		R_Time_Min
 	lda		#59
 	cmp		R_Time_Min
@@ -366,6 +381,8 @@ L_MinSet_Juge:
 	jsr		L_DisTime_Min
 	rts
 L_KeyHTrigger_TimeSetMode:
+	lda		#00
+	sta		R_Time_Sec							; 调时间会清S计数
 	inc		R_Time_Hour
 	lda		#23
 	cmp		R_Time_Hour
@@ -378,6 +395,8 @@ L_HourSet_Juge:
 L_KeyBTrigger_TimeSetMode:
 	smb3	Key_Flag
 	smb3	PB
+	lda		#0
+	sta		CC3									; 每次按背光都会重置计时
 	rts
 L_KeySTrigger_TimeSetMode:
 	lda		Clock_Flag
@@ -481,6 +500,8 @@ L_AlarmHourSet_Juge:
 L_KeyBTrigger_AlarmSetMode:
 	smb3	Key_Flag
 	smb3	PB
+	lda		#0
+	sta		CC3									; 每次按背光都会重置计时
 	rts
 L_KeySTrigger_AlarmSetMode:
 	lda		Clock_Flag
