@@ -19,34 +19,39 @@ L_DisTime_Min:
 	rts	
 
 L_DisTime_Hour:									; 显示小时
+	bbr0	Clock_Flag,L_24hMode_Time
 	lda		R_Time_Hour
-	bbr0	Clock_Flag, L_24h_Mode				; 24h模式处理
-	cmp		#13									; 12h处理
-	bcs		L_ClockPM							; 判断是PM还是AM
-	pha
-	ldx		#lcd_AM
+	cmp		#12
+	bcs		L_Time12h_PM
+	ldx		#lcd_AM								; 12h模式AM需要灭PM、亮AM点
 	jsr		F_DispSymbol
-	pla
-	bra		L_24h_Mode
-L_ClockPM:
-	sec
-	sbc		#12
-	pha
-	ldx		#lcd_PM
-	jsr		F_DispSymbol
-	pla
-L_24h_Mode:
-	bbs0	Clock_Flag,L_Start_DisHour			; 12h模式不能熄灭AM、PM标识
-	pha
-	ldx		#lcd_AM
-	jsr		F_ClrpSymbol						; 24h模式需要熄掉AM、PM标识
 	ldx		#lcd_PM
 	jsr		F_ClrpSymbol
-	pla
-	cmp		#24
-	bcc		L_Start_DisHour
-	lda		#0
-L_Start_DisHour:
+	lda		R_Time_Hour							; 显示函数会改A值，重新取变量
+	cmp		#0
+	beq		L_Time_0Hour
+	bra		L_Start_DisTime_Hour
+L_Time12h_PM:
+	ldx		#lcd_AM								; 12h模式PM需要灭AM、亮PM点
+	jsr		F_ClrpSymbol
+	ldx		#lcd_PM
+	jsr		F_DispSymbol
+	lda		R_Time_Hour							; 显示函数会改A值，重新取变量
+	sec
+	sbc		#12
+	cmp		#0
+	bne		L_Start_DisTime_Hour
+L_Time_0Hour:									; 12h模式0点需要变成12点
+	lda		#12
+	bra		L_Start_DisTime_Hour
+
+L_24hMode_Time:
+	ldx		#lcd_AM								; 24h模式下需要灭AM、PM点
+	jsr		F_ClrpSymbol
+	ldx		#lcd_PM
+	jsr		F_ClrpSymbol
+	lda		R_Time_Hour
+L_Start_DisTime_Hour:
 	tax
 	lda		Table_DataDot,x
 	pha
@@ -58,7 +63,6 @@ L_Start_DisHour:
 	jsr		L_LSR_4Bit_Prog
 	ldx		#lcd_d0
 	jsr		L_Dis_3Bit_DigitDot_Prog
-L_DisTime_Hour_rts:
 	rts 
 
 F_UnDisplay_Time:
@@ -188,25 +192,32 @@ L_DisAlarm_Min:
 	rts	
 
 L_DisAlarm_Hour:								; 显示闹钟小时
+	bbr0	Clock_Flag,L_24hMode_Alarm
 	lda		R_Alarm_Hour
-	bbr0	Clock_Flag, L_24h_Mode_Alarm
-	cmp		#13
-	bcc		L_24h_Mode_Alarm
+	cmp		#12
+	bcs		L_Alarm12h_PM						
+	ldx		#lcd_PM2							; 12h模式闹钟AM需要灭PM2
+	jsr		F_ClrpSymbol
+	lda		R_Alarm_Hour						; 显示函数会改A值，重新取变量
+	cmp		#0
+	beq		L_Alarm_0Hour
+	bra		L_Start_DisAlarm_Hour
+L_Alarm12h_PM:
+	ldx		#lcd_PM2							; 12h模式闹钟PM需要亮PM2
+	jsr		F_DispSymbol
+	lda		R_Alarm_Hour						; 显示函数会改A值，重新取变量
 	sec
 	sbc		#12
-	pha
-	ldx		#lcd_PM2
-	jsr		F_DispSymbol
-	pla
-L_24h_Mode_Alarm:
-	bbs0	Clock_Flag,L_Start_DisAlarm_Hour
-	pha
-	ldx		#lcd_PM2
-	jsr		F_ClrpSymbol						; 24h模式需要熄掉AM、PM标识
-	pla
-	cmp		#24
-	bcc		L_Start_DisAlarm_Hour
-	lda		#0
+	cmp		#0
+	bne		L_Start_DisAlarm_Hour
+L_Alarm_0Hour:									; 12h模式0点需要变成12点
+	lda		#12
+	bra		L_Start_DisAlarm_Hour
+
+L_24hMode_Alarm:
+	ldx		#lcd_PM2							; 24h模式闹钟需要灭PM2点
+	jsr		F_ClrpSymbol
+	lda		R_Alarm_Hour
 L_Start_DisAlarm_Hour:
 	tax
 	lda		Table_DataDot,x
@@ -219,7 +230,6 @@ L_Start_DisAlarm_Hour:
 	jsr		L_LSR_4Bit_Prog
 	ldx		#lcd_d7
 	jsr		L_Dis_3Bit_DigitDot_Prog
-L_DisAlarm_Hour_rts:
 	rts
 
 F_UnDisplay_Alarm:
@@ -265,7 +275,6 @@ L_LSR_4Bit_Prog:
 	ror		
 	ror		
 	and		#$0F
-
 	rts
 
 
@@ -372,3 +381,19 @@ Table_DataDot:		; 对应显示的16进制
 	.byte	97h	;97
 	.byte 	98h	;98
 	.byte 	99h	;99
+
+; 12h模式专用Table
+Table12h_DataDot:
+	.byte	12h	;12
+	.byte 	01h	;1
+	.byte	02h	;2
+	.byte	03h	;3
+	.byte	04h	;4
+	.byte	05h	;5
+	.byte	06h	;6
+	.byte	07h	;7
+	.byte	08h	;8
+	.byte	09h	;9
+	.byte	10h	;10
+	.byte 	11h	;11
+	.byte	12h	;12

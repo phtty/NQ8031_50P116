@@ -81,11 +81,11 @@ Status_Calendar_Set:
 	jsr		F_DisCalendar_Set
 	bra		MainLoop
 Status_Time_Set:
-	jsr		F_KeyTrigger_TimeSet_Mode
+	jsr		F_KeyTrigger_TimeSetMode
 	jsr		F_DisTime_Set
 	bra		MainLoop
 Status_Alarm_Set:
-	jsr		F_KeyTrigger_AlarmSet_Mode
+	jsr		F_KeyTrigger_AlarmSetMode
 	jsr		F_DisAlarm_Set
 	bra		MainLoop
 

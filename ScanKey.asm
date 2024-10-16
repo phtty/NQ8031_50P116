@@ -135,7 +135,7 @@ L_KeySTrigger_RunTimeMode:
 
 ; 日历设置模式的按键处理
 F_KeyTrigger_DateSetMode:
-	bbs3	Timer_Flag,L_Key8Hz_DataSetMode		; 有快加则直接判断8Hz标志位
+	bbs3	Timer_Flag,L_Key8Hz_DateSetMode		; 有快加则直接判断8Hz标志位
 	bbr1	Key_Flag,L_KeyScan_DateSetMode		; 首次按键触发
 	rmb1	Key_Flag
 	lda		#$00
@@ -147,16 +147,16 @@ L_DelayTrigger_DateSetMode:						; 消抖延时循环用标签
 	lda		PA
 	and		#$f0
 	cmp		#$00
-	bne		L_KeyYes_DataSetMode				; 检测是否有按键触发
+	bne		L_KeyYes_DateSetMode				; 检测是否有按键触发
 	bra		L_KeyExit_DateSetMode
 	rts
-L_KeyYes_DataSetMode:
+L_KeyYes_DateSetMode:
 	sta		PA_IO_Backup
 	bra		L_KeyHandle_DateMode				; 首次触发处理结束
 
 L_KeyScan_DateSetMode:							; 长按处理部分
 	bbr0	Key_Flag,L_KeyExit_DateSetMode		; 没有扫键标志直接退出
-L_Key8Hz_DataSetMode:
+L_Key8Hz_DateSetMode:
 	bbr4	Timer_Flag,L_Key8HzExit_DateSetMode	; 8Hz标志位到来前也不进行按键处理(快加下)
 	rmb4	Timer_Flag
 	lda		PA
@@ -179,19 +179,19 @@ L_KeyHandle_DateMode:
 	and		#$f0
 	cmp		#$80
 	bne		No_KeyMTrigger_DateSetMode			; 由于跳转指令寻址能力的问题，这里采用jmp进行跳转
-	jmp		L_KeyMTrigger_DateSetMode			; Min/Date单独触发
+	jmp		L_KeyMTrigger_DateSetMode			; Date单独触发
 No_KeyMTrigger_DateSetMode:
 	cmp		#$40
 	bne		No_KeyHTrigger_DateSetMode
-	jmp		L_KeyHTrigger_DateSetMode			; Hour/Month单独触发
+	jmp		L_KeyHTrigger_DateSetMode			; Month单独触发
 No_KeyHTrigger_DateSetMode:
 	cmp		#$20
 	bne		No_KeyBTrigger_DateSetMode
-	jmp		L_KeyBTrigger_DateSetMode			; Backlight/SNZ单独触发
+	jmp		L_KeyBTrigger_DateSetMode			; Backlight单独触发
 No_KeyBTrigger_DateSetMode:
 	cmp		#$10
 	bne		L_KeyExit_DateSetMode
-	jmp		L_KeySTrigger_DateSetMode			; 12/24h & year触发
+	jmp		L_KeySTrigger_DateSetMode			; year触发
 
 L_KeyExit_DateSetMode:
 	TMR1_OFF									; 关闭快加8Hz计时的定时器
@@ -200,7 +200,8 @@ L_KeyExit_DateSetMode:
 	lda		#0									; 清理相关变量
 	sta		CC2
 L_Key8HzExit_DateSetMode:
-	rts									
+	rts
+
 
 L_KeyMTrigger_DateSetMode:
 	jsr		F_Is_Leap_Year
@@ -283,115 +284,208 @@ L_Year_Add_Set:
 	rts
 
 
+
 ; 时间设置模式的按键处理
-F_KeyTrigger_TimeSet_Mode:
-	bbs3	Timer_Flag,L_QuikAdd1_TimeSet_Mode
-	rmb0	Key_Flag
-	bbr1	Key_Flag,L_KeyWait_TimeSet_Mode		; 首次按键触发需要消抖
-	rmb1	Key_Flag							; 清除首次按键触发标志位
+F_KeyTrigger_TimeSetMode:
+	bbs3	Timer_Flag,L_Key8Hz_TimeSetMode		; 有快加则直接判断8Hz标志位
+	bbr1	Key_Flag,L_KeyScan_TimeSetMode		; 首次按键触发
+	rmb1	Key_Flag
 	lda		#$00
 	sta		P_Temp
-L_DelayTrigger_TimeSet_Mode:					; 消抖延时循环用标签
+L_DelayTrigger_TimeSetMode:						; 消抖延时循环用标签
 	inc		P_Temp
 	lda		P_Temp
-	bne		L_DelayTrigger_TimeSet_Mode			; 软件消抖
-	bra		L_QuikAdd1_TimeSet_Mode
+	bne		L_DelayTrigger_TimeSetMode			; 软件消抖
+	lda		PA
+	and		#$f0
+	cmp		#$00
+	bne		L_KeyYes_TimeSetMode				; 检测是否有按键触发
+	bra		L_KeyExit_TimeSetMode
+	rts
+L_KeyYes_TimeSetMode:
+	sta		PA_IO_Backup
+	bra		L_KeyHandle_TimeSetMode				; 首次触发处理结束
 
-L_KeyWait_TimeSet_Mode:	
-	lda		PA									; 长按时，在快加到来前，只需要判断有效按键是否存在
-	and		#$a4								; 并关闭中断
-	cmp		#$0
-	beq		L_QuikAdd2_TimeSet_Mode
-	bne		L_KeyExit_TimeSet_Mode
+L_KeyScan_TimeSetMode:							; 长按处理部分
+	bbr0	Key_Flag,L_KeyExit_TimeSetMode		; 没有扫键标志直接退出
+L_Key8Hz_TimeSetMode:
+	bbr4	Timer_Flag,L_Key8HzExit_TimeSetMode	; 8Hz标志位到来前也不进行按键处理(快加下)
+	rmb4	Timer_Flag
+	lda		PA
+	and		#$f0
+	cmp		PA_IO_Backup						; 若检测到有按键的状态变化则退出快加判断并结束
+	beq		L_8Hz_Count_TimeSetMode
+	bra		L_KeyExit_TimeSetMode
+	rts
+L_8Hz_Count_TimeSetMode:
+	inc		CC2
+	lda		CC2
+	cmp		#12
+	bcs		L_QuikAdd_TimeSetMode
+	rts											; 长按计时，必须满1S才有快加
+L_QuikAdd_TimeSetMode:
+	smb3	Timer_Flag
 
-L_QuikAdd1_TimeSet_Mode:
+L_KeyHandle_TimeSetMode:
 	lda		PA									; 判断4种按键触发情况
-	and		#$F0
+	and		#$f0
 	cmp		#$80
-	bne		No_KeyMTrigger_TimeSet_Mode			; 由于跳转指令寻址能力的问题，这里采用jmp进行跳转
-	jmp		L_KeyMTrigger_TimeSet_Mode			; Min/Date单独触发
-No_KeyMTrigger_TimeSet_Mode:
+	bne		No_KeyMTrigger_TimeSetMode			; 由于跳转指令寻址能力的问题，这里采用jmp进行跳转
+	jmp		L_KeyMTrigger_TimeSetMode			; Min单独触发
+No_KeyMTrigger_TimeSetMode:
 	cmp		#$40
-	bne		No_KeyHTrigger_TimeSet_Mode
-	jmp		L_KeyHTrigger_TimeSet_Mode			; Hour/Month单独触发
-No_KeyHTrigger_TimeSet_Mode:
+	bne		No_KeyHTrigger_TimeSetMode
+	jmp		L_KeyHTrigger_TimeSetMode			; Hour单独触发
+No_KeyHTrigger_TimeSetMode:
 	cmp		#$20
-	bne		No_KeyBTrigger_TimeSet_Mode
-	jmp		L_KeyBTrigger_TimeSet_Mode			; Backlight/SNZ单独触发
-No_KeyBTrigger_TimeSet_Mode:
+	bne		No_KeyBTrigger_TimeSetMode
+	jmp		L_KeyBTrigger_TimeSetMode			; Backlight/SNZ单独触发
+No_KeyBTrigger_TimeSetMode:
 	cmp		#$10
-	bne		L_QuikAdd2_TimeSet_Mode
-	jmp		L_KeySTrigger_TimeSet_Mode			; 12/24h & year触发
+	bne		L_KeyExit_TimeSetMode
+	jmp		L_KeySTrigger_TimeSetMode			; 12/24h触发
 
-L_QuikAdd2_TimeSet_Mode:
-	TMR1_OFF
-	rmb3	Timer_Flag							; 若无有效按键组合，则清掉快加标志位
+L_KeyExit_TimeSetMode:
+	TMR1_OFF									; 关闭快加8Hz计时的定时器
+	rmb0	Key_Flag							; 清相关标志位
+	rmb3	Timer_Flag
+	lda		#0									; 清理相关变量
+	sta		CC2
+L_Key8HzExit_TimeSetMode:
+	rts
 
-L_KeyExit_TimeSet_Mode:
-	rts									
 
-L_KeyMTrigger_TimeSet_Mode:
+L_KeyMTrigger_TimeSetMode:
+	inc		R_Time_Min
+	lda		#59
+	cmp		R_Time_Min
+	bcs		L_MinSet_Juge
+	lda		#00
+	sta		R_Time_Min
+L_MinSet_Juge:
+	jsr		L_DisTime_Min
 	rts
-L_KeyHTrigger_TimeSet_Mode:
+L_KeyHTrigger_TimeSetMode:
+	inc		R_Time_Hour
+	lda		#23
+	cmp		R_Time_Hour
+	bcs		L_HourSet_Juge
+	lda		#00
+	sta		R_Time_Hour
+L_HourSet_Juge:
+	jsr		L_DisTime_Hour
 	rts
-L_KeyBTrigger_TimeSet_Mode:
+L_KeyBTrigger_TimeSetMode:
+	smb3	Key_Flag
+	smb3	PB
 	rts
-L_KeySTrigger_TimeSet_Mode:
+L_KeySTrigger_TimeSetMode:
+	lda		Clock_Flag
+	eor		#0001B
+	sta		Clock_Flag
+	jsr		L_DisTime_Hour
+	jsr		L_DisAlarm_Hour
 	rts
+
 
 
 ; 闹钟设置模式的按键处理
-F_KeyTrigger_AlarmSet_Mode:
-	bbs3	Timer_Flag,L_QuikAdd1_AlarmSet_Mode
-	rmb0	Key_Flag
-	bbr1	Key_Flag,L_KeyWait_AlarmSet_Mode	; 首次按键触发需要消抖
-	rmb1	Key_Flag							; 清除首次按键触发标志位
+F_KeyTrigger_AlarmSetMode:
+	bbs3	Timer_Flag,L_Key8Hz_AlarmSetMode	; 有快加则直接判断8Hz标志位
+	bbr1	Key_Flag,L_KeyScan_AlarmSetMode		; 首次按键触发
+	rmb1	Key_Flag
 	lda		#$00
 	sta		P_Temp
-L_DelayTrigger_AlarmSet_Mode:					; 消抖延时循环用标签
+L_DelayTrigger_AlarmSetMode:					; 消抖延时循环用标签
 	inc		P_Temp
 	lda		P_Temp
-	bne		L_DelayTrigger_AlarmSet_Mode		; 软件消抖
-	bra		L_QuikAdd1_AlarmSet_Mode
+	bne		L_DelayTrigger_AlarmSetMode			; 软件消抖
+	lda		PA
+	and		#$f0
+	cmp		#$00
+	bne		L_KeyYes_AlarmSetMode				; 检测是否有按键触发
+	bra		L_KeyExit_AlarmSetMode
+	rts
+L_KeyYes_AlarmSetMode:
+	sta		PA_IO_Backup
+	bra		L_KeyHandle_AlarmSetMode			; 首次触发处理结束
 
-L_KeyWait_AlarmSet_Mode:	
-	lda		PA									; 长按时，在快加到来前，只需要判断有效按键是否存在
-	and		#$a4								; 并关闭中断
-	cmp		#$0
-	beq		L_QuikAdd2_AlarmSet_Mode
-	bne		L_KeyExit_AlarmSet_Mode
+L_KeyScan_AlarmSetMode:							; 长按处理部分
+	bbr0	Key_Flag,L_KeyExit_AlarmSetMode		; 没有扫键标志直接退出
+L_Key8Hz_AlarmSetMode:
+	bbr4	Timer_Flag,L_Key8HzExit_AlarmSetMode; 8Hz标志位到来前也不进行按键处理(快加下)
+	rmb4	Timer_Flag
+	lda		PA
+	and		#$f0
+	cmp		PA_IO_Backup						; 若检测到有按键的状态变化则退出快加判断并结束
+	beq		L_8Hz_Count_AlarmSetMode
+	bra		L_KeyExit_AlarmSetMode
+	rts
+L_8Hz_Count_AlarmSetMode:
+	inc		CC2
+	lda		CC2
+	cmp		#12
+	bcs		L_QuikAdd_AlarmSetMode
+	rts											; 长按计时，必须满1S才有快加
+L_QuikAdd_AlarmSetMode:
+	smb3	Timer_Flag
 
-L_QuikAdd1_AlarmSet_Mode:
+L_KeyHandle_AlarmSetMode:
 	lda		PA									; 判断4种按键触发情况
-	and		#$F0
+	and		#$f0
 	cmp		#$80
-	bne		No_KeyMTrigger_AlarmSet_Mode		; 由于跳转指令寻址能力的问题，这里采用jmp进行跳转
-	jmp		L_KeyMTrigger_AlarmSet_Mode			; Min/Date单独触发
-No_KeyMTrigger_AlarmSet_Mode:
+	bne		No_KeyMTrigger_AlarmSetMode			; 由于跳转指令寻址能力的问题，这里采用jmp进行跳转
+	jmp		L_KeyMTrigger_AlarmSetMode			; Min单独触发
+No_KeyMTrigger_AlarmSetMode:
 	cmp		#$40
-	bne		No_KeyHTrigger_AlarmSet_Mode
-	jmp		L_KeyHTrigger_AlarmSet_Mode			; Hour/Month单独触发
-No_KeyHTrigger_AlarmSet_Mode:
+	bne		No_KeyHTrigger_AlarmSetMode
+	jmp		L_KeyHTrigger_AlarmSetMode			; Hour单独触发
+No_KeyHTrigger_AlarmSetMode:
 	cmp		#$20
-	bne		No_KeyBTrigger_AlarmSet_Mode
-	jmp		L_KeyBTrigger_AlarmSet_Mode			; Backlight/SNZ单独触发
-No_KeyBTrigger_AlarmSet_Mode:
+	bne		No_KeyBTrigger_AlarmSetMode
+	jmp		L_KeyBTrigger_AlarmSetMode			; Backlight单独触发
+No_KeyBTrigger_AlarmSetMode:
 	cmp		#$10
-	bne		L_QuikAdd2_AlarmSet_Mode
-	jmp		L_KeySTrigger_AlarmSet_Mode			; 12/24h & year触发
+	bne		L_KeyExit_AlarmSetMode
+	jmp		L_KeySTrigger_AlarmSetMode			; 12/24h触发
 
-L_QuikAdd2_AlarmSet_Mode:
-	TMR1_OFF
-	rmb3	Timer_Flag							; 若无有效按键组合，则清掉快加标志位
+L_KeyExit_AlarmSetMode:
+	TMR1_OFF									; 关闭快加8Hz计时的定时器
+	rmb0	Key_Flag							; 清相关标志位
+	rmb3	Timer_Flag
+	lda		#0									; 清理相关变量
+	sta		CC2
+L_Key8HzExit_AlarmSetMode:
+	rts
 
-L_KeyExit_AlarmSet_Mode:
-	rts									
-
-L_KeyMTrigger_AlarmSet_Mode:
+L_KeyMTrigger_AlarmSetMode:
+	inc		R_Alarm_Min
+	lda		#59
+	cmp		R_Alarm_Min
+	bcs		L_AlarmMinSet_Juge
+	lda		#00
+	sta		R_Alarm_Min
+L_AlarmMinSet_Juge:
+	jsr		L_DisAlarm_Min
 	rts
-L_KeyHTrigger_AlarmSet_Mode:
+L_KeyHTrigger_AlarmSetMode:
+	inc		R_Alarm_Hour
+	lda		#23
+	cmp		R_Alarm_Hour
+	bcs		L_AlarmHourSet_Juge
+	lda		#00
+	sta		R_Alarm_Hour
+L_AlarmHourSet_Juge:	
+	jsr		L_DisAlarm_Hour
 	rts
-L_KeyBTrigger_AlarmSet_Mode:
+L_KeyBTrigger_AlarmSetMode:
+	smb3	Key_Flag
+	smb3	PB
 	rts
-L_KeySTrigger_AlarmSet_Mode:
+L_KeySTrigger_AlarmSetMode:
+	lda		Clock_Flag
+	eor		#0001B
+	sta		Clock_Flag
+	jsr		L_DisTime_Hour
+	jsr		L_DisAlarm_Hour
 	rts
