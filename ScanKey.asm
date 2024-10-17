@@ -132,7 +132,7 @@ L_KeyBTrigger_RunTimeMode:
 	smb3	Key_Flag							; 背光激活，同时启动贪睡
 	smb3	PB
 	lda		#0									; 每次按背光都会重置计时
-	sta		CC3
+	sta		Backlight_Counter
 	smb3	Clock_Flag
 	rts
 L_KeySTrigger_RunTimeMode:
@@ -177,8 +177,8 @@ L_Key8Hz_DateSetMode:
 	bra		L_KeyExit_DateSetMode
 	rts
 L_8Hz_Count_DateSetMode:
-	inc		CC2
-	lda		CC2
+	inc		QuickAdd_Counter
+	lda		QuickAdd_Counter
 	cmp		#12
 	bcs		L_QuikAdd_DateSetMode
 	rts											; 长按计时，必须满1S才有快加
@@ -209,7 +209,7 @@ L_KeyExit_DateSetMode:
 	rmb0	Key_Flag							; 清相关标志位
 	rmb3	Timer_Flag
 	lda		#0									; 清理相关变量
-	sta		CC2
+	sta		QuickAdd_Counter
 L_Key8HzExit_DateSetMode:
 	rts
 
@@ -266,7 +266,7 @@ L_KeyBTrigger_DateSetMode:
 	smb3	Key_Flag							; 背光激活
 	smb3	PB
 	lda		#0
-	sta		CC3									; 每次按背光都会重置计时
+	sta		Backlight_Counter					; 每次按背光都会重置计时
 	rts
 
 L_KeySTrigger_DateSetMode:
@@ -331,8 +331,8 @@ L_Key8Hz_TimeSetMode:
 	bra		L_KeyExit_TimeSetMode
 	rts
 L_8Hz_Count_TimeSetMode:
-	inc		CC2
-	lda		CC2
+	inc		QuickAdd_Counter
+	lda		QuickAdd_Counter
 	cmp		#12
 	bcs		L_QuikAdd_TimeSetMode
 	rts											; 长按计时，必须满1S才有快加
@@ -363,7 +363,7 @@ L_KeyExit_TimeSetMode:
 	rmb0	Key_Flag							; 清相关标志位
 	rmb3	Timer_Flag
 	lda		#0									; 清理相关变量
-	sta		CC2
+	sta		QuickAdd_Counter
 L_Key8HzExit_TimeSetMode:
 	rts
 
@@ -396,7 +396,7 @@ L_KeyBTrigger_TimeSetMode:
 	smb3	Key_Flag
 	smb3	PB
 	lda		#0
-	sta		CC3									; 每次按背光都会重置计时
+	sta		Backlight_Counter					; 每次按背光都会重置计时
 	rts
 L_KeySTrigger_TimeSetMode:
 	lda		Clock_Flag
@@ -441,8 +441,8 @@ L_Key8Hz_AlarmSetMode:
 	bra		L_KeyExit_AlarmSetMode
 	rts
 L_8Hz_Count_AlarmSetMode:
-	inc		CC2
-	lda		CC2
+	inc		QuickAdd_Counter
+	lda		QuickAdd_Counter
 	cmp		#12
 	bcs		L_QuikAdd_AlarmSetMode
 	rts											; 长按计时，必须满1S才有快加
@@ -473,7 +473,7 @@ L_KeyExit_AlarmSetMode:
 	rmb0	Key_Flag							; 清相关标志位
 	rmb3	Timer_Flag
 	lda		#0									; 清理相关变量
-	sta		CC2
+	sta		QuickAdd_Counter
 L_Key8HzExit_AlarmSetMode:
 	rts
 
@@ -501,7 +501,7 @@ L_KeyBTrigger_AlarmSetMode:
 	smb3	Key_Flag
 	smb3	PB
 	lda		#0
-	sta		CC3									; 每次按背光都会重置计时
+	sta		Backlight_Counter					; 每次按背光都会重置计时
 	rts
 L_KeySTrigger_AlarmSetMode:
 	lda		Clock_Flag

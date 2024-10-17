@@ -3,14 +3,14 @@ F_Backlight:
 	bbr5	Timer_Flag,L_Backlight_Exit
 
 	rmb5	Timer_Flag
-	lda		CC3
+	lda		Backlight_Counter
 	cmp		#6
 	bcs		L_Backlight_Stop
-	inc		CC3
+	inc		Backlight_Counter
 	bra		L_Backlight_Exit
 L_Backlight_Stop:
 	lda		#0
-	sta		CC3
+	sta		Backlight_Counter
 	rmb3	Key_Flag
 	rmb3	PB
 L_Backlight_Exit:

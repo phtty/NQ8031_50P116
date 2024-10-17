@@ -57,7 +57,6 @@ V_RESET:
 	jsr		F_Display_All
 	
 	; test Code
-	smb0	Clock_Flag
 
 
 ;***********************************************************************
@@ -66,6 +65,7 @@ MainLoop:
 	jsr		F_Time_Run							; 走时全局生效
 	jsr		F_Switch_Scan						; 拨键扫描全局生效
 	jsr		F_Backlight							; 背光全局生效
+	jsr		L_Louding
 
 Status_Juge:
 	bbs0	Sys_Status_Flag,Status_Runtime
@@ -76,7 +76,7 @@ Status_Juge:
 Status_Runtime:
 	jsr		F_KeyTrigger_RunTimeMode			; RunTime模式下按键逻辑
 	jsr		F_DisTime_Run
-	jsr		F_Alarm_Louding						; 只在RunTime模式下才会响闹
+	jsr		F_Alarm_Handler						; 只在RunTime模式下才会响闹
 	bra		MainLoop
 Status_Calendar_Set:
 	jsr		F_KeyTrigger_DateSetMode			; DateSet模式下按键逻辑
@@ -124,10 +124,9 @@ L_Timer2Irq:
 L_1Hz_Out:
 	lda		#$0
 	sta		Counter_1Hz
-	smb1	Timer_Flag							; 1S标志，用于闪烁
-	smb2	Timer_Flag							; 增S标志，用于计时
-	smb5	Timer_Flag							; 背光1S标志，用于背光计时
-	bra		L_EndIrq
+	lda		Timer_Flag
+	ora		#10100110B							; 1S、增S、背光、响铃的1S标志位
+	sta		Timer_Flag
 
 L_Timer0Irq:									; 用于蜂鸣器
 	CLR_TMR0_IRQ_FLAG
@@ -139,7 +138,7 @@ L_Timer0Irq:									; 用于蜂鸣器
 L_16Hz_Out:
 	lda		#$0
 	sta		Counter_16Hz
-	smb3	Timer_Flag							; 响铃判断标志
+	smb6	Timer_Flag							; 16Hz标志
 	bra		L_EndIrq
 
 L_Timer1Irq:									; 用于快加计时
