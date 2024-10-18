@@ -7,8 +7,6 @@ L_Blink_Alarm:
 	bbs1	Timer_Flag,L_Alarm_Clear
 L_KeyTrigger_NoBlink_Alarm:
 	jsr		F_Display_Alarm						; 半S亮
-	ldx		#lcd_DotC
-	jsr		F_DispSymbol
 	bbr1	Calendar_Flag,No_Date_Add1			; 如有增日期，则调用显示日期函数
 	jsr		F_Display_Date
 	rts
@@ -32,8 +30,11 @@ F_Alarm_Handler:
 	rts
 L_No_Alarm_Process:
 	TMR0_OFF
+	rmb7	TMRC
 	rmb6	Timer_Flag
 	rmb7	Timer_Flag
+	lda		#0
+	sta		AlarmLoud_Counter
 	rts
 
 L_IS_AlarmTrigger:
@@ -45,29 +46,61 @@ L_IS_AlarmTrigger:
 	lda		R_Time_Min
 	cmp		R_Alarm_Min
 	bne		L_CloseLoud
-	bra		L_No_Snooze
+	bbs2	Clock_Flag,L_Start_Loud_Juge
+	lda		R_Time_Sec
+	cmp		#00
+	bne		L_CloseLoud
+L_Start_Loud_Juge:
+	lda		R_Alarm_Hour						; 在贪睡启动前，必定先触发设定闹钟
+	sta		R_Snooze_Hour						; 此时同步设定闹钟时间至贪睡闹钟
+	lda		R_Alarm_Min							; 之后贪睡触发时只需要在自己的基础上加5min
+	sta		R_Snooze_Min
+	bra		L_AlarmTrigger
 L_Snooze:
 	lda		R_Time_Hour							; 有贪睡的情况下
 	cmp		R_Snooze_Hour						; 贪睡闹钟设定值和当前时间不匹配不会进响闹模式
-	bne		L_CloseLoud
+	bne		L_Snooze_CloseLoud
 	lda		R_Time_Min
 	cmp		R_Snooze_Min
-	bne		L_CloseLoud
-L_No_Snooze:
-	smb2	Clock_Flag							; 开启响闹模式和蜂鸣器计时TIM0
+	bne		L_Snooze_CloseLoud
+	bbs2	Clock_Flag,L_AlarmTrigger
+	lda		R_Time_Sec
+	cmp		#00
+	bne		L_Snooze_CloseLoud
+L_AlarmTrigger:
 	TMR0_ON
+	smb2	Clock_Flag							; 开启响闹模式和蜂鸣器计时TIM0
+	bbs5	Clock_Flag,L_AlarmTrigger_Exit
+	smb5	Clock_Flag							; 保存响闹模式的值,区分响闹结束状态和未响闹状态
+	smb7	Clock_Flag
+L_AlarmTrigger_Exit:
 	rts
+L_Snooze_CloseLoud:
+	rmb2	Clock_Flag
+	bbr5	Clock_Flag,L_CloseLoud				; last==1 && now==0
+	rmb5	Clock_Flag							; 响闹结束状态同步响闹模式的保存值
+	bbr6	Clock_Flag,L_No_SnoozeKey
+	rmb6	Clock_Flag							; 清贪睡按键触发
+	bra		L_CloseLoud
+L_No_SnoozeKey:
+	rmb3	Clock_Flag							; 没有贪睡按键触发&&贪睡模式&&响闹结束状态
+	rmb6	Clock_Flag							; 才结束贪睡模式
 L_CloseLoud:
 	rmb2	Clock_Flag							; 非以上情况关闭响闹模式
 	rmb7	TMRC
+	rmb6	Timer_Flag
+	rmb7	Timer_Flag
+	TMR0_OFF
 	rts
 
 
 L_Alarm_Process:
+	bbs7	Clock_Flag,L_BeepStart
 	bbs7	Timer_Flag,L_BeepStart				; 每S进一次
 	rts
 L_BeepStart:
 	rmb7	Timer_Flag
+	rmb7	Clock_Flag
 	inc		AlarmLoud_Counter					; 响铃1次加1响铃计数
 	lda		#2									; 0-10S响闹的序列为2，1声
 	sta		Beep_Serial
@@ -91,7 +124,7 @@ L_Alarm_Exit:
 	rts
 
 
-L_Louding:
+F_Louding:
 	bbs6	Timer_Flag,L_Beeping
 	rts
 L_Beeping:

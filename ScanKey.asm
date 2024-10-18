@@ -87,16 +87,22 @@ Switch_Date_Set_Mode:
 	jsr		F_Display_Date
 	ldx		#lcd_DotC
 	jsr		F_ClrpSymbol
+	jsr		L_CloseLoud							; 如果有响闹和贪睡，则打断响闹和贪睡
+	rmb3	Clock_Flag
 	rts
 Switch_Time_Set_Mode:
 	lda		#0100B
 	sta		Sys_Status_Flag
 	jsr		F_Display_All
+	jsr		L_CloseLoud							; 如果有响闹和贪睡，则打断响闹和贪睡
+	rmb3	Clock_Flag
 	rts
 Switch_Alarm_Set_Mode:
 	lda		#1000B
 	sta		Sys_Status_Flag
 	jsr		F_Display_All
+	jsr		L_CloseLoud							; 如果有响闹和贪睡，则打断响闹和贪睡
+	rmb3	Clock_Flag
 	rts
 
 
@@ -133,8 +139,32 @@ L_KeyBTrigger_RunTimeMode:
 	smb3	PB
 	lda		#0									; 每次按背光都会重置计时
 	sta		Backlight_Counter
-	smb3	Clock_Flag
+	bbr2	Clock_Flag,L_KeyBTrigger_Exit		; 如果不是在响闹模式下，则不会处理贪睡
+	smb6	Clock_Flag							; 贪睡按键触发						
+	smb3	Clock_Flag							; 进入贪睡模式
+
+	lda		R_Snooze_Min						; 贪睡闹钟的时间加5
+	clc
+	adc		#5
+	cmp		#60
+	bcs		L_Snooze_OverflowMin
+	sta		R_Snooze_Min
+	bra		L_KeyBTrigger_Exit
+L_Snooze_OverflowMin:
+	sec
+	sbc		#60
+	sta		R_Snooze_Min						; 产生贪睡响闹的分钟进位
+	inc		R_Snooze_Hour
+	lda		R_Snooze_Hour
+	cmp		#24
+	bcc		L_KeyBTrigger_Exit
+	lda		#00									; 产生贪睡小时进位
+	sta		R_Snooze_Hour
+L_KeyBTrigger_Exit:
+	lda		R_Snooze_Hour
+	lda		R_Snooze_Min
 	rts
+
 L_KeySTrigger_RunTimeMode:
 	lda		Clock_Flag							; 每按一次翻转clock_flag bit0状态
 	eor		#$01

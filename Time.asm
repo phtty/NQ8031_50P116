@@ -33,6 +33,12 @@ F_DisTime_Run:
 L_TimeDot_Out:
 	rmb0	Timer_Flag
 	bbs1	Timer_Flag,L_Dot_Clear
+	bbr1	Clock_Flag,L_Snooze_Blink1			; Alarm
+	bbs2	Clock_Flag,L_Snooze_Blink1			; Loud
+	bbr3	Clock_Flag,L_Snooze_Blink1			; Snooze	
+	ldx		#lcd_Zz								; Zz闪烁条件:
+	jsr		F_DispSymbol						; Snooze==1 && loud==0 && Alarm==1
+L_Snooze_Blink1:
 	ldx		#lcd_DotC							; 没1S亮点
 	jsr		F_DispSymbol
 	rts											; 半S触发时没1S标志不走时，直接返回
@@ -40,6 +46,12 @@ L_Dot_Clear:
 	rmb1	Timer_Flag							; 清1S标志
 	ldx		#lcd_DotC							; 1S触发后必定进灭点，同时走时
 	jsr		F_ClrpSymbol
+	bbr1	Clock_Flag,L_Snooze_Blink2			; Alarm
+	bbs2	Clock_Flag,L_Snooze_Blink2			; Loud
+	bbr3	Clock_Flag,L_Snooze_Blink2			; Snooze	
+	ldx		#lcd_Zz								; Zz闪烁条件:
+	jsr		F_ClrpSymbol						; Snooze==1 && loud==0
+L_Snooze_Blink2:
 	jsr		F_Display_Time
 	bbr1	Calendar_Flag,No_Date_Add			; 如有增日期，则调用显示日期函数
 	jsr		F_Display_Date

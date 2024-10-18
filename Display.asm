@@ -268,6 +268,23 @@ F_Display_All:
 	rts
 
 
+F_SymbolRegulate:
+	bbr1	Clock_Flag,L_No_Alarm
+	ldx		#lcd_bell
+	jsr		F_DispSymbol
+	bbr2	Clock_Flag,L_Loud_Juge_Exit			; Loud==0: exit
+	ldx		#lcd_Zz								; Zz常亮条件
+	jsr		F_DispSymbol						; Loud==1 && Alarm==1
+L_Loud_Juge_Exit
+	rts
+L_No_Alarm:
+	ldx		#lcd_Zz
+	jsr		F_ClrpSymbol
+	ldx		#lcd_bell
+	jsr		F_ClrpSymbol
+	rts
+
+
 L_LSR_4Bit_Prog:
 	clc
 	ror		

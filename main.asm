@@ -65,7 +65,8 @@ MainLoop:
 	jsr		F_Time_Run							; 走时全局生效
 	jsr		F_Switch_Scan						; 拨键扫描全局生效
 	jsr		F_Backlight							; 背光全局生效
-	jsr		L_Louding
+	jsr		F_Louding
+	jsr		F_SymbolRegulate
 
 Status_Juge:
 	bbs0	Sys_Status_Flag,Status_Runtime
@@ -127,6 +128,7 @@ L_1Hz_Out:
 	lda		Timer_Flag
 	ora		#10100110B							; 1S、增S、背光、响铃的1S标志位
 	sta		Timer_Flag
+	bra		L_EndIrq
 
 L_Timer0Irq:									; 用于蜂鸣器
 	CLR_TMR0_IRQ_FLAG
