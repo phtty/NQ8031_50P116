@@ -9,7 +9,7 @@
 	;.INCLIST	ON		;宏定义和文件
 	.MACLIST	ON
 ;***************************************
-CODE_BEG	EQU		F000H ;C000H(4K*4次)		;起始地址
+CODE_BEG	EQU		C000H						;起始地址
 ;***************************************
 
 PROG	SECTION	OFFSET	CODE_BEG				;定义代码段的偏移量从CODE_BEG开始，用于组织程序代码。
@@ -53,9 +53,16 @@ V_RESET:
 
 	jsr		F_Timer_Init
 
+	lda		PC
+	and		#$1
+	beq		L_MODE1
+	jsr		F_Port_Init2
+	jmp		L_MODE2
+
+L_MODE1:
 	cli											; 开总中断
 	jsr		F_Display_All
-	
+
 	; test Code
 
 
@@ -88,7 +95,7 @@ Status_Time_Set:
 	jsr		F_DisTime_Set
 	bra		MainLoop
 Status_Alarm_Set:
-	jsr		F_KeyTrigger_AlarmSetMode			; AlarmSet模式下案件逻辑
+	jsr		F_KeyTrigger_AlarmSetMode			; AlarmSet模式下按键逻辑
 	jsr		F_DisAlarm_Set
 	bra		MainLoop
 
@@ -169,19 +176,26 @@ L_EndIrq:
 
 
 ;***********************************************************************
+.include	main2.asm
 .include	ScanKey.asm
+.include	ScanKey2.asm
 .include	Time.asm
+.include	Time2.asm
 .include	Calendar.asm
 .include	Alarm.asm
+.include	Alarm2.asm
 .include	Backlight.asm
 .include	Init.asm
 .include	Disp.asm
+.include	Disp2.asm
 .include	Display.asm
+.include	Display2.asm
 .include	Lcdtab.asm
+.include	Lcdtab2.asm
 
 ;--------------------------------------------------------	
 ;***********************************************************************
-.BLKB	0FFF8H-$,0FFH
+.BLKB	0FFFFH-$,0FFH							; 从当前地址到FFFF全部填充0xFF
 	
 .ORG	0FFF8H
 	DB		C_RST_SEL + C_OMS0 + C_PAIM

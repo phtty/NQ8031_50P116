@@ -5,6 +5,7 @@ L_Init_SystemRam_Prog:							; 系统初始化
 	sta		Key_Flag
 	sta		Timer_Flag
 	sta		Clock_Flag
+	smb1	Clock_Flag
 	sta		Calendar_Flag
 	sta		AlarmLoud_Counter					; 阶段响闹计数
 	sta		QuickAdd_Counter					; 快加标志的计数
@@ -13,14 +14,14 @@ L_Init_SystemRam_Prog:							; 系统初始化
 	lda		#$01
 	sta		Sys_Status_Flag
 
-	lda		#18
+	lda		#0
 	sta		R_Time_Hour
-	lda		#00
+	lda		#0
 	sta		R_Time_Min
 	lda		#55
 	sta		R_Time_Sec
 
-	lda		#18
+	lda		#0
 	sta		R_Alarm_Hour
 	lda		#01
 	sta		R_Alarm_Min
@@ -117,3 +118,46 @@ F_Beep_Init:
 	rmb1	AUDCR								; 配置BP位，选择AUD开启时的模式，这里选择TONE模式				
 	lda		#$ff
 	sta		AUD0								; TONE模式下其实AUD0没用
+
+
+F_Port_Init2:
+	lda		PA_WAKE								; PA2~7做唤醒
+	ora		#$fc
+	sta		PA_WAKE
+	lda		PA_DIR								; 配置为输入
+	ora		#$fc
+	sta		PA_DIR
+	lda		PA									; 设置下拉
+	ora		#$fc
+	sta		PA
+	EN_PA_IRQ									; 打开PA口外部中断
+
+	PB3_PB3_COMS								; PB口作背光输出
+	
+	lda		PC_SEG								; 配置PC0~5为普通IO口
+	and		#$e0
+	sta		PC_SEG
+	lda		PC_DIR								; PC0/2~5作拨键输入
+	ora		#$3d
+	sta		PC_DIR
+	lda		PC									; PC0/2~5配置为下拉
+	ora		#$3d
+	sta		PC
+
+	lda		#$00
+	sta		PC_IO_Backup
+
+	rts
+
+F_LCD_Init2:
+	jsr		F_ClearScreen						; LCD初始化
+
+	CHECK_LCD
+
+	rmb1	LCD_COM								; 配置COM线数量
+	rmb0	LCD_COM
+
+	LCD_ON
+	jsr		F_ClearScreen						; 清屏
+
+	rts

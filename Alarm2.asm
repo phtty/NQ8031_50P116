@@ -1,36 +1,18 @@
-F_DisAlarm_Set:
-	bbs0	Timer_Flag,L_Blink_Alarm			; 没有半S标志时不闪烁
+F_DisAlarm_Set2:
+	bbs0	Timer_Flag,L_Blink_Alarm2			; 没有半S标志时不更新
 	rts
-L_Blink_Alarm:
+L_Blink_Alarm2:
 	rmb0	Timer_Flag							; 清半S标志
-	bbs1	Timer_Flag,L_Alarm_Clear
-	jsr		F_Display_Alarm						; 半S亮
-	ldx		#lcd_DotC
-	jsr		F_DispSymbol
-	bbr1	Calendar_Flag,No_Date_Add1			; 如有增日期，则调用显示日期函数
-	jsr		F_Display_Date
-	rts
-L_Alarm_Clear:
-	rmb1	Timer_Flag
-	bbs0	Key_Flag,L_KeyYes_NoBlink_Alarm	; 有按键时不闪烁
-	jsr		F_UnDisplay_Alarm					; 1S灭
-L_KeyYes_NoBlink_Alarm:
-	ldx		#lcd_DotC
-	jsr		F_ClrpSymbol
-	jsr		F_Display_Time
-	bbr1	Calendar_Flag,No_Date_Add1			; 如有增日期，则调用显示日期函数
-	jsr		F_Display_Date
-No_Date_Add1:
+	jsr		F_Display_Alarm2					; 产生更新
 	rts
 
 
-
-F_Alarm_Handler:
-	jsr		L_IS_AlarmTrigger					; 判断闹钟是否触发
-	bbr2	Clock_Flag,L_No_Alarm_Process		; 有响闹标志位再进处理
-	jsr		L_Alarm_Process
+F_Alarm_Handler2:
+	jsr		L_IS_AlarmTrigger2					; 判断闹钟是否触发
+	bbr2	Clock_Flag,L_No_Alarm_Process2		; 有响闹标志位再进处理
+	jsr		L_Alarm_Process2
 	rts
-L_No_Alarm_Process:
+L_No_Alarm_Process2:
 	TMR0_OFF
 	rmb7	TMRC
 	rmb6	Timer_Flag
@@ -39,56 +21,56 @@ L_No_Alarm_Process:
 	sta		AlarmLoud_Counter
 	rts
 
-L_IS_AlarmTrigger:
-	bbr1	Clock_Flag,L_CloseLoud				; 没有开启闹钟拨键不会进响闹模式
-	bbs3	Clock_Flag,L_Snooze
+L_IS_AlarmTrigger2:
+	bbr1	Clock_Flag,L_CloseLoud2				; 没有开启闹钟不会进响闹模式
+	bbs3	Clock_Flag,L_Snooze2
 	lda		R_Time_Hour							; 没有贪睡的情况下
 	cmp		R_Alarm_Hour						; 闹钟设定值和当前时间不匹配不会进响闹模式
-	bne		L_CloseLoud
+	bne		L_CloseLoud2
 	lda		R_Time_Min
 	cmp		R_Alarm_Min
-	bne		L_CloseLoud
-	bbs2	Clock_Flag,L_Alarm_NoStop
+	bne		L_CloseLoud2
+	bbs2	Clock_Flag,L_Alarm_NoStop2
 	lda		R_Time_Sec
 	cmp		#00
-	bne		L_CloseLoud
-L_Start_Loud_Juge:
+	bne		L_CloseLoud2
+L_Start_Loud_Juge2:
 	lda		R_Alarm_Hour						; 在贪睡启动前，必定先触发设定闹钟
 	sta		R_Snooze_Hour						; 此时同步设定闹钟时间至贪睡闹钟
 	lda		R_Alarm_Min							; 之后贪睡触发时只需要在自己的基础上加5min
 	sta		R_Snooze_Min
-	bra		L_AlarmTrigger
-L_Snooze:
+	bra		L_AlarmTrigger2
+L_Snooze2:
 	lda		R_Time_Hour							; 有贪睡的情况下
 	cmp		R_Snooze_Hour						; 贪睡闹钟设定值和当前时间不匹配不会进响闹模式
-	bne		L_Snooze_CloseLoud
+	bne		L_Snooze_CloseLoud2
 	lda		R_Time_Min
 	cmp		R_Snooze_Min
-	bne		L_Snooze_CloseLoud
-	bbs2	Clock_Flag,L_Alarm_NoStop
+	bne		L_Snooze_CloseLoud2
+	bbs2	Clock_Flag,L_Alarm_NoStop2
 	lda		R_Time_Sec
 	cmp		#00
-	bne		L_Snooze_CloseLoud
-L_AlarmTrigger:
-	smb7	Timer_Flag
+	bne		L_Snooze_CloseLoud2
+L_AlarmTrigger2:
+	smb7	Timer_Flag							
 	TMR0_ON
 	smb2	Clock_Flag							; 开启响闹模式和蜂鸣器计时TIM0
-L_Alarm_NoStop:
-	bbs5	Clock_Flag,L_AlarmTrigger_Exit
+L_Alarm_NoStop2:								; 判断退出条件，响闹模式的backup跟随
+	bbs5	Clock_Flag,L_AlarmTrigger_Exit2
 	smb5	Clock_Flag							; 保存响闹模式的值,区分响闹结束状态和未响闹状态
-L_AlarmTrigger_Exit:
+L_AlarmTrigger_Exit2:
 	rts
-L_Snooze_CloseLoud:
+L_Snooze_CloseLoud2:
 	rmb2	Clock_Flag
-	bbr5	Clock_Flag,L_CloseLoud				; last==1 && now==0
+	bbr5	Clock_Flag,L_CloseLoud2				; last==1 && now==0
 	rmb5	Clock_Flag							; 响闹结束状态同步响闹模式的保存值
-	bbr6	Clock_Flag,L_No_SnoozeKey
+	bbr6	Clock_Flag,L_No_SnoozeKey2
 	rmb6	Clock_Flag							; 清贪睡按键触发
-	bra		L_CloseLoud
-L_No_SnoozeKey:
+	bra		L_CloseLoud2
+L_No_SnoozeKey2:
 	rmb3	Clock_Flag							; 没有贪睡按键触发&&贪睡模式&&响闹结束状态
 	rmb6	Clock_Flag							; 才结束贪睡模式
-L_CloseLoud:
+L_CloseLoud2:
 	rmb2	Clock_Flag							; 非以上情况关闭响闹模式
 	rmb5	Clock_Flag
 	rmb7	TMRC
@@ -98,10 +80,10 @@ L_CloseLoud:
 	rts
 
 
-L_Alarm_Process:
-	bbs7	Timer_Flag,L_BeepStart				; 每S进一次
+L_Alarm_Process2:
+	bbs7	Timer_Flag,L_BeepStart2				; 每S进一次
 	rts
-L_BeepStart:
+L_BeepStart2:
 	rmb7	Timer_Flag
 	inc		AlarmLoud_Counter					; 响铃1次加1响铃计数
 	lda		#2									; 0-10S响闹的序列为2，1声
@@ -109,49 +91,49 @@ L_BeepStart:
 	rmb4	Clock_Flag							; 0-30S为序列响铃
 	lda		AlarmLoud_Counter
 	cmp		#10
-	bcc		L_Alarm_Exit
+	bcc		L_Alarm_Exit2
 	lda		#4									; 10-20S响闹的序列为4，2声
 	sta		Beep_Serial
 	lda		AlarmLoud_Counter
 	cmp		#20
-	bcc		L_Alarm_Exit
+	bcc		L_Alarm_Exit2
 	lda		#8									; 20-30S响闹的序列为8，4声
 	sta		Beep_Serial
 	lda		AlarmLoud_Counter
 	cmp		#30
-	bcc		L_Alarm_Exit
+	bcc		L_Alarm_Exit2
 	smb4	Clock_Flag							; 30S以上使用持续响铃
 
-L_Alarm_Exit:
+L_Alarm_Exit2:
 	rts
 
 
-F_Louding:
-	bbs6	Timer_Flag,L_Beeping
+F_Louding2:
+	bbs6	Timer_Flag,L_Beeping2
 	rts
-L_Beeping:
+L_Beeping2:
 	rmb6	Timer_Flag
-	bbs4	Clock_Flag,L_ConstBeep_Mode
+	bbs4	Clock_Flag,L_ConstBeep_Mode2
 	lda		Beep_Serial							; 序列响铃模式
 	cmp		#0
-	beq		L_NoBeep_Serial_Mode
+	beq		L_NoBeep_Serial_Mode2
 	dec		Beep_Serial
-	bbr0	Beep_Serial,L_NoBeep_Serial_Mode
+	bbr0	Beep_Serial,L_NoBeep_Serial_Mode2
 	smb7	TMRC
 	rts
-L_NoBeep_Serial_Mode:
+L_NoBeep_Serial_Mode2:
 	rmb7	TMRC
 	rts
 
-L_ConstBeep_Mode:
+L_ConstBeep_Mode2:
 	lda		Beep_Serial							; 持续响铃模式
 	eor		#01B								; Beep_Serial翻转第一位
 	sta		Beep_Serial
 
 	lda		Beep_Serial
-	bbr0	Beep_Serial,L_NoBeep_Const_Mode
+	bbr0	Beep_Serial,L_NoBeep_Const_Mode2
 	smb7	TMRC
 	rts
-L_NoBeep_Const_Mode:
+L_NoBeep_Const_Mode2:
 	rmb7	TMRC
 	rts
