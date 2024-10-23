@@ -29,21 +29,20 @@ V_RESET:
 	nop
 	nop
 	nop
-	ldx		#STACK_BOT  
+	ldx		#STACK_BOT
 	txs											; 使用这个值初始化堆栈指针，这通常是为了设置堆栈的底部地址，确保程序运行中堆栈的正确使用。
-	lda		#$B7								; #$07    
+	lda		#$17								; #$97
 	sta		SYSCLK								; 设置系统时钟
 	ClrAllRam									; 清RAM
 	lda		#$0
-	sta		DIVC								; 分频控制器，定时器与DICV异步
+	sta		DIVC								; 分频控制器，定时器与DIV异步
 	sta		IER									; 除能中断
 	sta		IFR									; 初始化中断标志位
-	sta		PB
 	lda		FUSE
-	sta		MF0									;为内部RC振荡器提供校准数据
+	sta		MF0									;为内部RC振荡器提供校准数据	
 
 	jsr		F_Beep_Init
-	jsr		L_Init_SystemRam_Prog				;初始化系统RAM并禁用所有断电保留的RAM
+	jsr		F_Init_SystemRam_Prog				;初始化系统RAM并禁用所有断电保留的RAM
 
 	jsr		F_LCD_Init
 	jsr		F_Port_Init
@@ -120,6 +119,7 @@ Status_Alarm_Set:
 
 ;***********************************************************************
 ;***********************************************************************
+; 中断服务函数
 V_IRQ:
 	pha
 	lda		IER

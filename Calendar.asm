@@ -1,4 +1,4 @@
-F_Calendar_Add:
+F_Calendar_Add:									; 走日期
 	smb1	Calendar_Flag
 	jsr		F_Is_Leap_Year
 	ldx		R_Date_Month						; 月份数作为索引，查表
@@ -45,6 +45,37 @@ F_Is_Leap_Year:
 	rts
 L_Set_LeapYear_Flag:
 	smb0	Calendar_Flag
+	rts
+
+; 判断当前日期星期数
+L_DateToWeek:
+	jsr		F_Is_Leap_Year
+	ldx		R_Date_Year
+	lda		L_Table_WeekInYear,x					; 当前年份首日的星期数->A
+	tax
+	bbs0	Calendar_Flag,L_DateToWeek_Leap
+	lda		L_Table_Gap_CommonMonth,x				; 当前月份首日的星期数->A
+	bra		L_Get_Week
+L_DateToWeek_Leap:
+	lda		L_Table_Gap_LeepMonth,x					; 当前月份首日的星期数->A
+L_Get_Week:
+	sta		P_Temp									; 当前月份首日的星期数->P_Temp
+	ldx		R_Date_Day
+	dex												; 当前日期->X->X-1->A
+	txa
+	jsr		L_MOD_7									; A对7求余即为当前日期的星期数偏移量
+	clc
+	adc		P_Temp									; 当前月份首日的星期数+偏移量=当前日期的星期数
+	rts
+
+
+L_MOD_7:
+	cmp		#7
+	bcc		L_MOD_Over
+	sec
+	sbc		#7
+	bra		L_MOD_7
+L_MOD_Over:
 	rts
 
 
@@ -95,3 +126,85 @@ L_Table_Month_Leap:
 	.byte	31	; October
 	.byte	30	; November
 	.byte	31	; December
+
+L_Table_WeekInYear:
+	.byte	$1E	; 2001,2000 E="1110"代表2000年1月1日是星期六(110),是闰年(1)
+	.byte	$32	; 2003,2002
+	.byte	$6C	; 2005,2004
+	.byte	$10	; 2007,2006
+	.byte	$4A	; 2009,2008
+	.byte	$65	; 2011,2010
+	.byte	$28	; 2013,2012
+	.byte	$43	; 2015,2014
+	.byte	$0D	; 2017,2016
+	.byte	$21	; 2019,2018
+	.byte	$5B	; 2021,2020
+	.byte	$06	; 2023,2022
+	.byte	$39	; 2025,2024
+	.byte	$54	; 2027,2026
+	.byte	$1E	; 2029,2028
+	.byte	$32	; 2031,2030
+	.byte	$6C	; 2033,2032
+	.byte	$10	; 2035,2034
+	.byte	$4A	; 2037,2036
+	.byte	$65	; 2039,2038
+	.byte	$28	; 2041,2040
+	.byte	$43	; 2043,2042
+	.byte	$0D	; 2045,2044
+	.byte	$21	; 2047,2046
+	.byte	$5B	; 2049,2048
+	.byte	$06	; 2051,2050
+	.byte	$39	; 2053,2052
+	.byte	$54	; 2055,2054
+	.byte	$1E	; 2057,2056
+	.byte	$32	; 2059,2058
+	.byte	$6C	; 2061,2060
+	.byte	$10	; 2063,2062
+	.byte	$4A	; 2065,2064
+	.byte	$65	; 2067,2066
+	.byte	$28	; 2069,2068
+	.byte	$43	; 2071,2070
+	.byte	$0D	; 2073,2072
+	.byte	$21	; 2075,2074
+	.byte	$5B	; 2077,2076
+	.byte	$06	; 2079,2078
+	.byte	$39	; 2081,2080
+	.byte	$54	; 2083,2082
+	.byte	$1E	; 2085,2084
+	.byte	$32	; 2087,2086
+	.byte	$6C	; 2089,2088
+	.byte	$10	; 2091,2090
+	.byte	$4A	; 2093,2092
+	.byte	$65	; 2095,2094
+	.byte	$28	; 2097,2096
+	.byte	$43	; 2099,2098
+
+; 平年里每月份首日对当前年份首日的星期偏移
+L_Table_Gap_CommonMonth:
+	.byte	0	; 1月1日
+	.byte	3	; 2月1日
+	.byte	3	; 3月1日
+	.byte	6	; 4月1日
+	.byte	1	; 5月1日
+	.byte	4	; 6月1日
+	.byte	6	; 7月1日
+	.byte	2	; 8月1日
+	.byte	5	; 9月1日
+	.byte	0	; 10月1日
+	.byte	3	; 11月1日
+	.byte	5	; 12月1日
+
+; 闰年里每月份首日对当前年份首日的星期偏移
+L_Table_Gap_LeapMonth:
+	.byte	0	; 1月1日
+	.byte	3	; 2月1日
+	.byte	4	; 3月1日
+	.byte	0	; 4月1日
+	.byte	2	; 5月1日
+	.byte	5	; 6月1日
+	.byte	0	; 7月1日
+	.byte	3	; 8月1日
+	.byte	6	; 9月1日
+	.byte	1	; 10月1日
+	.byte	4	; 11月1日
+	.byte	6	; 12月1日

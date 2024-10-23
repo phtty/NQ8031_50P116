@@ -1,4 +1,4 @@
-L_Init_SystemRam_Prog:							; 系统初始化
+F_Init_SystemRam_Prog:							; 系统初始化
 	lda		#0
 	sta		Counter_1Hz
 	sta		Counter_16Hz
@@ -62,15 +62,18 @@ F_Port_Init:
 	sta		PA
 	EN_PA_IRQ									; 打开PA口外部中断
 
-	PB3_PB3_COMS								; PB口作背光输出
+	lda		PB
+	and		#$f7
+	sta		PB
+	PB3_PB3_COMS								; PB3口作背光输出
 	
 	lda		PC_SEG								; 配置PC0~5为普通IO口
 	and		#$e0
 	sta		PC_SEG
-	lda		PC_DIR								; PC0/2~5作拨键输入
+	lda		PC_DIR								; PC2~5作拨键输入，PC0、1做邦选
 	ora		#$3f
 	sta		PC_DIR
-	lda		PC									; PC0/2~5配置为下拉
+	lda		PC									; PC0~5配置为下拉
 	ora		#$3f
 	sta		PC
 
