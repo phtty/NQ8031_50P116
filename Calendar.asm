@@ -22,7 +22,7 @@ L_Day_Juge:
 L_Day_Add:
 	inc		R_Date_Day
 	rts
-	
+
 L_Year_Add:
 	lda		#1
 	sta		R_Date_Month
@@ -35,7 +35,7 @@ L_Reload_Year:
 	lda		#0
 	sta		R_Date_Year
 	rts
-	
+
 ; 判断平闰年函数
 F_Is_Leap_Year:
 	lda		R_Date_Year

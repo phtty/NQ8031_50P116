@@ -54,18 +54,31 @@ V_RESET:
 	jsr		F_Timer_Init
 
 	lda		PC
-	and		#$1
+	and		#11B
+	beq		L_MODE0
+	cmp		#01B
 	beq		L_MODE1
-	jsr		F_Port_Init2
-	jmp		L_MODE2
+	cmp		#10B
+	beq		L_MODE2
+	rts
 
-L_MODE1:										; MODE1代表方块时钟
+L_MODE0:
+	jsr		F_Port_Init2
+	jsr		F_LCD_Init2
+	cli											; 开总中断
+
+	jsr		F_Display_Symbol2
+	jsr		F_Display_Time2
+	jmp		MainLoop2
+
+L_MODE1:										; MODE1代表旧方块时钟
 	cli											; 开总中断
 	jsr		F_Display_All
 	rmb0	Key_Flag
+	jmp		MainLoop
 
-	; test Code
-
+L_MODE2:
+	cli
 
 ;***********************************************************************
 ;***********************************************************************

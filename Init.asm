@@ -68,10 +68,10 @@ F_Port_Init:
 	and		#$e0
 	sta		PC_SEG
 	lda		PC_DIR								; PC0/2~5作拨键输入
-	ora		#$3d
+	ora		#$3f
 	sta		PC_DIR
 	lda		PC									; PC0/2~5配置为下拉
-	ora		#$3d
+	ora		#$3f
 	sta		PC
 
 	lda		#$00

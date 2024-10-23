@@ -1,15 +1,7 @@
-L_MODE2:										; 
-	jsr		F_LCD_Init2
-	cli											; 开总中断
 
-	; test Code
-	jsr		F_Display_Symbol2
-	jsr		F_Display_Time2
+; 椭圆时钟状态机
 
-
-;***********************************************************************
-;***********************************************************************
-MainLoop2:										; MODE2的状态机
+MainLoop2:
 	jsr		F_Time_Run2							; 走时全局生效
 	jsr		F_Louding2							; 响铃处理全局生效
 	jsr		F_Backlight							; 背光全局生效
