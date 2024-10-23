@@ -59,16 +59,17 @@ V_RESET:
 	jsr		F_Port_Init2
 	jmp		L_MODE2
 
-L_MODE1:
+L_MODE1:										; MODE1代表方块时钟
 	cli											; 开总中断
 	jsr		F_Display_All
+	rmb0	Key_Flag
 
 	; test Code
 
 
 ;***********************************************************************
 ;***********************************************************************
-MainLoop:
+MainLoop:										; MODE1的状态机
 	jsr		F_Time_Run							; 走时全局生效
 	jsr		F_Switch_Scan						; 拨键扫描全局生效
 	jsr		F_Backlight							; 背光全局生效
@@ -85,18 +86,22 @@ Status_Runtime:
 	jsr		F_KeyTrigger_RunTimeMode			; RunTime模式下按键逻辑
 	jsr		F_DisTime_Run
 	jsr		F_Alarm_Handler						; 只在RunTime模式下才会响闹
+	sta		HALT
 	bra		MainLoop
 Status_Calendar_Set:
 	jsr		F_KeyTrigger_DateSetMode			; DateSet模式下按键逻辑
 	jsr		F_DisCalendar_Set
+	sta		HALT
 	bra		MainLoop
 Status_Time_Set:
 	jsr		F_KeyTrigger_TimeSetMode			; TimeSet模式下按键逻辑
 	jsr		F_DisTime_Set
+	sta		HALT
 	bra		MainLoop
 Status_Alarm_Set:
 	jsr		F_KeyTrigger_AlarmSetMode			; AlarmSet模式下按键逻辑
 	jsr		F_DisAlarm_Set
+	sta		HALT
 	bra		MainLoop
 
 

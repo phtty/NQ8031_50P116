@@ -49,6 +49,7 @@ L_Set_LeapYear_Flag:
 
 
 F_DisCalendar_Set:
+	lda		Key_Flag
 	bbs0	Key_Flag,L_KeyTrigger_NoBlink_Date	; 有按键时不闪烁
 	bbs0	Timer_Flag,L_Blink_Date				; 没有半S标志不闪烁
 	rts
@@ -60,7 +61,7 @@ L_KeyTrigger_NoBlink_Date:
 	jsr		F_Display_Date
 	rts	
 L_Date_Clear:
-	rmb1	Timer_Flag
+	rmb1	Timer_Flag							; 清1S标志
 	jsr		F_UnDisplay_Date
 	rts
 

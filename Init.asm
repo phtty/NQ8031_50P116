@@ -54,14 +54,11 @@ F_LCD_Init:
 
 
 F_Port_Init:
-	lda		PA_WAKE								; PA4~7做唤醒
-	ora		#$f0
+	lda		#$f0
 	sta		PA_WAKE
-	lda		PA_DIR								; 配置为输入
-	ora		#$f0
+	lda		#$f0
 	sta		PA_DIR
-	lda		PA									; 设置下拉
-	ora		#$f0
+	lda		#$f0
 	sta		PA
 	EN_PA_IRQ									; 打开PA口外部中断
 
@@ -120,14 +117,11 @@ F_Beep_Init:
 
 
 F_Port_Init2:
-	lda		PA_WAKE								; PA2~7做唤醒
-	ora		#$fc
+	lda		#$fc
 	sta		PA_WAKE
-	lda		PA_DIR								; 配置为输入
-	ora		#$fc
+	lda		#$fc
 	sta		PA_DIR
-	lda		PA									; 设置下拉
-	ora		#$fc
+	lda		#$fc
 	sta		PA
 	EN_PA_IRQ									; 打开PA口外部中断
 
