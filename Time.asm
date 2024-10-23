@@ -43,6 +43,7 @@ L_Snooze_Blink1:
 	jsr		F_DispSymbol
 	jsr		F_Display_Time
 	bbr1	Calendar_Flag,No_Date_Add			; 如有增日期，则调用显示日期函数
+	rmb1	Calendar_Flag
 	jsr		F_Display_Date
 	rts											; 半S触发时没1S标志不走时，直接返回
 L_Dot_Clear:
@@ -57,6 +58,7 @@ L_Dot_Clear:
 L_Snooze_Blink2:
 	jsr		F_Display_Time
 	bbr1	Calendar_Flag,No_Date_Add			; 如有增日期，则调用显示日期函数
+	rmb1	Calendar_Flag
 	jsr		F_Display_Date
 No_Date_Add:
 	rts
@@ -68,6 +70,10 @@ F_DisTime_Set:
 	rts
 L_Blink_Time:
 	rmb0	Timer_Flag							; 清半S标志
+	bbr1	Calendar_Flag,L_No_Date_Add_TS
+	rmb1	Calendar_Flag
+	jsr		F_Display_Date
+L_No_Date_Add_TS:
 	bbs1	Timer_Flag,L_Time_Clear
 L_KeyTrigger_NoBlink_Time:
 	jsr		F_Display_Time						; 半S亮

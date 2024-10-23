@@ -72,6 +72,7 @@ Switch_Alarm_OFF:
 	jsr		F_ClrpSymbol
 	ldx		#lcd_Zz
 	jsr		F_ClrpSymbol
+	jsr		L_NoSnooze_CloseLoud				; 如果有响闹和贪睡，则打断响闹和贪睡
 	rts
 
 ; 四种模式切换的拨键处理
@@ -85,24 +86,20 @@ Switch_Date_Set_Mode:
 	sta		Sys_Status_Flag
 	jsr		F_Display_Alarm
 	jsr		F_Display_Date
-	ldx		#lcd_DotC
-	jsr		F_ClrpSymbol
-	jsr		L_CloseLoud							; 如果有响闹和贪睡，则打断响闹和贪睡
-	rmb3	Clock_Flag
+	jsr		F_UnDisplay_InDateMode				; 进入日期模式后停止显示一些符号
+	jsr		L_NoSnooze_CloseLoud				; 如果有响闹和贪睡，则打断响闹和贪睡
 	rts
 Switch_Time_Set_Mode:
 	lda		#0100B
 	sta		Sys_Status_Flag
 	jsr		F_Display_All
-	jsr		L_CloseLoud							; 如果有响闹和贪睡，则打断响闹和贪睡
-	rmb3	Clock_Flag
+	jsr		L_NoSnooze_CloseLoud				; 如果有响闹和贪睡，则打断响闹和贪睡
 	rts
 Switch_Alarm_Set_Mode:
 	lda		#1000B
 	sta		Sys_Status_Flag
 	jsr		F_Display_All
-	jsr		L_CloseLoud							; 如果有响闹和贪睡，则打断响闹和贪睡
-	rmb3	Clock_Flag
+	jsr		L_NoSnooze_CloseLoud				; 如果有响闹和贪睡，则打断响闹和贪睡
 	rts
 
 
@@ -122,9 +119,17 @@ L_DelayTrigger_RunTimeMode:						; 消抖延时循环用标签
 	bne		L_DelayTrigger_RunTimeMode			; 软件消抖
 
 	lda		PA									; 正常走时模式下只对2个按键有响应
-	and		#$30
+	and		#$f0
+	cmp		#$80
+	bne		No_KeyMTrigger_RunTimeMode			; 由于跳转指令寻址能力的问题，这里采用jmp进行跳转
+	jmp		L_KeyMTrigger_RunTimeMode			; Date/Min单独触发
+No_KeyMTrigger_RunTimeMode:
+	cmp		#$40
+	bne		No_KeyHTrigger_RunTimeMode
+	jmp		L_KeyHTrigger_RunTimeMode			; Month/Hour单独触发
+No_KeyHTrigger_RunTimeMode:
 	cmp		#$20
-	bne		No_KeyBTrigger_RunTimeMode			; 由于跳转指令寻址能力的问题，这里采用jmp进行跳转
+	bne		No_KeyBTrigger_RunTimeMode
 	jmp		L_KeyBTrigger_RunTimeMode			; Backlight & SNZ触发
 No_KeyBTrigger_RunTimeMode:
 	cmp		#$10
@@ -132,6 +137,11 @@ No_KeyBTrigger_RunTimeMode:
 	jmp		L_KeySTrigger_RunTimeMode			; 12/24h & year触发
 
 L_KeyExit_RunTimeMode:
+	rts
+
+L_KeyMTrigger_RunTimeMode:						; 在走时模式下，M、H键都只会打断贪睡这一个功能
+L_KeyHTrigger_RunTimeMode:
+	jsr		L_NoSnooze_CloseLoud
 	rts
 
 L_KeyBTrigger_RunTimeMode:
@@ -171,7 +181,9 @@ L_KeySTrigger_RunTimeMode:
 	sta		Clock_Flag
 	jsr		F_Display_Time
 	jsr		F_Display_Alarm
+	jsr		L_NoSnooze_CloseLoud				; 如果有响闹和贪睡，则打断响闹和贪睡
 	rts
+
 
 
 ; 日历设置模式的按键处理
@@ -432,7 +444,7 @@ L_KeySTrigger_TimeSetMode:
 	lda		Clock_Flag
 	eor		#0001B
 	sta		Clock_Flag
-	jsr		L_DisTime_Hour
+	jsr		F_Display_Time
 	jsr		L_DisAlarm_Hour
 	rts
 
@@ -538,5 +550,5 @@ L_KeySTrigger_AlarmSetMode:
 	eor		#0001B
 	sta		Clock_Flag
 	jsr		L_DisTime_Hour
-	jsr		L_DisAlarm_Hour
+	jsr		F_Display_Alarm
 	rts

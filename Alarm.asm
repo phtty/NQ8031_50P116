@@ -3,12 +3,14 @@ F_DisAlarm_Set:
 	rts
 L_Blink_Alarm:
 	rmb0	Timer_Flag							; 清半S标志
+	bbr1	Calendar_Flag,L_No_Date_Add_AS		; 如有增日期，则调用显示日期函数
+	rmb1	Calendar_Flag
+	jsr		F_Display_Date
+L_No_Date_Add_AS:
 	bbs1	Timer_Flag,L_Alarm_Clear
 	jsr		F_Display_Alarm						; 半S亮
 	ldx		#lcd_DotC
 	jsr		F_DispSymbol
-	bbr1	Calendar_Flag,No_Date_Add1			; 如有增日期，则调用显示日期函数
-	jsr		F_Display_Date
 	rts
 L_Alarm_Clear:
 	rmb1	Timer_Flag
@@ -18,8 +20,6 @@ L_KeyYes_NoBlink_Alarm:
 	ldx		#lcd_DotC
 	jsr		F_ClrpSymbol
 	jsr		F_Display_Time
-	bbr1	Calendar_Flag,No_Date_Add1			; 如有增日期，则调用显示日期函数
-	jsr		F_Display_Date
 No_Date_Add1:
 	rts
 
@@ -79,17 +79,16 @@ L_Alarm_NoStop:
 L_AlarmTrigger_Exit:
 	rts
 L_Snooze_CloseLoud:
-	rmb2	Clock_Flag
 	bbr5	Clock_Flag,L_CloseLoud				; last==1 && now==0
 	rmb5	Clock_Flag							; 响闹结束状态同步响闹模式的保存值
-	bbr6	Clock_Flag,L_No_SnoozeKey
+	bbr6	Clock_Flag,L_NoSnooze_CloseLoud		; 没有贪睡按键触发&&贪睡模式&&响闹结束状态才会自然结束贪睡模式
 	rmb6	Clock_Flag							; 清贪睡按键触发
 	bra		L_CloseLoud
-L_No_SnoozeKey:
-	rmb3	Clock_Flag							; 没有贪睡按键触发&&贪睡模式&&响闹结束状态
-	rmb6	Clock_Flag							; 才结束贪睡模式
+L_NoSnooze_CloseLoud:							; 结束贪睡模式并关闭响闹
+	rmb3	Clock_Flag
+	rmb6	Clock_Flag
 L_CloseLoud:
-	rmb2	Clock_Flag							; 非以上情况关闭响闹模式
+	rmb2	Clock_Flag							; 关闭响闹模式
 	rmb5	Clock_Flag
 	rmb7	TMRC
 	rmb6	Timer_Flag

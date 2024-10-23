@@ -259,6 +259,15 @@ F_Display_Symbol:
 	jsr		F_DispSymbol
 	rts
 
+F_UnDisplay_InDateMode:
+	ldx		#lcd_AM
+	jsr		F_ClrpSymbol
+	ldx		#lcd_PM
+	jsr		F_ClrpSymbol
+	ldx		#lcd_DotC
+	jsr		F_ClrpSymbol
+	rts
+
 
 F_Display_All:
 	jsr		F_Display_Symbol

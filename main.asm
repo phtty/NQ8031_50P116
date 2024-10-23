@@ -74,6 +74,7 @@ L_MODE1:										; MODE1代表旧方块时钟
 	cli											; 开总中断
 	jsr		F_Display_All
 	rmb0	Key_Flag
+	jsr		F_Test_Mode
 	jmp		MainLoop
 
 L_MODE2:

@@ -47,25 +47,45 @@ L_Set_LeapYear_Flag:
 	smb0	Calendar_Flag
 	rts
 
-; 判断当前日期星期数
-L_DateToWeek:
+
+; 通过当前日期计算当前星期数
+L_GetWeek:
 	jsr		F_Is_Leap_Year
-	ldx		R_Date_Year
-	lda		L_Table_WeekInYear,x					; 当前年份首日的星期数->A
-	tax
+
+	ldx		R_Date_Day
+	dex												; 当前日期-1->X->A
+	txa
+	jsr		L_MOD_7
+	sta		P_Temp									; 当前日期相对月首日的星期数偏移量->P_Temp
+	
+	ldx		R_Date_Month
+	dex
 	bbs0	Calendar_Flag,L_DateToWeek_Leap
-	lda		L_Table_Gap_CommonMonth,x				; 当前月份首日的星期数->A
+	lda		L_Table_Gap_CommonMonth,x				; 平年月份首日的星期数->A
 	bra		L_Get_Week
 L_DateToWeek_Leap:
-	lda		L_Table_Gap_LeepMonth,x					; 当前月份首日的星期数->A
+	lda		L_Table_Gap_LeapMonth,x					; 闰年月份首日的星期数->A
 L_Get_Week:
-	sta		P_Temp									; 当前月份首日的星期数->P_Temp
-	ldx		R_Date_Day
-	dex												; 当前日期->X->X-1->A
-	txa
-	jsr		L_MOD_7									; A对7求余即为当前日期的星期数偏移量
+	sta		P_Temp+1								; 月份首日的星期数->P_Temp+1
+
+	lda		R_Date_Year								; 获取当前年首日的星期数
 	clc
-	adc		P_Temp									; 当前月份首日的星期数+偏移量=当前日期的星期数
+	ror												; 年份除以2来查表
+	tax
+	lda		L_Table_WeekInYear,x
+	bbs0	R_Date_Year,L_Odd_Year
+	and		#0111B									; 偶数年份取低4位
+	bra		L_Get_Weak_YearFirstDay
+L_Odd_Year:
+	jsr		L_LSR_4Bit_Prog
+	and		#0111B									; 奇数年份取高4位
+L_Get_Weak_YearFirstDay:
+	clc
+	adc		P_Temp
+	clc
+	adc		P_Temp+1								; 当前年首日的星期数+总偏移==当前星期数
+	jsr		L_MOD_7
+	sta		R_Date_Week
 	rts
 
 

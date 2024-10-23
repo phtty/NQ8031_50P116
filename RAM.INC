@@ -72,9 +72,10 @@ Time_Str_Addr	EQU		$
 R_Time_Sec				DS		1	;时间秒
 R_Time_Min				DS		1	;时间分
 R_Time_Hour				DS		1	;时间小时
-R_Date_Day				DS		1	;日期
-R_Date_Month			DS		1	;月份
+R_Date_Day				DS		1	;日期，从1开始
+R_Date_Month			DS		1	;月份，从1开始
 R_Date_Year				DS		1	;年份，由于只计2000-2099，所以由0-99代替
+R_Date_Week				DS		1	;星期数，从1开始
 R_Alarm_Min				DS		1	;闹钟分钟
 R_Alarm_Hour			DS		1	;闹钟小时
 R_Snooze_Min			DS		1	;贪睡闹钟分钟

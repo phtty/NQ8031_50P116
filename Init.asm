@@ -10,27 +10,29 @@ F_Init_SystemRam_Prog:							; 系统初始化
 	sta		QuickAdd_Counter					; 快加标志的计数
 	sta		Backlight_Counter
 
-	lda		#$01
+	lda		#01
 	sta		Sys_Status_Flag
 
-	lda		#0
+	lda		#00
 	sta		R_Time_Hour
-	lda		#0
+	lda		#00
 	sta		R_Time_Min
-	lda		#0
+	lda		#00
 	sta		R_Time_Sec
 
-	lda		#0
+	lda		#06
 	sta		R_Alarm_Hour
-	lda		#01
+	lda		#00
 	sta		R_Alarm_Min
 
-	lda		#1
+	lda		#01
 	sta		R_Date_Day
-	lda		#1
+	lda		#01
 	sta		R_Date_Month
-	lda		#00
+	lda		#07
 	sta		R_Date_Year
+	lda		#01
+	sta		R_Date_Week
 
 	rts
 
