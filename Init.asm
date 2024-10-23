@@ -5,7 +5,6 @@ L_Init_SystemRam_Prog:							; 系统初始化
 	sta		Key_Flag
 	sta		Timer_Flag
 	sta		Clock_Flag
-	smb1	Clock_Flag
 	sta		Calendar_Flag
 	sta		AlarmLoud_Counter					; 阶段响闹计数
 	sta		QuickAdd_Counter					; 快加标志的计数
@@ -18,7 +17,7 @@ L_Init_SystemRam_Prog:							; 系统初始化
 	sta		R_Time_Hour
 	lda		#0
 	sta		R_Time_Min
-	lda		#55
+	lda		#0
 	sta		R_Time_Sec
 
 	lda		#0
@@ -26,11 +25,11 @@ L_Init_SystemRam_Prog:							; 系统初始化
 	lda		#01
 	sta		R_Alarm_Min
 
-	lda		#16
+	lda		#1
 	sta		R_Date_Day
-	lda		#10
+	lda		#1
 	sta		R_Date_Month
-	lda		#24
+	lda		#00
 	sta		R_Date_Year
 
 	rts
