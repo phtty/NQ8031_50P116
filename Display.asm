@@ -245,7 +245,7 @@ F_UnDisplay_Alarm:
 	lda		#0
 	ldx		#lcd_d7
 	jsr		L_Dis_3Bit_DigitDot_Prog
-
+	rts
 
 ;显示常亮的符号
 F_Display_Symbol:
@@ -267,7 +267,6 @@ F_UnDisplay_InDateMode:
 	ldx		#lcd_DotC
 	jsr		F_ClrpSymbol
 	rts
-
 
 F_Display_All:
 	jsr		F_Display_Symbol

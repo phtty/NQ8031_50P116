@@ -1,85 +1,85 @@
 ;------------------------------------
 PB2_PB2_COMS MACRO
-        RMB0    PADF0
-        SMB2    PB_TYPE ; COMS
-        ENDM
+	RMB0    PADF0
+	SMB2    PB_TYPE ; COMS
+	ENDM
 PB2_PB2_NOMS MACRO
-        RMB0    PADF0
-        RMB2    PB_TYPE ; NOMS
-        ENDM		
+	RMB0    PADF0
+	RMB2    PB_TYPE ; NOMS
+	ENDM		
 PB2_PWM MACRO
-        SMB0    PADF0
-        SMB2    PB_TYPE
-        ENDM
+	SMB0    PADF0
+	SMB2    PB_TYPE
+	ENDM
 PB3_PB3_COMS MACRO
-        RMB1    PADF0
-        SMB3    PB_TYPE ; CMOS		
-        ENDM
+	RMB1    PADF0
+	SMB3    PB_TYPE ; CMOS		
+	ENDM
 PB3_PB3_NOMS MACRO
-        RMB1    PADF0
-        RMB3    PB_TYPE ; NMOS		
-        ENDM			
+	RMB1    PADF0
+	RMB3    PB_TYPE ; NMOS		
+	ENDM			
 PB3_PWM MACRO
-        SMB1    PADF0
-        SMB3    PB_TYPE
-        ENDM
+	SMB1    PADF0
+	SMB3    PB_TYPE
+	ENDM
 
 PA4_PA4 MACRO
-        RMB3    PADF0
-        RMB4    PADF0
-        ENDM
+	RMB3    PADF0
+	RMB4    PADF0
+	ENDM
 PA4_IR_FSUB     MACRO
-        SMB3    PADF0
-        RMB4    PADF0
-        ENDM
+	SMB3    PADF0
+	RMB4    PADF0
+	ENDM
 PA4_IR_TMR0_D2  MACRO
-        RMB3    PADF0
-        SMB4    PADF0
-        ENDM
+	RMB3    PADF0
+	SMB4    PADF0
+	ENDM
 PA4_IR_TMR0_D3  MACRO
-        SMB3    PADF0
-        SMB4    PADF0
-        ENDM
+	SMB3    PADF0
+	SMB4    PADF0
+	ENDM
 
 PA7_PA7 MACRO
-        RMB2    PADF0
-        ENDM
+	RMB2    PADF0
+	ENDM
 
 PA7_EXT MACRO
-        SMB2    PADF0 ;falling edge trigger
-        ENDM
+	SMB2    PADF0 ;falling edge trigger
+	ENDM
 		
 PC45_PC45       MACRO
-        RMB4    PC_SEG
-        ENDM		
+	RMB4    PC_SEG
+	ENDM		
 
 PC67_PC67       MACRO
-        RMB5    PC_SEG
-        RMB4    DIVC
-        ENDM
+	RMB5    PC_SEG
+	RMB4    DIVC
+	ENDM
 
 PC67_EL01       MACRO
-        RMB5    PC_SEG
-        SMB4    DIVC
-        ENDM
+	RMB5    PC_SEG
+	SMB4    DIVC
+	ENDM
 
 PC03_SEG       MACRO
-        SMB0    PC_SEG
-        SMB1    PC_SEG
-        SMB2    PC_SEG		
-        SMB3    PC_SEG		
-        ENDM	
+	SMB0    PC_SEG
+	SMB1    PC_SEG
+	SMB2    PC_SEG		
+	SMB3    PC_SEG		
+	ENDM	
 	
 PC45_SEG       MACRO
-        SMB4    PC_SEG
-        ENDM		
+	SMB4    PC_SEG
+	ENDM		
 PC67_SEG	MACRO
-        SMB5    PC_SEG
-        ENDM
+	SMB5    PC_SEG
+	ENDM
 		
 PD03_SEG	MACRO		
 		SMB6	PC_SEG
-        ENDM
+	ENDM
 PD03_RFC	MACRO		
 		RMB6	PC_SEG	
 ;		RMB0	PDSEG		
@@ -90,7 +90,7 @@ PD03_RFC	MACRO
 		SMB1	RFCC0		
 		SMB2	RFCC0		
 		SMB3	RFCC0		
-        ENDM
+	ENDM
 PD03_PD03	MACRO		
 		RMB6	PC_SEG	
 ;		RMB0	PDSEG		
@@ -101,27 +101,27 @@ PD03_PD03	MACRO
 		RMB1	RFCC0		
 		RMB2	RFCC0		
 		RMB3	RFCC0		
-        ENDM
+	ENDM
 PD0_SEG	MACRO		
 ;		RMB6	PC_SEG	
 		SMB0	PDSEG			
-        ENDM		
+	ENDM		
 PD1_SEG	MACRO		
 ;		RMB6	PC_SEG	
 		SMB1	PDSEG			
-        ENDM
+	ENDM
 PD2_SEG	MACRO		
 ;		RMB6	PC_SEG	
 		SMB2	PDSEG			
-        ENDM
+	ENDM
 PD3_SEG	MACRO		
 		RMB6	PC_SEG	
 		SMB3	PDSEG			
-        ENDM		
+	ENDM		
 		
 PD47_SEG	MACRO
 		SMB7	PC_SEG
-        ENDM	
+	ENDM	
 PD47_RFC	MACRO		
 		RMB7	PC_SEG	
 ;		RMB4	PDSEG		
@@ -132,7 +132,7 @@ PD47_RFC	MACRO
 		SMB5	RFCC0		
 		SMB6	RFCC0		
 		SMB7	RFCC0		
-        ENDM
+	ENDM
 PD47_PD47	MACRO		
 		RMB7	PC_SEG	
 ;		RMB4	PDSEG		
@@ -143,437 +143,437 @@ PD47_PD47	MACRO
 		RMB5	RFCC0		
 		RMB6	RFCC0		
 		RMB7	RFCC0		
-        ENDM
+	ENDM
 PD4_SEG	MACRO		
 ;		RMB7	PC_SEG	
 		SMB4	PDSEG			
-        ENDM		
+	ENDM		
 PD5_SEG	MACRO		
 ;		RMB7	PC_SEG	
 		SMB5	PDSEG			
-        ENDM
+	ENDM
 PD6_SEG	MACRO		
 ;		RMB7	PC_SEG	
 		SMB6	PDSEG			
-        ENDM
+	ENDM
 PD7_SEG	MACRO		
 		RMB7	PC_SEG	
 		SMB7	PDSEG			
-        ENDM
+	ENDM
 		
 PC_PD_SEG	MACRO		
 		lda		#$FF
 		STA		PC_SEG	;S1~S7,S8~S15			
-        ENDM
+	ENDM
 		
 LCD_2COM	MACRO		
-		SMB0	LCD_COM
+		RMB0	LCD_COM
 		RMB1	LCD_COM
-		RMB2	LCD_COM				
-        ENDM		
+
+	ENDM		
 LCD_3COM	MACRO		
 		RMB0	LCD_COM
-		SMB1	LCD_COM
-		RMB2	LCD_COM				
-        ENDM		
+		RMB1	LCD_COM
+
+	ENDM		
 LCD_4COM	MACRO		
 		SMB0	LCD_COM
-		SMB1	LCD_COM
-		RMB2	LCD_COM				
-        ENDM		
+		RMB1	LCD_COM
+
+	ENDM
 LCD_5COM	MACRO		
 		RMB0	LCD_COM
 		RMB1	LCD_COM
-		SMB2	LCD_COM				
-        ENDM		
+
+	ENDM		
 LCD_6COM	MACRO		
 		SMB0	LCD_COM
 		RMB1	LCD_COM
-		SMB2	LCD_COM				
-        ENDM		
+
+	ENDM		
 LCD_7COM	MACRO		
 		RMB0	LCD_COM
 		SMB1	LCD_COM
-		SMB2	LCD_COM				
-        ENDM		
+
+	ENDM		
 LCD_8COM	MACRO		
 		SMB0	LCD_COM
 		SMB1	LCD_COM
-		SMB2	LCD_COM				
-        ENDM
+
+	ENDM
 		
 LCD_ENCH_EN		MACRO		
 		SMB6	LCD_COM			
-        ENDM
+	ENDM
 LCD_ENCH_DIS	MACRO		
 		RMB6	LCD_COM			
-        ENDM
+	ENDM
 		
 LCD_C_TYPE	MACRO		
-		SMB7	LCD_COM
+		SMB6	LCD_COM
 		SMB0	PC_SEG
 		SMB1	PC_SEG
 		SMB2	PC_SEG
 		SMB3	PC_SEG
-        ENDM
+	ENDM
 LCD_DRIVE_2	MACRO
 		SMB0	LCDCTRL
 		RMB1	LCDCTRL	
-        ENDM
+	ENDM
 LCD_DRIVE_4	MACRO
 		RMB0	LCDCTRL
 		SMB1	LCDCTRL	
-        ENDM
+	ENDM
 LCD_DRIVE_8	MACRO		
 		SMB0	LCDCTRL
 		SMB1	LCDCTRL	
-        ENDM
+	ENDM
 LCD_DRIVE_FULL	MACRO		
 		RMB0	LCDCTRL
 		RMB1	LCDCTRL
-        ENDM
+	ENDM
 LCD_C_1_2_BAIS_3V	MACRO	
 		RMB2	LCDCTRL
 		RMB3	LCDCTRL	
-        ENDM
+	ENDM
 LCD_C_1_3_BAIS_3V	MACRO	
 		SMB2	LCDCTRL
 		RMB3	LCDCTRL	
-        ENDM
+	ENDM
 LCD_C_1_3_BAIS_4V	MACRO	
 		SMB2	LCDCTRL
 		SMB3	LCDCTRL	
-        ENDM		
+	ENDM		
 		
 LCD_R_TYPE	MACRO		
 		RMB7	LCD_COM		
-        ENDM
+	ENDM
 LCD_R_1_2_BAIS	MACRO	
 		SMB2	LCDCTRL
 		SMB3	LCDCTRL	
-        ENDM			
+	ENDM			
 LCD_R_1_3_BAIS	MACRO	
 		RMB2	LCDCTRL
 		RMB3	LCDCTRL	
-        ENDM
+	ENDM
 LCD_R_1_4_BAIS	MACRO	
 		SMB2	LCDCTRL
 		RMB3	LCDCTRL	
-        ENDM		
+	ENDM		
 ;------------------------------------
 Fext_WEAK       MACRO
-        RMB0    SYSCLK
-        ENDM
+	RMB0    SYSCLK
+	ENDM
 Fext_STRONG     MACRO
-        SMB0    SYSCLK
-        ENDM
+	SMB0    SYSCLK
+	ENDM
 
 Fext_OFF        MACRO
-        RMB1    SYSCLK
-        ENDM
+	RMB1    SYSCLK
+	ENDM
 Fext_ON         MACRO
-        SMB1    SYSCLK
-        ENDM
+	SMB1    SYSCLK
+	ENDM
 
 Fosc_OFF        MACRO
-        RMB2    SYSCLK
-        ENDM
+	RMB2    SYSCLK
+	ENDM
 Fosc_ON         MACRO
-        SMB2    SYSCLK
-        ENDM
+	SMB2    SYSCLK
+	ENDM
 
 Fext_Xtal       MACRO
-        RMB3    SYSCLK
-        ENDM
+	RMB3    SYSCLK
+	ENDM
 Fext_RC         MACRO
-        SMB3    SYSCLK
-        ENDM
+	SMB3    SYSCLK
+	ENDM
 
 Fsys_4MHZ MACRO
-        RMB4    SYSCLK
-        RMB5    SYSCLK
-        ENDM
+	RMB4    SYSCLK
+	RMB5    SYSCLK
+	ENDM
 Fsys_2MHZ MACRO
-        SMB4    SYSCLK
-        RMB5    SYSCLK
-        ENDM
+	SMB4    SYSCLK
+	RMB5    SYSCLK
+	ENDM
 Fsys_1MHZ MACRO
-        RMB4    SYSCLK
-        SMB5    SYSCLK
-        ENDM
+	RMB4    SYSCLK
+	SMB5    SYSCLK
+	ENDM
 Fsys_500K MACRO
-        SMB4    SYSCLK
-        SMB5    SYSCLK
-        ENDM
+	SMB4    SYSCLK
+	SMB5    SYSCLK
+	ENDM
 
 Fsub_Fext MACRO
-        SMB6    SYSCLK
-        ENDM
+	SMB6    SYSCLK
+	ENDM
 Fsub_32KCLK     MACRO
-        RMB6    SYSCLK
-        ENDM
+	RMB6    SYSCLK
+	ENDM
 
 Fcpu_Fext  MACRO
-        SMB7    SYSCLK
-        ENDM
+	SMB7    SYSCLK
+	ENDM
 Fcpu_Fsys  MACRO
-        RMB7    SYSCLK
-        ENDM
+	RMB7    SYSCLK
+	ENDM
 
 ;------------------------------------
 DIV_8KHZ  MACRO
-        RMB0    DIVC
-        RMB1    DIVC
+	RMB0    DIVC
+	RMB1    DIVC
 		RMB5	DIVC		
-        ENDM
+	ENDM
 DIV_16KHZ  MACRO
-        SMB0    DIVC
-        RMB1    DIVC
+	SMB0    DIVC
+	RMB1    DIVC
 		RMB5	DIVC		
-        ENDM
+	ENDM
 DIV_512HZ  MACRO
-        RMB0    DIVC
-        SMB1    DIVC
+	RMB0    DIVC
+	SMB1    DIVC
 		RMB5	DIVC		
-        ENDM
+	ENDM
 DIV_1KHZ  MACRO
-        SMB0    DIVC
-        SMB1    DIVC
+	SMB0    DIVC
+	SMB1    DIVC
 		RMB5	DIVC		
-        ENDM
+	ENDM
 DIV_256HZ  MACRO
 		SMB5	DIVC
-        ENDM		
+	ENDM		
 ;------------------------------------
 WDTC_CLK_256HZ   MACRO
-        RMB0    WDTC
-        RMB1    WDTC
-        ENDM
+	RMB0    WDTC
+	RMB1    WDTC
+	ENDM
 WDTC_CLK_DIV     MACRO
-        SMB0    WDTC
-        RMB1    WDTC
-        ENDM
+	SMB0    WDTC
+	RMB1    WDTC
+	ENDM
 WDTC_CLK_TMR1   MACRO
-        RMB0    WDTC
-        SMB1    WDTC
-        ENDM
+	RMB0    WDTC
+	SMB1    WDTC
+	ENDM
 WDTC_CLK_LCDS    MACRO
-        SMB0    WDTC
-        SMB1    WDTC
-        ENDM
+	SMB0    WDTC
+	SMB1    WDTC
+	ENDM
 
 WDTC_CLR MACRO
-        RMB2    WDTC
-        ENDM
+	RMB2    WDTC
+	ENDM
 
 WDTC_ON  MACRO
-        SMB3    WDTC
-        ENDM
+	SMB3    WDTC
+	ENDM
 WDTC_OFF MACRO
-        RMB3    WDTC
-        ENDM
+	RMB3    WDTC
+	ENDM
 
 IF_WDTC MACRO   LAB
-        BBS4    WDTC,LAB
-        ENDM
+	BBS4    WDTC,LAB
+	ENDM
 
 ;------------------------------------
 TMR0_ON MACRO
-        SMB0    TMRC
-        ENDM
+	SMB0    TMRC
+	ENDM
 TMR0_OFF MACRO
-        RMB0    TMRC
-        ENDM
+	RMB0    TMRC
+	ENDM
 TMR0_CLK_FOSC   MACRO
-        SMB0    TMCLK
-        RMB1    TMCLK
-        ENDM
+	SMB0    TMCLK
+	RMB1    TMCLK
+	ENDM
 TMR0_CLK_FSUB    MACRO
-        RMB0    TMCLK
-        RMB1    TMCLK
-        RMB0	PADF1
-        ENDM
+	RMB0    TMCLK
+	RMB1    TMCLK
+	RMB0	PADF1
+	ENDM
 TMR0_CLK_128K	macro
 		RMB0    TMCLK
-        SMB1    TMCLK
-        ENDM
+	SMB1    TMCLK
+	ENDM
 TMR0_CLK_32K	macro
 		RMB0    TMCLK
-        RMB1    TMCLK
-        SMB0	PADF1
-        ENDM    
+	RMB1    TMCLK
+	SMB0	PADF1
+	ENDM    
 TMR0_CLK_1M   MACRO
-        SMB0    TMCLK
-        SMB1    TMCLK
-        RMB6	TMRC       
-        ENDM
+	SMB0    TMCLK
+	SMB1    TMCLK
+	RMB6	TMRC       
+	ENDM
 
 TMR1_ON MACRO
-        SMB1    TMRC
-        ENDM
+	SMB1    TMRC
+	ENDM
 TMR1_OFF MACRO
-        RMB1    TMRC
-        ENDM			
+	RMB1    TMRC
+	ENDM			
 TMR1_CLK_TMR0   MACRO
-        RMB2    TMCLK
-        RMB3    TMCLK
-        ENDM
+	RMB2    TMCLK
+	RMB3    TMCLK
+	ENDM
 TMR1_CLK_512Hz    MACRO
-        SMB2    TMCLK
-        RMB3    TMCLK
-        ENDM
+	SMB2    TMCLK
+	RMB3    TMCLK
+	ENDM
 TMR1_CLK_128K	macro
 		RMB2    TMCLK
-        SMB3    TMCLK
-        ENDM
+	SMB3    TMCLK
+	ENDM
 TMR1_CLK_1M		macro
 		SMB2    TMCLK
-        SMB3    TMCLK
-        ENDM			
+	SMB3    TMCLK
+	ENDM			
 		
 TMR2_ON MACRO
-        SMB2    TMRC
-        ENDM
+	SMB2    TMRC
+	ENDM
 TMR2_OFF MACRO
-        RMB2    TMRC
-        ENDM			
+	RMB2    TMRC
+	ENDM			
 
 
 TONE_2KHZ       MACRO
-        RMB2    DIVC
-        RMB3    DIVC
-        ENDM
+	RMB2    DIVC
+	RMB3    DIVC
+	ENDM
 TONE_TMR0_2     MACRO
-        SMB2    DIVC
-        RMB3    DIVC
-        ENDM
+	SMB2    DIVC
+	RMB3    DIVC
+	ENDM
 TONE_L       MACRO
-        RMB2    DIVC
-        SMB3    DIVC
-        ENDM
+	RMB2    DIVC
+	SMB3    DIVC
+	ENDM
 TONE_H       MACRO
-        SMB2    DIVC
-        SMB3    DIVC
-        ENDM
+	SMB2    DIVC
+	SMB3    DIVC
+	ENDM
 ;------------------------------------
 EN_DIV_IRQ     MACRO
-        SMB0    IER
-        ENDM
+	SMB0    IER
+	ENDM
 EN_TMR0_IRQ     MACRO
-        SMB1    IER
-        ENDM
+	SMB1    IER
+	ENDM
 EN_TMR1_IRQ     MACRO
-        SMB2    IER
-        ENDM		
+	SMB2    IER
+	ENDM		
 EN_TMR2_IRQ     MACRO
-        SMB3    IER
-        ENDM
+	SMB3    IER
+	ENDM
 EN_KEY_IRQ      MACRO
-        SMB4    IER
-        ENDM
+	SMB4    IER
+	ENDM
 EN_PA_IRQ      MACRO
-        SMB4    IER
-        ENDM		
+	SMB4    IER
+	ENDM		
 EN_EXT_IRQ      MACRO
-        SMB5    IER
-        ENDM
+	SMB5    IER
+	ENDM
 EN_LCD_IRQ      MACRO
-        SMB6    IER
-        ENDM
+	SMB6    IER
+	ENDM
 
 DIS_DIV_IRQ     MACRO
-        RMB0    IER
-        ENDM
+	RMB0    IER
+	ENDM
 DIS_TMR0_IRQ     MACRO
-        RMB1    IER
-        ENDM
+	RMB1    IER
+	ENDM
 DIS_TMR1_IRQ     MACRO
-        RMB2    IER
-        ENDM		
+	RMB2    IER
+	ENDM		
 DIS_TMR2_IRQ     MACRO
-        RMB3    IER
-        ENDM
+	RMB3    IER
+	ENDM
 DIS_KEY_IRQ      MACRO
-        RMB4    IER
-        ENDM
+	RMB4    IER
+	ENDM
 DIS_PA_IRQ		 MACRO
-        RMB4    IER
-        ENDM		
+	RMB4    IER
+	ENDM		
 DIS_EXT_IRQ      MACRO
-        RMB5    IER
-        ENDM
+	RMB5    IER
+	ENDM
 DIS_LCD_IRQ      MACRO
-        RMB6    IER
-        ENDM
+	RMB6    IER
+	ENDM
 
 CLR_DIV_IRQ_FLAG MACRO
-        RMB0    IFR
-        ENDM
+	RMB0    IFR
+	ENDM
 CLR_TMR0_IRQ_FLAG      MACRO
-        RMB1    IFR
-        ENDM
+	RMB1    IFR
+	ENDM
 CLR_TMR1_IRQ_FLAG      MACRO
-        RMB2    IFR
-        ENDM		
+	RMB2    IFR
+	ENDM		
 CLR_TMR2_IRQ_FLAG      MACRO
-        RMB3    IFR
-        ENDM
+	RMB3    IFR
+	ENDM
 CLR_KEY_IRQ_FLAG      MACRO
-        RMB4    IFR
-        ENDM
+	RMB4    IFR
+	ENDM
 CLR_PA_IRQ_FLAG      MACRO
-        RMB4    IFR
-        ENDM
+	RMB4    IFR
+	ENDM
 CLR_PA_IRQF      MACRO
-        RMB4    IFR
-        ENDM		
+	RMB4    IFR
+	ENDM		
 CLR_EXT_IRQ_FLAG       MACRO
-        RMB5    IFR
-        ENDM
+	RMB5    IFR
+	ENDM
 CLR_LCD_IRQ_FLAG       MACRO
-        RMB6    IFR
-        ENDM
+	RMB6    IFR
+	ENDM
 
 IF_DIV_IRQ_FLAG MACRO   LAB1
-        BBS0    IFR,LAB1
-        ENDM
+	BBS0    IFR,LAB1
+	ENDM
 IF_TMR0_IRQ_FLAG MACRO   LAB1
-        BBS1    IFR,LAB1
-        ENDM
+	BBS1    IFR,LAB1
+	ENDM
 IF_TMR1_IRQ_FLAG MACRO   LAB1
-        BBS2    IFR,LAB1
-        ENDM		
+	BBS2    IFR,LAB1
+	ENDM		
 IF_TMR2_IRQ_FLAG MACRO   LAB1
-        BBS3    IFR,LAB1
-        ENDM
+	BBS3    IFR,LAB1
+	ENDM
 IF_KEY_IRQ_FLAG MACRO   LAB1
-        BBS4    IFR,LAB1
-        ENDM
+	BBS4    IFR,LAB1
+	ENDM
 IF_EXT_IRQ_FLAG MACRO   LAB1
-        BBS5    IFR,LAB1
-        ENDM
+	BBS5    IFR,LAB1
+	ENDM
 IF_LCD_IRQ_FLAG MACRO   LAB1
-        BBS6    IFR,LAB1
-        ENDM
+	BBS6    IFR,LAB1
+	ENDM
 ;------------------------------------
 LCD_ON           MACRO
-        SMB4    TMRC
-        ENDM
+	SMB4    TMRC
+	ENDM
 LCD_OFF          MACRO
-        RMB4    TMRC
-        ENDM
+	RMB4    TMRC
+	ENDM
 
 PWM_ON  MACRO
 		SMB0	SYSCLK	;Strong Mode	
-        SMB7    TMRC
-        ENDM
+	SMB7    TMRC
+	ENDM
 PWM_OFF MACRO
-        RMB7    TMRC
+	RMB7    TMRC
 ;		lda		R_Strong_2S
 ;		bne		?Skip
 		RMB0	SYSCLK	;WeakMode
 ?Skip:		
-        ENDM
+	ENDM
 ;DAC_ON		MACRO
 ;	SMB7	P_TMRCTRL
 ;	ENDM
@@ -582,43 +582,43 @@ PWM_OFF MACRO
 ;	ENDM		
 		
 IF_PWM_ON       MACRO   LAB
-        BBS7    TMRC,LAB
-        ENDM
+	BBS7    TMRC,LAB
+	ENDM
 IF_PWM_OFF      MACRO   LAB
-        BBR7    TMRC,LAB
-        ENDM
+	BBR7    TMRC,LAB
+	ENDM
 
 SEL_PWM MACRO
-        SMB1    AUDCR
-        ENDM
+	SMB1    AUDCR
+	ENDM
 DAC_LATCH_TMR0	MACRO
 		SMB5	AUDCR
 		ENDM
 SEL_TONE MACRO
-        RMB2    AUDCR
-        RMB4    AUDCR
-        RMB5    AUDCR		
-        ENDM
+	RMB2    AUDCR
+	RMB4    AUDCR
+	RMB5    AUDCR		
+	ENDM
 
 SEL_MELODY  MACRO
-        RMB2    AUDCR
-        SMB4    AUDCR
-        RMB5    AUDCR	
-        ENDM
+	RMB2    AUDCR
+	SMB4    AUDCR
+	RMB5    AUDCR	
+	ENDM
 SEL_VOICE   MACRO
-        SMB2    AUDCR
-        RMB4    AUDCR
-        SMB5    AUDCR
-        ENDM
+	SMB2    AUDCR
+	RMB4    AUDCR
+	SMB5    AUDCR
+	ENDM
 ;------------------------------------
 ClrAllRam MACRO
     LDA		#$00
 	LDX		#$FF
 	STA		$1800	
-?ClrAllRamLoop:
+ClrAllRamLoop:
 	STA		$1800,X
 	DEX
-	BNE		?ClrAllRamLoop
+	BNE		ClrAllRamLoop
     ENDM
 ;------------------------------------
 CHECK_LCD	MACRO

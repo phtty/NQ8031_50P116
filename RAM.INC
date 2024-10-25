@@ -15,7 +15,7 @@ Time_Addr		EQU		RamStarAddr+Time_Str_Addr-Page0RamStarAddr ;事件相关数据�
 ;	ORG	0098H
 ;---------------------------------------------------------------------
 	ORG	0080H
-Page0RamStarAddr		EQU		$	
+Page0RamStarAddr		EQU		$
 LCDRAM					DS		6*6
 
 R_Int_Backup			DS		1

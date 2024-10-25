@@ -13,41 +13,40 @@ F_Init_SystemRam_Prog:							; 系统初始化
 	lda		#01
 	sta		Sys_Status_Flag
 
-	lda		#00
+	lda		#23
 	sta		R_Time_Hour
-	lda		#00
+	lda		#59
 	sta		R_Time_Min
-	lda		#00
+	lda		#55
 	sta		R_Time_Sec
 
-	lda		#06
+	lda		#00
 	sta		R_Alarm_Hour
 	lda		#00
 	sta		R_Alarm_Min
 
-	lda		#01
+	lda		#25
 	sta		R_Date_Day
-	lda		#01
+	lda		#10
 	sta		R_Date_Month
-	lda		#07
+	lda		#24
 	sta		R_Date_Year
-	lda		#01
+	lda		#00
 	sta		R_Date_Week
 
 	rts
 
 
 F_LCD_Init:
-	jsr		F_ClearScreen						; LCD初始化
-
-	CHECK_LCD
+	LCD_C_TYPE
+	LCD_ENCH_EN
+	LCD_4COM
+	LCD_DRIVE_8
+	LCD_C_1_3_BAIS_3V
 
 	PC67_SEG									; 配置IO口为SEG线模式
 	PD03_SEG
 	PD47_SEG
-
-	rmb1	LCD_COM								; 配置COM线数量
-	smb0	LCD_COM
 
 	LCD_ON
 	jsr		F_ClearScreen						; 清屏
@@ -148,14 +147,10 @@ F_Port_Init2:
 	rts
 
 F_LCD_Init2:
-	jsr		F_ClearScreen						; LCD初始化
-
-	CHECK_LCD
-
-	rmb1	LCD_COM								; 配置COM线数量
-	rmb0	LCD_COM
-
+	LCD_OFF
+	LCD_3COM
 	LCD_ON
+
 	jsr		F_ClearScreen						; 清屏
 
 	rts

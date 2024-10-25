@@ -20,7 +20,6 @@ L_KeyYes_NoBlink_Alarm:
 	ldx		#lcd_DotC
 	jsr		F_ClrpSymbol
 	jsr		F_Display_Time
-No_Date_Add1:
 	rts
 
 

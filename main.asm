@@ -59,34 +59,41 @@ V_RESET:
 	beq		L_MODE1
 	cmp		#10B
 	beq		L_MODE2
-	rts
+	bra		V_RESET
 
-L_MODE0:
-	jsr		F_Port_Init2
+L_MODE0:										; MODE0代表椭圆时钟
+	jsr		F_Port_Init2						; Mode0初始化
 	jsr		F_LCD_Init2
 	cli											; 开总中断
 
+	jsr		F_Test_Mode
 	jsr		F_Display_Symbol2
 	jsr		F_Display_Time2
 	jmp		MainLoop2
 
 L_MODE1:										; MODE1代表旧方块时钟
 	cli											; 开总中断
-	jsr		F_Display_All
 	rmb0	Key_Flag
 	jsr		F_Test_Mode
+	jsr		F_Display_Symbol
 	jmp		MainLoop
 
-L_MODE2:
+L_MODE2:										; MODE2代表星期方块时钟
 	cli
+	smb0	Clock_Flag
+	; jsr		F_Test_Mode
+	jsr		F_Display_Symbol3
+	jsr		F_Display_Date3
+	jmp		MainLoop3
 
 ;***********************************************************************
 ;***********************************************************************
-MainLoop:										; MODE1的状态机
+; 方块时钟（旧）状态机
+MainLoop:
 	jsr		F_Time_Run							; 走时全局生效
 	jsr		F_Switch_Scan						; 拨键扫描全局生效
 	jsr		F_Backlight							; 背光全局生效
-	jsr		F_Louding
+	jsr		F_Louding							; 响铃处理全局生效
 	jsr		F_SymbolRegulate
 
 Status_Juge:
@@ -196,21 +203,30 @@ L_EndIrq:
 
 ;***********************************************************************
 .include	main2.asm
+.include	main3.asm
 .include	ScanKey.asm
 .include	ScanKey2.asm
+.include	ScanKey3.asm
 .include	Time.asm
 .include	Time2.asm
+.include	Time3.asm
 .include	Calendar.asm
+.include	Calendar3.asm
 .include	Alarm.asm
 .include	Alarm2.asm
+.include	Alarm3.asm
 .include	Backlight.asm
 .include	Init.asm
 .include	Disp.asm
 .include	Disp2.asm
+.include	Disp3.asm
 .include	Display.asm
 .include	Display2.asm
+.include	Display3.asm
 .include	Lcdtab.asm
 .include	Lcdtab2.asm
+.include	Lcdtab3.asm
+.include	TestMode.asm
 
 ;--------------------------------------------------------	
 ;***********************************************************************

@@ -445,7 +445,7 @@ L_KeySTrigger_TimeSetMode:
 	eor		#0001B
 	sta		Clock_Flag
 	jsr		F_Display_Time
-	jsr		L_DisAlarm_Hour
+	jsr		F_Display_Alarm
 	rts
 
 
@@ -549,6 +549,6 @@ L_KeySTrigger_AlarmSetMode:
 	lda		Clock_Flag
 	eor		#0001B
 	sta		Clock_Flag
-	jsr		L_DisTime_Hour
+	jsr		F_Display_Time
 	jsr		F_Display_Alarm
 	rts

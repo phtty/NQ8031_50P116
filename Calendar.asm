@@ -53,11 +53,11 @@ L_GetWeek:
 	jsr		F_Is_Leap_Year
 
 	ldx		R_Date_Day
-	dex												; 当前日期-1->X->A
+	dex												; 当前日期-1->A
 	txa
 	jsr		L_MOD_7
 	sta		P_Temp									; 当前日期相对月首日的星期数偏移量->P_Temp
-	
+
 	ldx		R_Date_Month
 	dex
 	bbs0	Calendar_Flag,L_DateToWeek_Leap
