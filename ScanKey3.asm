@@ -71,7 +71,7 @@ Switch_Alarm_OFF3:
 	jsr		F_ClrpSymbol3
 	ldx		#lcd3_Zz
 	jsr		F_ClrpSymbol3
-	jsr		L_NoSnooze_CloseLoud				; 如果有响闹和贪睡，则打断响闹和贪睡
+	jsr		L_NoSnooze_CloseLoud				; 打断响闹和贪睡
 	rts
 
 ; 四种模式切换的拨键处理
@@ -178,11 +178,14 @@ L_KeyBTrigger_Exit3:
 	rts
 
 L_KeySTrigger_RunTimeMode3:
+	bbs2	Clock_Flag,L_LoundSnz_Handle3		; 若有响闹模式或贪睡模式，则不切换时间模式，只打断响闹和贪睡
+	bbs3	Clock_Flag,L_LoundSnz_Handle3
 	lda		Clock_Flag							; 每按一次翻转clock_flag bit0状态
 	eor		#$01
 	sta		Clock_Flag
 	jsr		F_Display_Time3
-	jsr		L_NoSnooze_CloseLoud				; 如果有响闹和贪睡，则打断响闹和贪睡
+L_LoundSnz_Handle3:
+	jsr		L_NoSnooze_CloseLoud				; 打断响闹和贪睡
 	rts
 
 
@@ -271,11 +274,11 @@ L_Day_Juge_Set3:
 	bne		L_Day_Add_Set3
 	lda		#1
 	sta		R_Date_Day							; 日进位，重新回到1
-	jsr		L_DisDate_Day3						; 显示调整后的日期
+	jsr		F_Display_Date3						; 显示调整后的日期
 	rts
 L_Day_Add_Set3:
 	inc		R_Date_Day
-	jsr		L_DisDate_Day3						; 显示调整后的日期
+	jsr		F_Display_Date3						; 显示调整后的日期
 	rts
 
 L_KeyHTrigger_DateSetMode3:
@@ -284,7 +287,7 @@ L_KeyHTrigger_DateSetMode3:
 	bcc		L_Month_Juge3
 	lda		#1
 	sta		R_Date_Month
-	jsr		L_DisDate_Month3
+	jsr		F_Display_Date3
 	rts
 L_Month_Juge3:
 	inc		R_Date_Month						; 调整月份
@@ -302,7 +305,7 @@ L_Day_Juge_Set13:
 	lda		#1
 	sta		R_Date_Day							; 日期如果和当前月份数不匹配，则初始化日期
 L_Month_Add_Set3:
-	jsr		L_DisDate_Month3
+	jsr		F_Display_Date3
 	rts
 
 L_KeyBTrigger_DateSetMode3:
@@ -421,7 +424,7 @@ L_KeyMTrigger_TimeSetMode3:
 	lda		#00
 	sta		R_Time_Min
 L_MinSet_Juge3:
-	jsr		L_DisTime_Min3
+	jsr		F_Display_Time3
 	rts
 L_KeyHTrigger_TimeSetMode3:
 	lda		#00
@@ -433,7 +436,7 @@ L_KeyHTrigger_TimeSetMode3:
 	lda		#00
 	sta		R_Time_Hour
 L_HourSet_Juge3:
-	jsr		L_DisTime_Hour3
+	jsr		F_Display_Time3
 	rts
 L_KeyBTrigger_TimeSetMode3:
 	smb3	Key_Flag
@@ -527,7 +530,7 @@ L_KeyMTrigger_AlarmSetMode3:
 	lda		#00
 	sta		R_Alarm_Min
 L_AlarmMinSet_Juge3:
-	jsr		L_DisAlarm_Min3
+	jsr		F_Display_Alarm3
 	rts
 L_KeyHTrigger_AlarmSetMode3:
 	inc		R_Alarm_Hour
@@ -537,7 +540,7 @@ L_KeyHTrigger_AlarmSetMode3:
 	lda		#00
 	sta		R_Alarm_Hour
 L_AlarmHourSet_Juge3:	
-	jsr		L_DisAlarm_Hour3
+	jsr		F_Display_Alarm3
 	rts
 L_KeyBTrigger_AlarmSetMode3:
 	smb3	Key_Flag

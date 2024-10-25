@@ -1,5 +1,4 @@
-F_Display_Time2:
-	; 调用显示函数显示当前时间
+F_Display_Time2:								; 调用显示函数显示当前时间
 	jsr		L_DisTime_Min2
 	jsr		L_DisTime_Hour2
 	rts

@@ -13,23 +13,23 @@ F_Init_SystemRam_Prog:							; 系统初始化
 	lda		#01
 	sta		Sys_Status_Flag
 
-	lda		#23
+	lda		#00
 	sta		R_Time_Hour
-	lda		#59
+	lda		#00
 	sta		R_Time_Min
-	lda		#55
+	lda		#00
 	sta		R_Time_Sec
 
-	lda		#00
+	lda		#12
 	sta		R_Alarm_Hour
-	lda		#00
+	lda		#01
 	sta		R_Alarm_Min
 
-	lda		#25
+	lda		#01
 	sta		R_Date_Day
-	lda		#10
+	lda		#01
 	sta		R_Date_Month
-	lda		#24
+	lda		#07
 	sta		R_Date_Year
 	lda		#00
 	sta		R_Date_Week

@@ -297,9 +297,11 @@ L_No_ClrALM:
 	bbr1	Clock_Flag,L_No_Alarm3
 	ldx		#lcd3_bell
 	jsr		F_DispSymbol3
-	bbr2	Clock_Flag,L_Loud_Juge_Exit3		; Loud==0: exit
-	ldx		#lcd3_Zz							; Zz常亮条件
-	jsr		F_DispSymbol3						; Loud==1 && Alarm==1
+	bbr3	Clock_Flag,L_Snz_Juge3
+	bbr2	Clock_Flag,L_Loud_Juge_Exit3		; Zz常亮条件为Loud!=0 Snz!=1
+L_Snz_Juge3:
+	ldx		#lcd3_Zz
+	jsr		F_DispSymbol3
 L_Loud_Juge_Exit3
 	rts
 L_No_Alarm3:

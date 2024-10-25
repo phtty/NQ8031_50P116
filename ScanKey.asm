@@ -176,12 +176,15 @@ L_KeyBTrigger_Exit:
 	rts
 
 L_KeySTrigger_RunTimeMode:
+	bbs2	Clock_Flag,L_LoundSnz_Handle		; 若有响闹模式或贪睡模式，则不切换时间模式，只打断响闹和贪睡
+	bbs3	Clock_Flag,L_LoundSnz_Handle
 	lda		Clock_Flag							; 每按一次翻转clock_flag bit0状态
 	eor		#$01
 	sta		Clock_Flag
 	jsr		F_Display_Time
 	jsr		F_Display_Alarm
-	jsr		L_NoSnooze_CloseLoud				; 如果有响闹和贪睡，则打断响闹和贪睡
+L_LoundSnz_Handle:
+	jsr		L_NoSnooze_CloseLoud				; 打断响闹和贪睡
 	rts
 
 
@@ -270,11 +273,11 @@ L_Day_Juge_Set:
 	bne		L_Day_Add_Set
 	lda		#1
 	sta		R_Date_Day							; 日进位，重新回到1
-	jsr		L_DisDate_Day						; 显示调整后的日期
+	jsr		F_Display_Date						; 显示调整后的日期
 	rts
 L_Day_Add_Set:
 	inc		R_Date_Day
-	jsr		L_DisDate_Day						; 显示调整后的日期
+	jsr		F_Display_Date						; 显示调整后的日期
 	rts
 
 L_KeyHTrigger_DateSetMode:
@@ -283,7 +286,7 @@ L_KeyHTrigger_DateSetMode:
 	bcc		L_Month_Juge
 	lda		#1
 	sta		R_Date_Month
-	jsr		L_DisDate_Month
+	jsr		F_Display_Date
 	rts
 L_Month_Juge:
 	inc		R_Date_Month						; 调整月份
@@ -301,7 +304,7 @@ L_Day_Juge_Set1:
 	lda		#1
 	sta		R_Date_Day							; 日期如果和当前月份数不匹配，则初始化日期
 L_Month_Add_Set:
-	jsr		L_DisDate_Month
+	jsr		F_Display_Date
 	rts
 
 L_KeyBTrigger_DateSetMode:
@@ -420,7 +423,7 @@ L_KeyMTrigger_TimeSetMode:
 	lda		#00
 	sta		R_Time_Min
 L_MinSet_Juge:
-	jsr		L_DisTime_Min
+	jsr		F_Display_Time
 	rts
 L_KeyHTrigger_TimeSetMode:
 	lda		#00
@@ -432,7 +435,7 @@ L_KeyHTrigger_TimeSetMode:
 	lda		#00
 	sta		R_Time_Hour
 L_HourSet_Juge:
-	jsr		L_DisTime_Hour
+	jsr		F_Display_Time
 	rts
 L_KeyBTrigger_TimeSetMode:
 	smb3	Key_Flag
@@ -527,8 +530,9 @@ L_KeyMTrigger_AlarmSetMode:
 	lda		#00
 	sta		R_Alarm_Min
 L_AlarmMinSet_Juge:
-	jsr		L_DisAlarm_Min
+	jsr		F_Display_Alarm
 	rts
+
 L_KeyHTrigger_AlarmSetMode:
 	inc		R_Alarm_Hour
 	lda		#23
@@ -537,14 +541,16 @@ L_KeyHTrigger_AlarmSetMode:
 	lda		#00
 	sta		R_Alarm_Hour
 L_AlarmHourSet_Juge:	
-	jsr		L_DisAlarm_Hour
+	jsr		F_Display_Alarm
 	rts
+
 L_KeyBTrigger_AlarmSetMode:
 	smb3	Key_Flag
 	smb3	PB
 	lda		#0
 	sta		Backlight_Counter					; 每次按背光都会重置计时
 	rts
+
 L_KeySTrigger_AlarmSetMode:
 	lda		Clock_Flag
 	eor		#0001B

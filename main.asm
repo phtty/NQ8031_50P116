@@ -64,9 +64,10 @@ V_RESET:
 L_MODE0:										; MODE0代表椭圆时钟
 	jsr		F_Port_Init2						; Mode0初始化
 	jsr		F_LCD_Init2
+	jsr		F_MODE0_Init
 	cli											; 开总中断
 
-	jsr		F_Test_Mode
+	jsr		F_Test_Mode2
 	jsr		F_Display_Symbol2
 	jsr		F_Display_Time2
 	jmp		MainLoop2
@@ -81,7 +82,7 @@ L_MODE1:										; MODE1代表旧方块时钟
 L_MODE2:										; MODE2代表星期方块时钟
 	cli
 	smb0	Clock_Flag
-	; jsr		F_Test_Mode
+	jsr		F_Test_Mode
 	jsr		F_Display_Symbol3
 	jsr		F_Display_Date3
 	jmp		MainLoop3
