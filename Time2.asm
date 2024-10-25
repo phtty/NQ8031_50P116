@@ -36,29 +36,47 @@ L_TimeDot_Out2:
 	lda		Clock_Flag
 	and		#1100B
 	beq		L_Snooze_Blink12					; Loud和Snooze都为0时不闪烁			
-	ldx		#lcd2_Zz							; Zz闪烁条件:Alarm==1
-	jsr		F_DispSymbol2						; Snooze==1 || loud==1
+	ldx		#lcd2_Zz
+	jsr		F_DispSymbol2
 L_Snooze_Blink12:
 	jsr		F_Display_Time2
 	rts											; 半S触发时没1S标志不走时，直接返回
-
 L_Dot_Clear2:
 	rmb1	Timer_Flag							; 清1S标志
 	bbr1	Clock_Flag,L_Snooze_Blink22			; Alarm
 	lda		Clock_Flag
 	and		#1100B
 	beq		L_Snooze_Blink22					; Loud和Snooze都为0时不闪烁	
-	ldx		#lcd2_Zz							; Zz闪烁条件:
-	jsr		F_ClrpSymbol2						; Snooze==1 && loud==0
+	ldx		#lcd2_Zz
+	jsr		F_ClrpSymbol2
 L_Snooze_Blink22:
 	jsr		F_Display_Time2
 	rts
 
 
 F_DisTime_Set2:
-	bbs0	Timer_Flag,L_DisTime_Set2			; 没有半S标志时不更新
+	bbs0	Timer_Flag,L_TimeDot_Out2_TimeSet
 	rts
-L_DisTime_Set2:
+L_TimeDot_Out2_TimeSet:
 	rmb0	Timer_Flag
-	jsr		F_Display_Time2						; 更新时间显示
+	bbs1	Timer_Flag,L_Dot_Clear2_TimeSet
+	bbr1	Clock_Flag,L_Snooze_Blink32			; Alarm
+	lda		Clock_Flag
+	and		#1100B
+	beq		L_Snooze_Blink32					; Loud和Snooze都为0时不闪烁			
+	ldx		#lcd2_Zz
+	jsr		F_DispSymbol2
+L_Snooze_Blink32:
+	jsr		F_Display_Time2
+	rts											; 半S触发时没1S标志不走时，直接返回
+L_Dot_Clear2_TimeSet:
+	rmb1	Timer_Flag							; 清1S标志
+	bbr1	Clock_Flag,L_Snooze_Blink42			; Alarm
+	lda		Clock_Flag
+	and		#1100B
+	beq		L_Snooze_Blink42					; Loud和Snooze都为0时不闪烁	
+	ldx		#lcd2_Zz							; Zz闪烁条件:
+	jsr		F_ClrpSymbol2						; Snooze==1 && loud==0
+L_Snooze_Blink42:
+	jsr		F_Display_Time2
 	rts

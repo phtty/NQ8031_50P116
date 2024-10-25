@@ -48,7 +48,7 @@ L_KeyTTrigger_RunTimeMode2:
 	sta		Sys_Status_Flag
 	rmb1	Key_Flag							; 进入时间设置模式的处理
 	sta		AlarmLoud_Counter					; 清空响铃计数
-	jsr		L_No_SnoozeKey2						; 清理响铃计时、16Hz计时、响铃计数、贪睡等标志位
+	jsr		L_NoSnooze_CloseLoud2				; 清理响铃计时、16Hz计时、响铃计数、贪睡等标志位
 	rts
 
 L_KeyHTrigger_RunTimeMode2:
@@ -60,7 +60,8 @@ L_KeyBTrigger_RunTimeMode2:
 	lda		#0									; 每次按背光都会重置计时
 	sta		Backlight_Counter
 	bbs2	Clock_Flag,L_KeyBTrigger_NoLoud2	; 如果不是在响闹模式下，则退出贪睡
-	jsr		L_No_SnoozeKey2
+	jsr		L_NoSnooze_CloseLoud2
+	rts
 L_KeyBTrigger_NoLoud2:
 	smb6	Clock_Flag							; 贪睡按键触发						
 	smb3	Clock_Flag							; 进入贪睡模式
@@ -97,10 +98,12 @@ L_KeyATrigger_RunTimeMode2:
 	jsr		F_Display_Alarm2
 	lda		#00
 	sta		AlarmLoud_Counter					; 清空响铃计数
-	jsr		L_No_SnoozeKey2						; 清理响铃计时、16Hz计时、响铃计数、贪睡等标志位
+	jsr		L_NoSnooze_CloseLoud2				; 清理响铃计时、16Hz计时、响铃计数、贪睡等标志位
 	rts
 
 L_KeySTrigger_RunTimeMode2:
+	bbs2	Clock_Flag,L_LoundSnz_Handle12		; 若有响闹模式或贪睡模式，则不切换时间模式，只打断响闹和贪睡
+	bbs3	Clock_Flag,L_LoundSnz_Handle12
 	lda		Clock_Flag							; 每按一次翻转闹钟模式的状态
 	eor		#0010B
 	sta		Clock_Flag
@@ -109,12 +112,15 @@ L_KeySTrigger_RunTimeMode2:
 	jsr		F_DispSymbol2
 	ldx		#lcd2_Zz
 	jsr		F_DispSymbol2
+L_LoundSnz_Handle12:
+	jsr		L_NoSnooze_CloseLoud2
 	rts
 L_Alarm_off_RunTime:
 	ldx		#lcd2_bell
 	jsr		F_ClrpSymbol2
 	ldx		#lcd2_Zz
 	jsr		F_ClrpSymbol2
+	jsr		L_NoSnooze_CloseLoud2
 	rts
 
 
@@ -213,12 +219,11 @@ L_KeyHTrigger_TimeSetMode2:
 L_HourSet_Juge2:
 	jsr		L_DisTime_Hour2						; H也会触发背光
 L_KeyBTrigger_TimeSetMode2:
-	smb3	Key_Flag
-	smb3	PB
-	lda		#0
-	sta		Backlight_Counter					; 每次按背光都会重置计时
+	jmp		L_KeyBTrigger_RunTimeMode2
 	rts
 L_KeySTrigger_TimeSetMode2:
+	bbs2	Clock_Flag,L_LoundSnz_Handle22		; 若有响闹模式或贪睡模式，则不切换时间模式，只打断响闹和贪睡
+	bbs3	Clock_Flag,L_LoundSnz_Handle22
 	lda		Clock_Flag							; 每按一次翻转闹钟模式的状态
 	eor		#0010B
 	sta		Clock_Flag
@@ -227,6 +232,8 @@ L_KeySTrigger_TimeSetMode2:
 	jsr		F_DispSymbol2
 	ldx		#lcd2_Zz
 	jsr		F_DispSymbol2
+L_LoundSnz_Handle22:
+	jsr		L_NoSnooze_CloseLoud2
 	rts
 L_Alarm_off_TimeSet:
 	ldx		#lcd2_bell
@@ -247,6 +254,7 @@ L_NoKeyT_Keep:
 	lda		#0001B								; 回到走时模式
 	sta		Sys_Status_Flag
 	jsr		F_Display_Time2
+	jsr		L_NoSnooze_CloseLoud2
 	rts
 
 
@@ -342,12 +350,11 @@ L_KeyHTrigger_AlarmSetMode2:
 L_AlarmHourSet_Juge2:
 	jsr		L_DisAlarm_Hour2					; H触发也会触发背光
 L_KeyBTrigger_AlarmSetMode2:
-	smb3	Key_Flag
-	smb3	PB
-	lda		#0
-	sta		Backlight_Counter					; 每次按背光都会重置计时
+	jmp		L_KeyBTrigger_RunTimeMode2
 	rts
 L_KeySTrigger_AlarmSetMode2:
+	bbs2	Clock_Flag,L_LoundSnz_Handle32		; 若有响闹模式或贪睡模式，则不切换时间模式，只打断响闹和贪睡
+	bbs3	Clock_Flag,L_LoundSnz_Handle32
 	lda		Clock_Flag							; 每按一次翻转闹钟模式的状态
 	eor		#0010B
 	sta		Clock_Flag
@@ -356,6 +363,8 @@ L_KeySTrigger_AlarmSetMode2:
 	jsr		F_DispSymbol2
 	ldx		#lcd2_Zz
 	jsr		F_DispSymbol2
+L_LoundSnz_Handle32:
+	jsr		L_NoSnooze_CloseLoud2
 	rts
 L_Alarm_off_AlarmSet:
 	ldx		#lcd2_bell
@@ -376,4 +385,5 @@ L_NoKeyA_Keep:
 	lda		#0001B								; 回到走时模式
 	sta		Sys_Status_Flag
 	jsr		F_Display_Time2
+	jsr		L_NoSnooze_CloseLoud2
 	rts

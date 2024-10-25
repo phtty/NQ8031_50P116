@@ -1,9 +1,28 @@
 F_DisAlarm_Set2:
-	bbs0	Timer_Flag,L_Blink_Alarm2			; 没有半S标志时不更新
+	bbs0	Timer_Flag,L_TimeDot_Out2_AlarmSet
 	rts
-L_Blink_Alarm2:
-	rmb0	Timer_Flag							; 清半S标志
-	jsr		F_Display_Alarm2					; 产生更新
+L_TimeDot_Out2_AlarmSet:
+	rmb0	Timer_Flag
+	bbs1	Timer_Flag,L_Dot_Clear2_AlarmSet
+	bbr1	Clock_Flag,L_Snooze_Blink52			; Alarm
+	lda		Clock_Flag
+	and		#1100B
+	beq		L_Snooze_Blink52					; Loud和Snooze都为0时不闪烁			
+	ldx		#lcd2_Zz
+	jsr		F_DispSymbol2
+L_Snooze_Blink52:
+	jsr		F_Display_Alarm2
+	rts											; 半S触发时没1S标志不走时，直接返回
+L_Dot_Clear2_AlarmSet:
+	rmb1	Timer_Flag							; 清1S标志
+	bbr1	Clock_Flag,L_Snooze_Blink62			; Alarm
+	lda		Clock_Flag
+	and		#1100B
+	beq		L_Snooze_Blink62					; Loud和Snooze都为0时不闪烁	
+	ldx		#lcd2_Zz							; Zz闪烁条件:
+	jsr		F_ClrpSymbol2						; Snooze==1 && loud==0
+L_Snooze_Blink62:
+	jsr		F_Display_Alarm2
 	rts
 
 
@@ -64,10 +83,10 @@ L_Snooze_CloseLoud2:
 	rmb2	Clock_Flag
 	bbr5	Clock_Flag,L_CloseLoud2				; last==1 && now==0
 	rmb5	Clock_Flag							; 响闹结束状态同步响闹模式的保存值
-	bbr6	Clock_Flag,L_No_SnoozeKey2
+	bbr6	Clock_Flag,L_NoSnooze_CloseLoud2
 	rmb6	Clock_Flag							; 清贪睡按键触发
 	bra		L_CloseLoud2
-L_No_SnoozeKey2:
+L_NoSnooze_CloseLoud2:
 	rmb3	Clock_Flag							; 没有贪睡按键触发&&贪睡模式&&响闹结束状态
 	rmb6	Clock_Flag							; 才结束贪睡模式
 L_CloseLoud2:

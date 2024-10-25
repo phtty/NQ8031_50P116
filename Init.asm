@@ -20,9 +20,9 @@ F_Init_SystemRam_Prog:							; 系统初始化
 	lda		#00
 	sta		R_Time_Sec
 
-	lda		#12
+	lda		#06
 	sta		R_Alarm_Hour
-	lda		#01
+	lda		#00
 	sta		R_Alarm_Min
 
 	lda		#01
