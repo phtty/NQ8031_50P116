@@ -231,9 +231,9 @@ L_Alarm_0Hour3:									; 12h模式0点需要变成12点
 
 L_24hMode_Alarm3:
 	ldx		#lcd3_PM							; 24h模式闹钟需要灭PM、AM点
-	jsr		F_ClrpSymbol
+	jsr		F_ClrpSymbol3
 	ldx		#lcd3_AM
-	jsr		F_ClrpSymbol
+	jsr		F_ClrpSymbol3
 	lda		R_Alarm_Hour
 L_Start_DisAlarm_Hour3:
 	tax

@@ -68,7 +68,7 @@ L_KeyBTrigger_NoLoud2:
 
 	lda		R_Snooze_Min						; 贪睡闹钟的时间加5
 	clc
-	adc		#1
+	adc		#8
 	cmp		#60
 	bcs		L_Snooze_OverflowMin2
 	sta		R_Snooze_Min
@@ -94,7 +94,7 @@ L_KeyMTrigger_RunTimeMode2:
 L_KeyATrigger_RunTimeMode2:
 	lda		#1000B
 	sta		Sys_Status_Flag
-	rmb1	Key_Flag							; 清首次触发,可以直接
+	rmb1	Key_Flag							; 清首次触发，等待闹钟设置模式的首个按键
 	jsr		F_Display_Alarm2
 	lda		#00
 	sta		AlarmLoud_Counter					; 清空响铃计数
@@ -138,7 +138,7 @@ L_DelayTrigger_TimeSetMode2						; 消抖延时循环用标签
 	lda		P_Temp
 	bne		L_DelayTrigger_TimeSetMode2			; 软件消抖
 	lda		PA
-	and		#$fc
+	and		#$7c
 	cmp		#$00
 	bne		L_KeyYes_TimeSetMode2				; 检测是否有按键触发
 	bra		L_KeyExit_TimeSetMode2
@@ -153,7 +153,7 @@ L_Key8Hz_TimeSetMode2:
 	bbr4	Timer_Flag,L_Key8HzExit_TimeSetMode2; 8Hz标志位到来前也不进行按键处理(快加下)
 	rmb4	Timer_Flag
 	lda		PA
-	and		#$fc
+	and		#$7c
 	cmp		PA_IO_Backup						; 若检测到有按键的状态变化则退出快加判断并结束
 	beq		L_8Hz_Count_TimeSetMode2
 	bra		L_KeyExit_TimeSetMode2
@@ -243,7 +243,9 @@ L_Alarm_off_TimeSet:
 	rts
 
 F_Is_KeyTKeep:
+	bbs3	Timer_Flag,L_QA_KeyTKeep			; 有快加时不退出
 	bbr7	PA,L_NoKeyT_Keep
+L_QA_KeyTKeep:
 	rts
 L_NoKeyT_Keep:
 	TMR1_OFF									; 关闭快加8Hz计时的定时器
@@ -272,7 +274,7 @@ L_DelayTrigger_AlarmSetMode2:					; 消抖延时循环用标签
 	lda		P_Temp
 	bne		L_DelayTrigger_AlarmSetMode2		; 软件消抖
 	lda		PA
-	and		#$fc
+	and		#$f4
 	cmp		#$00
 	bne		L_KeyYes_AlarmSetMode2				; 检测是否有按键触发
 	bra		L_KeyExit_AlarmSetMode2
@@ -287,7 +289,7 @@ L_Key8Hz_AlarmSetMode2:
 	bbr4	Timer_Flag,L_Key8HzExit_AlarmSetMode2; 8Hz标志位到来前也不进行按键处理(快加下)
 	rmb4	Timer_Flag
 	lda		PA
-	and		#$fc
+	and		#$f4
 	cmp		PA_IO_Backup						; 若检测到有按键的状态变化则退出快加判断并结束
 	beq		L_8Hz_Count_AlarmSetMode2
 	bra		L_KeyExit_AlarmSetMode2
@@ -374,9 +376,12 @@ L_Alarm_off_AlarmSet:
 	rts
 
 F_Is_KeyAKeep:
+	bbs3	Timer_Flag,L_QA_KeyAKeep			; 有快加时不退出
 	bbr3	PA,L_NoKeyA_Keep
+L_QA_KeyAKeep:
 	rts
 L_NoKeyA_Keep:
+	lda		Timer_Flag
 	TMR1_OFF									; 关闭快加8Hz计时的定时器
 	rmb0	Key_Flag							; 清相关标志位
 	rmb3	Timer_Flag

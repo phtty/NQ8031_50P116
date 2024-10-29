@@ -16,10 +16,8 @@ L_No_Date_Add_AS3:
 	rts
 L_Alarm_Clear3:
 	rmb1	Timer_Flag
-	bbs0	Key_Flag,L_KeyYes_NoBlink_Alarm3	; 有按键时不闪烁
-	jsr		F_UnDisplay_Alarm3					; 1S灭
-L_KeyYes_NoBlink_Alarm3:
+	bbs0	Key_Flag,L_Blink_Alarm3				; 有按键时常亮
 	ldx		#lcd3_DotC
 	jsr		F_ClrpSymbol3
-	jsr		F_UnDisplay_Alarm3
+	jsr		F_UnDisplay_Alarm3					; 1S灭
 	rts

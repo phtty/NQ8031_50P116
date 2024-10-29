@@ -1,5 +1,4 @@
 F_DisCalendar_Set3:
-	lda		Key_Flag
 	bbs0	Key_Flag,L_KeyTrigger_NoBlink_Date3	; 有按键时不闪烁
 	bbs0	Timer_Flag,L_Blink_Date3			; 没有半S标志不闪烁
 	rts

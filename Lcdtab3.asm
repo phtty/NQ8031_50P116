@@ -104,7 +104,7 @@ lcd3_dot:
 lcd3_AM		equ	$-lcd_table3
 	db_c_s	c3,s43	; AM
 lcd3_PM		equ	$-lcd_table3
-	db_c_s	c2,s43	;PM
+	db_c_s	c2,s43	; PM
 lcd3_bell	equ	$-lcd_table3
 	db_c_s	c3,s40	; bell
 lcd3_DotC	equ	$-lcd_table3

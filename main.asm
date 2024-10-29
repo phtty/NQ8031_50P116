@@ -75,6 +75,7 @@ L_MODE0:										; MODE0代表椭圆时钟
 L_MODE1:										; MODE1代表旧方块时钟
 	cli											; 开总中断
 	rmb0	Key_Flag
+	smb0	Clock_Flag
 	jsr		F_Test_Mode
 	jsr		F_Display_Symbol
 	jmp		MainLoop
