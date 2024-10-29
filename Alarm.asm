@@ -14,7 +14,9 @@ L_No_Date_Add_AS:
 	rts
 L_Alarm_Clear:
 	rmb1	Timer_Flag
-	bbs0	Key_Flag,L_Blink_Alarm				; 有按键时不闪烁
+	lda		PA
+	and		#$C0
+	bne		L_Blink_Alarm						; 有按键时不闪烁
 	jsr		F_UnDisplay_Alarm					; 1S灭
 	ldx		#lcd_DotC
 	jsr		F_ClrpSymbol

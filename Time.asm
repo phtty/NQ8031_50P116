@@ -65,7 +65,6 @@ No_Date_Add:
 
 
 F_DisTime_Set:
-	bbs0	Key_Flag,L_KeyTrigger_NoBlink_Time	; 有按键时不闪烁
 	bbs0	Timer_Flag,L_Blink_Time				; 没有半S标志时不闪烁
 	rts
 L_Blink_Time:
@@ -75,13 +74,15 @@ L_Blink_Time:
 	jsr		F_Display_Date
 L_No_Date_Add_TS:
 	bbs1	Timer_Flag,L_Time_Clear
-L_KeyTrigger_NoBlink_Time:
 	jsr		F_Display_Time						; 半S亮
 	ldx		#lcd_DotC
 	jsr		F_DispSymbol
 	rts
 L_Time_Clear:
 	rmb1	Timer_Flag
+	lda		PA									; 有按键时不闪烁
+	and		#$C0
+	bne		L_Blink_Time
 	jsr		F_UnDisplay_Time					; 1S灭
 	ldx		#lcd_DotC
 	jsr		F_ClrpSymbol

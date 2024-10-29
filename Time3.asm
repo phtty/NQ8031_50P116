@@ -36,7 +36,6 @@ No_Date_Add3:
 
 
 F_DisTime_Set3:
-	bbs0	Key_Flag,L_KeyTrigger_NoBlink_Time3	; 有按键时不闪烁
 	bbs0	Timer_Flag,L_Blink_Time3			; 没有半S标志时不闪烁
 	rts
 L_Blink_Time3:
@@ -46,13 +45,15 @@ L_Blink_Time3:
 	jsr		F_Display_Date3
 L_No_Date_Add_TS3:
 	bbs1	Timer_Flag,L_Time_Clear3
-L_KeyTrigger_NoBlink_Time3:
 	jsr		F_Display_Time3						; 半S亮
 	ldx		#lcd3_DotC
 	jsr		F_DispSymbol3
 	rts
 L_Time_Clear3:
 	rmb1	Timer_Flag
+	lda		PA									; 有按键时不闪烁
+	and		#$C0
+	bne		L_Blink_Time3
 	jsr		F_UnDisplay_Time3					; 1S灭
 	ldx		#lcd3_DotC
 	jsr		F_ClrpSymbol3

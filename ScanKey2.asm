@@ -49,7 +49,8 @@ L_KeyTTrigger_RunTimeMode2:
 	rmb1	Key_Flag							; 进入时间设置模式的处理
 	sta		AlarmLoud_Counter					; 清空响铃计数
 	jsr		L_NoSnooze_CloseLoud2				; 清理响铃计时、16Hz计时、响铃计数、贪睡等标志位
-	rts
+	pla
+	jmp		MainLoop2
 
 L_KeyHTrigger_RunTimeMode2:
 	bra		L_KeyBTrigger_RunTimeMode2
@@ -99,7 +100,8 @@ L_KeyATrigger_RunTimeMode2:
 	lda		#00
 	sta		AlarmLoud_Counter					; 清空响铃计数
 	jsr		L_NoSnooze_CloseLoud2				; 清理响铃计时、16Hz计时、响铃计数、贪睡等标志位
-	rts
+	pla
+	jmp		MainLoop2
 
 L_KeySTrigger_RunTimeMode2:
 	bbs2	Clock_Flag,L_LoundSnz_Handle12		; 若有响闹模式或贪睡模式，则不切换时间模式，只打断响闹和贪睡
@@ -196,8 +198,8 @@ L_Key8HzExit_TimeSetMode2:
 	rts
 
 L_KeyMTrigger_TimeSetMode2:
-	lda		#00
-	sta		R_Time_Sec							; 调时间会清S计数
+	lda		#01
+	sta		R_Time_Sec							; 调分钟会清S计数
 	inc		R_Time_Min
 	lda		#59
 	cmp		R_Time_Min
@@ -208,8 +210,6 @@ L_MinSet_Juge2:
 	jsr		L_DisTime_Min2
 	bra		L_KeyBTrigger_TimeSetMode2			; M也会触发背光
 L_KeyHTrigger_TimeSetMode2:
-	lda		#00
-	sta		R_Time_Sec							; 调时间会清S计数
 	inc		R_Time_Hour
 	lda		#23
 	cmp		R_Time_Hour

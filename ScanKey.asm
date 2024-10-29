@@ -395,6 +395,7 @@ No_KeyMTrigger_TimeSetMode:
 	bne		No_KeyHTrigger_TimeSetMode
 	jmp		L_KeyHTrigger_TimeSetMode			; Hour单独触发
 No_KeyHTrigger_TimeSetMode:
+	bbs3	Timer_Flag,L_KeyExit_TimeSetMode	; 背光和12h模式切换不需要快加
 	cmp		#$20
 	bne		No_KeyBTrigger_TimeSetMode
 	jmp		L_KeyBTrigger_TimeSetMode			; Backlight/SNZ单独触发
@@ -415,7 +416,7 @@ L_Key8HzExit_TimeSetMode:
 
 L_KeyMTrigger_TimeSetMode:
 	lda		#00
-	sta		R_Time_Sec							; 调时间会清S计数
+	sta		R_Time_Sec							; 调分钟会清S计数
 	inc		R_Time_Min
 	lda		#59
 	cmp		R_Time_Min
@@ -426,8 +427,6 @@ L_MinSet_Juge:
 	jsr		F_Display_Time
 	rts
 L_KeyHTrigger_TimeSetMode:
-	lda		#00
-	sta		R_Time_Sec							; 调时间会清S计数
 	inc		R_Time_Hour
 	lda		#23
 	cmp		R_Time_Hour
@@ -505,6 +504,7 @@ No_KeyMTrigger_AlarmSetMode:
 	bne		No_KeyHTrigger_AlarmSetMode
 	jmp		L_KeyHTrigger_AlarmSetMode			; Hour单独触发
 No_KeyHTrigger_AlarmSetMode:
+	bbs3	Timer_Flag,L_KeyExit_AlarmSetMode	; 背光和12h模式切换不需要快加
 	cmp		#$20
 	bne		No_KeyBTrigger_AlarmSetMode
 	jmp		L_KeyBTrigger_AlarmSetMode			; Backlight单独触发
