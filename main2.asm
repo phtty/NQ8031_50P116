@@ -21,6 +21,7 @@ Status_Runtime2:
 Status_Time_Set2:
 	jsr		F_KeyTrigger_TimeSetMode2			; TimeSet模式下按键逻辑
 	jsr		F_DisTime_Set2
+	jsr		F_Alarm_Handler2
 	jsr		F_Is_KeyTKeep						; 判断T键是否保持按下
 	bra		MainLoop2
 Status_Alarm_Set2:

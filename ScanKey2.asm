@@ -50,6 +50,7 @@ L_KeyTTrigger_RunTimeMode2:
 	sta		AlarmLoud_Counter					; 清空响铃计数
 	jsr		L_NoSnooze_CloseLoud2				; 清理响铃计时、16Hz计时、响铃计数、贪睡等标志位
 	pla
+	pla
 	jmp		MainLoop2
 
 L_KeyHTrigger_RunTimeMode2:
@@ -100,6 +101,7 @@ L_KeyATrigger_RunTimeMode2:
 	lda		#00
 	sta		AlarmLoud_Counter					; 清空响铃计数
 	jsr		L_NoSnooze_CloseLoud2				; 清理响铃计时、16Hz计时、响铃计数、贪睡等标志位
+	pla
 	pla
 	jmp		MainLoop2
 
