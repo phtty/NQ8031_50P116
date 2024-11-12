@@ -12,6 +12,6 @@ L_Backlight_Stop:
 	lda		#0
 	sta		Backlight_Counter
 	rmb3	Key_Flag
-	rmb3	PB
+	rmb2	PB
 L_Backlight_Exit:
 	rts

@@ -16,28 +16,28 @@ L_DelayTrigger_RunTimeMode2:					; 消抖延时循环用标签
 	lda		PA
 	and		#$fc
 	cmp		#$80
-	bne		No_KeyTTrigger_RunTimeMode2			; 由于跳转指令寻址能力的问题，这里采用jmp进行跳转
+	bne		No_KeySTrigger_RunTimeMode2			; 由于跳转指令寻址能力的问题，这里采用jmp进行跳转
+	jmp		L_KeySTrigger_RunTimeMode2			; on/off Alarm触发
+No_KeySTrigger_RunTimeMode2:
+	cmp		#$40
+	bne		No_KeyTTrigger_RunTimeMode2
 	jmp		L_KeyTTrigger_RunTimeMode2			; Time_Set触发
 No_KeyTTrigger_RunTimeMode2:
-	cmp		#$40
-	bne		No_KeyHTrigger_RunTimeMode2
-	jmp		L_KeyHTrigger_RunTimeMode2			; Hour触发
-No_KeyHTrigger_RunTimeMode2:
 	cmp		#$20
-	bne		No_KeyBTrigger_RunTimeMode2
-	jmp		L_KeyBTrigger_RunTimeMode2			; Backlight/Snooze触发
-No_KeyBTrigger_RunTimeMode2:
-	cmp		#$10
 	bne		No_KeyMTrigger_RunTimeMode2
 	jmp		L_KeyMTrigger_RunTimeMode2			; Min触发
 No_KeyMTrigger_RunTimeMode2:
-	cmp		#$08
+	cmp		#$10
 	bne		No_KeyATrigger_RunTimeMode2
 	jmp		L_KeyATrigger_RunTimeMode2			; Alarm_Set触发
 No_KeyATrigger_RunTimeMode2:
+	cmp		#$08
+	bne		No_KeyHTrigger_RunTimeMode2
+	jmp		L_KeyHTrigger_RunTimeMode2			; Hour触发
+No_KeyHTrigger_RunTimeMode2:
 	cmp		#$04
 	bne		L_KeyExit_RunTimeMode2
-	jmp		L_KeySTrigger_RunTimeMode2			; on/off Alarm触发
+	jmp		L_KeyBTrigger_RunTimeMode2			; Backlight/Snooze触发
 
 L_KeyExit_RunTimeMode2:
 	rts
@@ -58,7 +58,7 @@ L_KeyHTrigger_RunTimeMode2:
 
 L_KeyBTrigger_RunTimeMode2:
 	smb3	Key_Flag							; 背光激活，同时启动贪睡
-	smb3	PB
+	smb2	PB
 	lda		#0									; 每次按背光都会重置计时
 	sta		Backlight_Counter
 	bbs2	Clock_Flag,L_KeyBTrigger_NoLoud2	; 如果不是在响闹模式下，则退出贪睡
@@ -142,7 +142,7 @@ L_DelayTrigger_TimeSetMode2						; 消抖延时循环用标签
 	lda		P_Temp
 	bne		L_DelayTrigger_TimeSetMode2			; 软件消抖
 	lda		PA
-	and		#$7c
+	and		#$ac
 	cmp		#$00
 	bne		L_KeyYes_TimeSetMode2				; 检测是否有按键触发
 	bra		L_KeyExit_TimeSetMode2
@@ -157,7 +157,7 @@ L_Key8Hz_TimeSetMode2:
 	bbr4	Timer_Flag,L_Key8HzExit_TimeSetMode2; 8Hz标志位到来前也不进行按键处理(快加下)
 	rmb4	Timer_Flag
 	lda		PA
-	and		#$7c
+	and		#$ac
 	cmp		PA_IO_Backup						; 若检测到有按键的状态变化则退出快加判断并结束
 	beq		L_8Hz_Count_TimeSetMode2
 	bra		L_KeyExit_TimeSetMode2
@@ -173,22 +173,22 @@ L_QuikAdd_TimeSetMode2:
 
 L_KeyHandle_TimeSetMode2:
 	lda		PA
-	and		#$7c
-	cmp		#$40
-	bne		No_KeyHTrigger_TimeSetMode2			; 由于跳转指令寻址能力的问题，这里采用jmp进行跳转
-	jmp		L_KeyHTrigger_TimeSetMode2			; Hour触发
-No_KeyHTrigger_TimeSetMode2:
+	and		#$ac
+	cmp		#$80
+	bne		No_KeySTrigger_TimeSetMode2			; 由于跳转指令寻址能力的问题，这里采用jmp进行跳转
+	jmp		L_KeySTrigger_TimeSetMode2			; on/off Alarm触发
+No_KeySTrigger_TimeSetMode2:
 	cmp		#$20
-	bne		No_KeyBTrigger_TimeSetMode2
-	jmp		L_KeyBTrigger_TimeSetMode2			; Backlight/Snooze触发
-No_KeyBTrigger_TimeSetMode2:
-	cmp		#$10
 	bne		No_KeyMTrigger_TimeSetMode2
 	jmp		L_KeyMTrigger_TimeSetMode2			; Min触发
 No_KeyMTrigger_TimeSetMode2:
+	cmp		#$08
+	bne		No_KeyHTrigger_TimeSetMode2
+	jmp		L_KeyHTrigger_TimeSetMode2			; Hour触发
+No_KeyHTrigger_TimeSetMode2:
 	cmp		#$04
 	bne		L_KeyExit_TimeSetMode2
-	jmp		L_KeySTrigger_TimeSetMode2			; on/off Alarm触发
+	jmp		L_KeyBTrigger_TimeSetMode2			; Backlight/Snooze触发
 
 L_KeyExit_TimeSetMode2:
 	TMR1_OFF									; 关闭快加8Hz计时的定时器
@@ -246,7 +246,7 @@ L_Alarm_off_TimeSet:
 
 F_Is_KeyTKeep:
 	bbs3	Timer_Flag,L_QA_KeyTKeep			; 有快加时不退出
-	bbr7	PA,L_NoKeyT_Keep
+	bbr6	PA,L_NoKeyT_Keep
 L_QA_KeyTKeep:
 	rts
 L_NoKeyT_Keep:
@@ -276,7 +276,7 @@ L_DelayTrigger_AlarmSetMode2:					; 消抖延时循环用标签
 	lda		P_Temp
 	bne		L_DelayTrigger_AlarmSetMode2		; 软件消抖
 	lda		PA
-	and		#$f4
+	and		#$ac
 	cmp		#$00
 	bne		L_KeyYes_AlarmSetMode2				; 检测是否有按键触发
 	bra		L_KeyExit_AlarmSetMode2
@@ -291,7 +291,7 @@ L_Key8Hz_AlarmSetMode2:
 	bbr4	Timer_Flag,L_Key8HzExit_AlarmSetMode2; 8Hz标志位到来前也不进行按键处理(快加下)
 	rmb4	Timer_Flag
 	lda		PA
-	and		#$f4
+	and		#$ac
 	cmp		PA_IO_Backup						; 若检测到有按键的状态变化则退出快加判断并结束
 	beq		L_8Hz_Count_AlarmSetMode2
 	bra		L_KeyExit_AlarmSetMode2
@@ -307,22 +307,22 @@ L_QuikAdd_AlarmSetMode2:
 
 L_KeyHandle_AlarmSetMode2:
 	lda		PA
-	and		#$f4
-	cmp		#$40
-	bne		No_KeyHTrigger_AlarmSetMode2		; 由于跳转指令寻址能力的问题，这里采用jmp进行跳转
-	jmp		L_KeyHTrigger_AlarmSetMode2			; Hour触发
-No_KeyHTrigger_AlarmSetMode2:
+	and		#$ac
+	cmp		#$80
+	bne		No_KeySTrigger_AlarmSetMode2		; 由于跳转指令寻址能力的问题，这里采用jmp进行跳转
+	jmp		L_KeySTrigger_AlarmSetMode2			; on/off Alarm触发
+No_KeySTrigger_AlarmSetMode2:
 	cmp		#$20
-	bne		No_KeyBTrigger_AlarmSetMode2
-	jmp		L_KeyBTrigger_AlarmSetMode2			; Backlight/Snooze触发
-No_KeyBTrigger_AlarmSetMode2:
-	cmp		#$10
 	bne		No_KeyMTrigger_AlarmSetMode2
 	jmp		L_KeyMTrigger_AlarmSetMode2			; Min触发
 No_KeyMTrigger_AlarmSetMode2:
+	cmp		#$08
+	bne		No_KeyHTrigger_AlarmSetMode2
+	jmp		L_KeyHTrigger_AlarmSetMode2			; Hour触发
+No_KeyHTrigger_AlarmSetMode2:
 	cmp		#$04
 	bne		L_KeyExit_AlarmSetMode2
-	jmp		L_KeySTrigger_AlarmSetMode2			; on/off Alarm触发
+	jmp		L_KeyBTrigger_AlarmSetMode2			; Backlight/Snooze触发
 
 L_KeyExit_AlarmSetMode2:
 	TMR1_OFF									; 关闭快加8Hz计时的定时器
@@ -379,7 +379,7 @@ L_Alarm_off_AlarmSet:
 
 F_Is_KeyAKeep:
 	bbs3	Timer_Flag,L_QA_KeyAKeep			; 有快加时不退出
-	bbr3	PA,L_NoKeyA_Keep
+	bbr4	PA,L_NoKeyA_Keep
 L_QA_KeyAKeep:
 	rts
 L_NoKeyA_Keep:

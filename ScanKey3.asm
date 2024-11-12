@@ -123,20 +123,20 @@ L_DelayTrigger_RunTimeMode3:					; 消抖延时循环用标签
 	lda		PA									; 正常走时模式下只对2个按键有响应
 	and		#$f0
 	cmp		#$80
-	bne		No_KeyMTrigger_RunTimeMode3			; 由于跳转指令寻址能力的问题，这里采用jmp进行跳转
-	jmp		L_KeyMTrigger_RunTimeMode3			; Date/Min单独触发
-No_KeyMTrigger_RunTimeMode3:
-	cmp		#$40
-	bne		No_KeyHTrigger_RunTimeMode3
+	bne		No_KeyHTrigger_RunTimeMode3			; 由于跳转指令寻址能力的问题，这里采用jmp进行跳转
 	jmp		L_KeyHTrigger_RunTimeMode3			; Month/Hour单独触发
 No_KeyHTrigger_RunTimeMode3:
+	cmp		#$40
+	bne		No_KeyMTrigger_RunTimeMode3
+	jmp		L_KeyMTrigger_RunTimeMode3			; Date/Min单独触发
+No_KeyMTrigger_RunTimeMode3:
 	cmp		#$20
-	bne		No_KeyBTrigger_RunTimeMode3
-	jmp		L_KeyBTrigger_RunTimeMode3			; Backlight & SNZ触发
-No_KeyBTrigger_RunTimeMode3:
+	bne		No_KeySTrigger_RunTimeMode3
+	jmp		L_KeySTrigger_RunTimeMode3			; 12/24h & year触发
+No_KeySTrigger_RunTimeMode3:
 	cmp		#$10
 	bne		L_KeyExit_RunTimeMode3
-	jmp		L_KeySTrigger_RunTimeMode3			; 12/24h & year触发
+	jmp		L_KeyBTrigger_RunTimeMode3			; Backlight & SNZ触发
 
 L_KeyExit_RunTimeMode3:
 	rts
@@ -148,7 +148,7 @@ L_KeyHTrigger_RunTimeMode3:
 
 L_KeyBTrigger_RunTimeMode3:
 	smb3	Key_Flag							; 背光激活，同时启动贪睡
-	smb3	PB
+	smb2	PB
 	lda		#0									; 每次按背光都会重置计时
 	sta		Backlight_Counter
 	bbr2	Clock_Flag,L_KeyBTrigger_Exit3		; 如果不是在响闹模式下，则不会处理贪睡
@@ -235,20 +235,20 @@ L_KeyHandle_DateMode3:
 	lda		PA									; 判断4种按键触发情况
 	and		#$f0
 	cmp		#$80
-	bne		No_KeyMTrigger_DateSetMode3			; 由于跳转指令寻址能力的问题，这里采用jmp进行跳转
-	jmp		L_KeyMTrigger_DateSetMode3			; Date单独触发
-No_KeyMTrigger_DateSetMode3:
-	cmp		#$40
-	bne		No_KeyHTrigger_DateSetMode3
+	bne		No_KeyHTrigger_DateSetMode3			; 由于跳转指令寻址能力的问题，这里采用jmp进行跳转
 	jmp		L_KeyHTrigger_DateSetMode3			; Month单独触发
 No_KeyHTrigger_DateSetMode3:
+	cmp		#$40
+	bne		No_KeyMTrigger_DateSetMode3
+	jmp		L_KeyMTrigger_DateSetMode3			; Date单独触发
+No_KeyMTrigger_DateSetMode3:
 	cmp		#$20
-	bne		No_KeyBTrigger_DateSetMode3
-	jmp		L_KeyBTrigger_DateSetMode3			; Backlight单独触发
-No_KeyBTrigger_DateSetMode3:
+	bne		No_KeySTrigger_DateSetMode3
+	jmp		L_KeySTrigger_DateSetMode3			; year触发
+No_KeySTrigger_DateSetMode3:
 	cmp		#$10
 	bne		L_KeyExit_DateSetMode3
-	jmp		L_KeySTrigger_DateSetMode3			; year触发
+	jmp		L_KeySTrigger_DateSetMode3			; Backlight单独触发
 
 L_KeyExit_DateSetMode3:
 	TMR1_OFF									; 关闭快加8Hz计时的定时器
@@ -310,7 +310,7 @@ L_Month_Add_Set3:
 
 L_KeyBTrigger_DateSetMode3:
 	smb3	Key_Flag							; 背光激活
-	smb3	PB
+	smb2	PB
 	lda		#0
 	sta		Backlight_Counter					; 每次按背光都会重置计时
 	rts
@@ -389,21 +389,21 @@ L_KeyHandle_TimeSetMode3:
 	lda		PA									; 判断4种按键触发情况
 	and		#$f0
 	cmp		#$80
-	bne		No_KeyMTrigger_TimeSetMode3			; 由于跳转指令寻址能力的问题，这里采用jmp进行跳转
-	jmp		L_KeyMTrigger_TimeSetMode3			; Min单独触发
-No_KeyMTrigger_TimeSetMode3:
-	cmp		#$40
-	bne		No_KeyHTrigger_TimeSetMode3
+	bne		No_KeyHTrigger_TimeSetMode3			; 由于跳转指令寻址能力的问题，这里采用jmp进行跳转
 	jmp		L_KeyHTrigger_TimeSetMode3			; Hour单独触发
 No_KeyHTrigger_TimeSetMode3:
+	cmp		#$40
+	bne		No_KeyMTrigger_TimeSetMode3
+	jmp		L_KeyMTrigger_TimeSetMode3			; Min单独触发
+No_KeyMTrigger_TimeSetMode3:
 	bbs3	Timer_Flag,L_KeyExit_TimeSetMode3	; 背光和12h模式切换不需要快加
 	cmp		#$20
-	bne		No_KeyBTrigger_TimeSetMode3
-	jmp		L_KeyBTrigger_TimeSetMode3			; Backlight/SNZ单独触发
-No_KeyBTrigger_TimeSetMode3:
+	bne		No_KeySTrigger_TimeSetMode3
+	jmp		L_KeySTrigger_TimeSetMode3			; 12/24h触发
+No_KeySTrigger_TimeSetMode3:
 	cmp		#$10
 	bne		L_KeyExit_TimeSetMode3
-	jmp		L_KeySTrigger_TimeSetMode3			; 12/24h触发
+	jmp		L_KeyBTrigger_TimeSetMode3			; Backlight/SNZ单独触发
 
 L_KeyExit_TimeSetMode3:
 	TMR1_OFF									; 关闭快加8Hz计时的定时器
@@ -439,7 +439,7 @@ L_HourSet_Juge3:
 	rts
 L_KeyBTrigger_TimeSetMode3:
 	smb3	Key_Flag
-	smb3	PB
+	smb2	PB
 	lda		#0
 	sta		Backlight_Counter					; 每次按背光都会重置计时
 	rts
@@ -497,21 +497,21 @@ L_KeyHandle_AlarmSetMode3:
 	lda		PA									; 判断4种按键触发情况
 	and		#$f0
 	cmp		#$80
-	bne		No_KeyMTrigger_AlarmSetMode3		; 由于跳转指令寻址能力的问题，这里采用jmp进行跳转
-	jmp		L_KeyMTrigger_AlarmSetMode3			; Min单独触发
-No_KeyMTrigger_AlarmSetMode3:
-	cmp		#$40
-	bne		No_KeyHTrigger_AlarmSetMode3
+	bne		No_KeyHTrigger_AlarmSetMode3		; 由于跳转指令寻址能力的问题，这里采用jmp进行跳转
 	jmp		L_KeyHTrigger_AlarmSetMode3			; Hour单独触发
 No_KeyHTrigger_AlarmSetMode3:
+	cmp		#$40
+	bne		No_KeyMTrigger_AlarmSetMode3
+	jmp		L_KeyMTrigger_AlarmSetMode3			; Min单独触发
+No_KeyMTrigger_AlarmSetMode3:
 	bbs3	Timer_Flag,L_KeyExit_AlarmSetMode3	; 背光和12h模式切换不需要快加
 	cmp		#$20
-	bne		No_KeyBTrigger_AlarmSetMode3
-	jmp		L_KeyBTrigger_AlarmSetMode3			; Backlight单独触发
-No_KeyBTrigger_AlarmSetMode3:
+	bne		No_KeySTrigger_AlarmSetMode3
+	jmp		L_KeySTrigger_AlarmSetMode3			; 12/24h触发
+No_KeySTrigger_AlarmSetMode3:
 	cmp		#$10
 	bne		L_KeyExit_AlarmSetMode3
-	jmp		L_KeySTrigger_AlarmSetMode3			; 12/24h触发
+	jmp		L_KeyBTrigger_AlarmSetMode3			; Backlight单独触发
 
 L_KeyExit_AlarmSetMode3:
 	TMR1_OFF									; 关闭快加8Hz计时的定时器
@@ -544,7 +544,7 @@ L_AlarmHourSet_Juge3:
 	rts
 L_KeyBTrigger_AlarmSetMode3:
 	smb3	Key_Flag
-	smb3	PB
+	smb2	PB
 	lda		#0
 	sta		Backlight_Counter					; 每次按背光都会重置计时
 	rts

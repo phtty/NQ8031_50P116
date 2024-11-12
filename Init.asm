@@ -42,7 +42,8 @@ F_LCD_Init:
 	LCD_ENCH_EN
 	LCD_4COM
 	LCD_DRIVE_8
-	LCD_C_1_3_BAIS_3V
+	smb2	LCDCTRL
+	smb3	LCDCTRL
 
 	PC67_SEG									; 配置IO口为SEG线模式
 	PD03_SEG
@@ -64,9 +65,9 @@ F_Port_Init:
 	EN_PA_IRQ									; 打开PA口外部中断
 
 	lda		PB
-	and		#$f7
+	and		#$fb
 	sta		PB
-	PB3_PB3_COMS								; PB3口作背光输出
+	PB2_PB2_COMS								; PB2口作背光输出
 	
 	lda		PC_SEG								; 配置PC0~5为普通IO口
 	and		#$e0
@@ -111,7 +112,7 @@ F_Timer_Init:
 
 
 F_Beep_Init:
-	PB2_PWM										; PP(PB2)不作IO用，配置成PWM输出模式
+	PB3_PWM										; PN(PB3)不作IO用，配置成PWM输出模式
 	rmb2    DIVC								; 配置蜂鸣音调频率(占空比3/4)
     rmb3    DIVC
 	rmb7	DIVC
@@ -129,7 +130,7 @@ F_Port_Init2:
 	sta		PA
 	EN_PA_IRQ									; 打开PA口外部中断
 
-	PB3_PB3_COMS								; PB口作背光输出
+	PB2_PB2_COMS								; PB口作背光输出
 	
 	lda		PC_SEG								; 配置PC0~5为普通IO口
 	and		#$e0
