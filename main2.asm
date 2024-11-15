@@ -16,7 +16,9 @@ Status_Runtime2:
 	jsr		F_KeyTrigger_RunTimeMode2			; 走时模式下的按键逻辑
 	jsr		F_DisTime_Run2
 	jsr		F_Alarm_Handler2
+	bbs7	TMRC,L_InBeep_NoHalt_Runtime2
 	sta		HALT
+L_InBeep_NoHalt_Runtime2:
 	bra		MainLoop2
 Status_Time_Set2:
 	jsr		F_KeyTrigger_TimeSetMode2			; TimeSet模式下按键逻辑

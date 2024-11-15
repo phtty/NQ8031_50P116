@@ -211,6 +211,7 @@ L_KeyMTrigger_TimeSetMode2:
 L_MinSet_Juge2:
 	jsr		L_DisTime_Min2
 	bra		L_KeyBTrigger_TimeSetMode2			; M也会触发背光
+
 L_KeyHTrigger_TimeSetMode2:
 	inc		R_Time_Hour
 	lda		#23
@@ -220,9 +221,11 @@ L_KeyHTrigger_TimeSetMode2:
 	sta		R_Time_Hour
 L_HourSet_Juge2:
 	jsr		L_DisTime_Hour2						; H也会触发背光
+
 L_KeyBTrigger_TimeSetMode2:
 	jmp		L_KeyBTrigger_RunTimeMode2
 	rts
+
 L_KeySTrigger_TimeSetMode2:
 	bbs2	Clock_Flag,L_LoundSnz_Handle22		; 若有响闹模式或贪睡模式，则不切换时间模式，只打断响闹和贪睡
 	bbs3	Clock_Flag,L_LoundSnz_Handle22

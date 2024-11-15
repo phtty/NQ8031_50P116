@@ -11,13 +11,14 @@ L_Test_Loop:
 L_No_Test_16Hz:
 	jsr		F_Louding
 	lda		P_Temp
-	cmp		#32
+	cmp		#28
 	bcs		L_Test_Over
 	bra		L_Test_Loop
 L_Test_Over:
 	TMR0_OFF
 	rmb4	Clock_Flag
 	rts
+
 
 F_Test_Mode2:
 	jsr		F_FillScreen
@@ -30,7 +31,7 @@ L_Test_Loop2:
 	inc		P_Temp
 L_No_Test_16Hz2:
 	lda		P_Temp
-	cmp		#32
+	cmp		#28
 	bcs		L_Test_Over
 	bra		L_Test_Loop
 L_Test_Over2:

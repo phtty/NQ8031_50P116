@@ -33,6 +33,8 @@ F_Alarm_Handler:
 L_No_Alarm_Process:
 	TMR0_OFF
 	rmb7	TMRC
+	PB3_PB3_COMS
+	rmb3	PB
 	rmb6	Timer_Flag
 	rmb7	Timer_Flag
 	lda		#0
@@ -91,6 +93,8 @@ L_CloseLoud:
 	rmb2	Clock_Flag							; 关闭响闹模式
 	rmb5	Clock_Flag
 	rmb7	TMRC
+	PB3_PB3_COMS
+	rmb3	PB
 	rmb6	Timer_Flag
 	rmb7	Timer_Flag
 	TMR0_OFF
@@ -136,10 +140,13 @@ L_Beeping:
 	beq		L_NoBeep_Serial_Mode
 	dec		Beep_Serial
 	bbr0	Beep_Serial,L_NoBeep_Serial_Mode
+	PB3_PWM
 	smb7	TMRC
 	rts
 L_NoBeep_Serial_Mode:
 	rmb7	TMRC
+	PB3_PB3_COMS
+	rmb3	PB
 	rts
 
 L_ConstBeep_Mode:
@@ -149,8 +156,11 @@ L_ConstBeep_Mode:
 
 	lda		Beep_Serial
 	bbr0	Beep_Serial,L_NoBeep_Const_Mode
+	PB3_PWM
 	smb7	TMRC
 	rts
 L_NoBeep_Const_Mode:
 	rmb7	TMRC
+	PB3_PB3_COMS
+	rmb3	PB
 	rts

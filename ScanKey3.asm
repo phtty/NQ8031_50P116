@@ -1,8 +1,11 @@
 ; 拨键只发生状态变化，不需要处理额外内容
 F_Switch_Scan3:									; 拨键部分需要扫描处理
+	jsr		F_SwitchPort_ScanReady
+	jsr		F_Delay
 	lda		PC
 	cmp		PC_IO_Backup						; 判断IO口状态是否与上次相同
 	bne		L_Switch_Delay3						; 如果不同说明拨键状态有改变，进消抖
+	jsr		F_SwitchPort_ScanReset				; 避免漏电
 	rts
 L_Switch_Delay3:
 	lda		#$00
@@ -15,6 +18,8 @@ L_Delay_S3:										; 消抖延时循环用标签
 	lda		PC_IO_Backup
 	cmp		PC
 	bne		L_Switched3
+
+	jsr		F_SwitchPort_ScanReset				; 避免漏电
 	rts
 L_Switched3:									; 检测到IO口状态与上次的不同，则进入拨键处理
 	lda		PC
@@ -55,6 +60,7 @@ No_Time_Set_Mode3:
 	bne		No_Alarm_Set_Mode3
 	jmp		Switch_Alarm_Set_Mode3
 No_Alarm_Set_Mode3:
+	jsr		F_SwitchPort_ScanReset				; 避免漏电
 	rts 
 
 ; 闹钟开启或关闭拨键处理
@@ -79,6 +85,7 @@ Switch_Runtime_Mode3:
 	lda		#0001B
 	sta		Sys_Status_Flag
 	jsr		F_Display_All3
+	jsr		F_SwitchPort_ScanReset				; 避免漏电
 	rts
 Switch_Date_Set_Mode3:
 	lda		#0010B
@@ -87,12 +94,14 @@ Switch_Date_Set_Mode3:
 	jsr		F_Display_Date3
 	jsr		F_UnDisplay_InDateMode3				; 进入日期模式后停止显示一些符号
 	jsr		L_NoSnooze_CloseLoud				; 打断响闹和贪睡
+	jsr		F_SwitchPort_ScanReset				; 避免漏电
 	rts
 Switch_Time_Set_Mode3:
 	lda		#0100B
 	sta		Sys_Status_Flag
 	jsr		F_Display_All3
 	jsr		L_NoSnooze_CloseLoud				; 打断响闹和贪睡
+	jsr		F_SwitchPort_ScanReset				; 避免漏电
 	rts
 Switch_Alarm_Set_Mode3:
 	lda		#1000B
@@ -102,6 +111,7 @@ Switch_Alarm_Set_Mode3:
 	ldx		#lcd3_ALM
 	jsr		F_DispSymbol3
 	jsr		L_NoSnooze_CloseLoud				; 打断响闹和贪睡
+	jsr		F_SwitchPort_ScanReset				; 避免漏电
 	rts
 
 
@@ -214,6 +224,8 @@ L_KeyYes_DateSetMode3:
 L_KeyScan_DateSetMode3:							; 长按处理部分
 	bbr0	Key_Flag,L_KeyExit_DateSetMode3		; 没有扫键标志直接退出
 L_Key8Hz_DateSetMode3:
+	jsr		F_QuikAdd_ScanReady					; 配置为输入
+	jsr		F_Delay
 	bbr4	Timer_Flag,L_Key8HzExit_DateSetMode3; 8Hz标志位到来前也不进行按键处理(快加下)
 	rmb4	Timer_Flag
 	lda		PA
@@ -248,7 +260,7 @@ No_KeyMTrigger_DateSetMode3:
 No_KeySTrigger_DateSetMode3:
 	cmp		#$10
 	bne		L_KeyExit_DateSetMode3
-	jmp		L_KeySTrigger_DateSetMode3			; Backlight单独触发
+	jmp		L_KeyBTrigger_DateSetMode3			; Backlight单独触发
 
 L_KeyExit_DateSetMode3:
 	TMR1_OFF									; 关闭快加8Hz计时的定时器
@@ -257,10 +269,12 @@ L_KeyExit_DateSetMode3:
 	lda		#0									; 清理相关变量
 	sta		QuickAdd_Counter
 L_Key8HzExit_DateSetMode3:
+	jsr		F_QuikAdd_ScanReady					; 配置为输入
 	rts
 
 
 L_KeyMTrigger_DateSetMode3:
+	jsr		F_QuikAdd_ScanReset					; 有快加的情况需要重置IO口为输出高避免漏电
 	jsr		F_Is_Leap_Year
 	ldx		R_Date_Month						; 月份数作为索引，查月份天数表
 	dex											; 表头从0开始，而月份是从1开始
@@ -282,6 +296,7 @@ L_Day_Add_Set3:
 	rts
 
 L_KeyHTrigger_DateSetMode3:
+	jsr		F_QuikAdd_ScanReset					; 有快加的情况需要重置IO口为输出高避免漏电
 	lda		R_Date_Month
 	cmp		#12
 	bcc		L_Month_Juge3
@@ -316,6 +331,7 @@ L_KeyBTrigger_DateSetMode3:
 	rts
 
 L_KeySTrigger_DateSetMode3:
+	jsr		F_QuikAdd_ScanReset					; 有快加的情况需要重置IO口为输出高避免漏电
 	lda		R_Date_Year
 	cmp		#99
 	bcc		L_Year_Juge3
@@ -368,6 +384,8 @@ L_KeyYes_TimeSetMode3:
 L_KeyScan_TimeSetMode3:							; 长按处理部分
 	bbr0	Key_Flag,L_KeyExit_TimeSetMode3		; 没有扫键标志直接退出
 L_Key8Hz_TimeSetMode3:
+	jsr		F_QuikAdd_ScanReady					; 配置为输入
+	jsr		F_Delay
 	bbr4	Timer_Flag,L_Key8HzExit_TimeSetMode3; 8Hz标志位到来前也不进行按键处理(快加下)
 	rmb4	Timer_Flag
 	lda		PA
@@ -412,10 +430,12 @@ L_KeyExit_TimeSetMode3:
 	lda		#0									; 清理相关变量
 	sta		QuickAdd_Counter
 L_Key8HzExit_TimeSetMode3:
+	jsr		F_QuikAdd_ScanReady					; 配置为输入
 	rts
 
 
 L_KeyMTrigger_TimeSetMode3:
+	jsr		F_QuikAdd_ScanReset					; 有快加的情况需要重置IO口为输出高避免漏电
 	lda		#00
 	sta		R_Time_Sec							; 调分钟会清S计数
 	inc		R_Time_Min
@@ -428,6 +448,7 @@ L_MinSet_Juge3:
 	jsr		F_Display_Time3
 	rts
 L_KeyHTrigger_TimeSetMode3:
+	jsr		F_QuikAdd_ScanReset					; 有快加的情况需要重置IO口为输出高避免漏电
 	inc		R_Time_Hour
 	lda		#23
 	cmp		R_Time_Hour
@@ -476,6 +497,8 @@ L_KeyYes_AlarmSetMode3:
 L_KeyScan_AlarmSetMode3:						; 长按处理部分
 	bbr0	Key_Flag,L_KeyExit_AlarmSetMode3	; 没有扫键标志直接退出
 L_Key8Hz_AlarmSetMode3:
+	jsr		F_QuikAdd_ScanReady					; 配置为输入
+	jsr		F_Delay
 	bbr4	Timer_Flag,L_Key8HzExit_AlarmSetMode3; 8Hz标志位到来前也不进行按键处理(快加下)
 	rmb4	Timer_Flag
 	lda		PA
@@ -520,9 +543,11 @@ L_KeyExit_AlarmSetMode3:
 	lda		#0									; 清理相关变量
 	sta		QuickAdd_Counter
 L_Key8HzExit_AlarmSetMode3:
+	jsr		F_QuikAdd_ScanReady					; 配置为输入
 	rts
 
 L_KeyMTrigger_AlarmSetMode3:
+	jsr		F_QuikAdd_ScanReset					; 有快加的情况需要重置IO口为输出高避免漏电
 	inc		R_Alarm_Min
 	lda		#59
 	cmp		R_Alarm_Min
@@ -532,7 +557,9 @@ L_KeyMTrigger_AlarmSetMode3:
 L_AlarmMinSet_Juge3:
 	jsr		F_Display_Alarm3
 	rts
+
 L_KeyHTrigger_AlarmSetMode3:
+	jsr		F_QuikAdd_ScanReset					; 有快加的情况需要重置IO口为输出高避免漏电
 	inc		R_Alarm_Hour
 	lda		#23
 	cmp		R_Alarm_Hour

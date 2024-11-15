@@ -60,13 +60,15 @@ F_Port_Init:
 	sta		PA_WAKE
 	lda		#$f0
 	sta		PA_DIR
-	lda		#$f0
+	lda		#$f0								; PA口初始配置为下拉输入
 	sta		PA
 	EN_PA_IRQ									; 打开PA口外部中断
 
 	lda		PB
 	and		#$fb
 	sta		PB
+	rmb2	PB_TYPE
+	rmb3	PB_TYPE
 	PB2_PB2_COMS								; PB2口作背光输出
 	
 	lda		PC_SEG								; 配置PC0~5为普通IO口
@@ -112,7 +114,9 @@ F_Timer_Init:
 
 
 F_Beep_Init:
-	PB3_PWM										; PN(PB3)不作IO用，配置成PWM输出模式
+	PB3_PB3_COMS								; PN(PB3)初始化成IO输出，避免漏电
+	rmb3	PB
+
 	rmb2    DIVC								; 配置蜂鸣音调频率(占空比3/4)
     rmb3    DIVC
 	rmb7	DIVC
@@ -136,10 +140,10 @@ F_Port_Init2:
 	and		#$e0
 	sta		PC_SEG
 	lda		PC_DIR								; PC0/2~5作拨键输入
-	ora		#$3d
+	and		#$c0
 	sta		PC_DIR
 	lda		PC									; PC0/2~5配置为下拉
-	ora		#$3d
+	and		#$c0
 	sta		PC
 
 	lda		#$00
@@ -154,4 +158,89 @@ F_LCD_Init2:
 
 	jsr		F_ClearScreen						; 清屏
 
+	rts
+
+
+F_BoundPort_Reset:
+	rmb0	PC_DIR
+	rmb1	PC_DIR
+	smb0	PC									; 邦选完成后配置成输出高避免漏电
+	smb1	PC
+	rts
+
+
+F_SwitchPort_ScanReady:
+	lda		PC_DIR
+	ora		#$3c
+	sta		PC_DIR
+	lda		PC									; PC2~5配置为下拉
+	ora		#$3c
+	sta		PC
+
+
+	rts
+
+F_SwitchPort_ScanReset:
+	lda		PC_DIR
+	and		#$c3
+	sta		PC_DIR
+	lda		PC									; PC2~5配置为下拉
+	ora		#$3c
+	sta		PC
+	rts
+
+F_QuikAdd_ScanReady:							; PA口配置为下拉输入
+	bbs3	Timer_Flag,L_QuikAdd_ScanReady
+	rts
+L_QuikAdd_ScanReady:
+	CLR_PA_IRQ_FLAG
+	EN_PA_IRQ
+	lda		#$f0
+	sta		PA_DIR
+	lda		#$f0
+	sta		PA
+	rts
+
+F_QuikAdd_ScanReset:
+	bbs3	Timer_Flag,L_QuikAdd_ScanReset
+	rts
+L_QuikAdd_ScanReset:
+	DIS_PA_IRQ
+	lda		#$00
+	sta		PA_DIR
+	lda		#$f0
+	sta		PA
+	rts
+
+F_QuikAdd_ScanReady2:
+	bbs3	Timer_Flag,L_QuikAdd_ScanReady2
+	rts
+L_QuikAdd_ScanReady2:
+	CLR_PA_IRQ_FLAG
+	EN_PA_IRQ
+	lda		#$fc
+	sta		PA_DIR
+	lda		#$fc
+	sta		PA
+	rts
+
+F_QuikAdd_ScanReset2:
+	bbs3	Timer_Flag,L_QuikAdd_ScanReset2
+	rts
+L_QuikAdd_ScanReset2:
+	DIS_PA_IRQ
+	lda		#$00
+	sta		PA_DIR
+	lda		#$00
+	sta		PA
+	lda		Timer_Flag
+	rts
+
+F_Delay:
+	lda		#$f5
+	sta		P_Temp
+L_Delay_f5:										; 延时循环用标签
+	inc		P_Temp
+	lda		P_Temp
+	bne		L_Delay_f5
 	rts

@@ -65,6 +65,7 @@ L_MODE0:										; MODE0代表椭圆时钟
 	jsr		F_Port_Init2						; Mode0初始化
 	jsr		F_LCD_Init2
 	jsr		F_MODE0_Init
+	jsr		F_BoundPort_Reset					; 邦选确定后重置输出口避免漏电
 	cli											; 开总中断
 
 	jsr		F_Test_Mode2
@@ -73,6 +74,7 @@ L_MODE0:										; MODE0代表椭圆时钟
 	jmp		MainLoop2
 
 L_MODE1:										; MODE1代表旧方块时钟
+	jsr		F_BoundPort_Reset					; 邦选确定后重置输出口避免漏电
 	cli											; 开总中断
 	rmb0	Key_Flag
 	smb0	Clock_Flag
@@ -81,6 +83,7 @@ L_MODE1:										; MODE1代表旧方块时钟
 	jmp		MainLoop
 
 L_MODE2:										; MODE2代表星期方块时钟
+	jsr		F_BoundPort_Reset					; 邦选确定后重置输出口避免漏电
 	cli
 	smb0	Clock_Flag
 	jsr		F_Test_Mode
@@ -108,22 +111,30 @@ Status_Runtime:
 	jsr		F_KeyTrigger_RunTimeMode			; RunTime模式下按键逻辑
 	jsr		F_DisTime_Run
 	jsr		F_Alarm_Handler						; 只在RunTime模式下才会响闹
+	bbs7	TMRC,L_InBeep_NoHalt_Runtime
 	sta		HALT
+L_InBeep_NoHalt_Runtime:
 	bra		MainLoop
 Status_Calendar_Set:
 	jsr		F_KeyTrigger_DateSetMode			; DateSet模式下按键逻辑
 	jsr		F_DisCalendar_Set
+	bbs7	TMRC,L_InBeep_NoHalt_Calendar_Set
 	sta		HALT
+L_InBeep_NoHalt_Calendar_Set:
 	bra		MainLoop
 Status_Time_Set:
 	jsr		F_KeyTrigger_TimeSetMode			; TimeSet模式下按键逻辑
 	jsr		F_DisTime_Set
+	bbs7	TMRC,L_InBeep_NoHalt_Time_Set
 	sta		HALT
+L_InBeep_NoHalt_Time_Set:
 	bra		MainLoop
 Status_Alarm_Set:
 	jsr		F_KeyTrigger_AlarmSetMode			; AlarmSet模式下按键逻辑
 	jsr		F_DisAlarm_Set
+	bbs7	TMRC,L_InBeep_NoHalt_Alarm_Set
 	sta		HALT
+L_InBeep_NoHalt_Alarm_Set:
 	bra		MainLoop
 
 
