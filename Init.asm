@@ -192,8 +192,6 @@ F_SwitchPort_ScanReady:
 	lda		PC									; PC2~5配置为下拉
 	ora		#$3c
 	sta		PC
-
-
 	rts
 
 F_SwitchPort_ScanReset:
