@@ -64,6 +64,7 @@ V_RESET:
 L_MODE0:										; MODE0代表椭圆时钟
 	jsr		F_Port_Init2						; Mode0初始化
 	jsr		F_LCD_Init2
+	jsr		F_Beep_Init2						; 椭圆时钟的蜂鸣器口不一样
 	jsr		F_MODE0_Init
 	jsr		F_BoundPort_Reset					; 邦选确定后重置输出口避免漏电
 	cli											; 开总中断

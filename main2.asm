@@ -4,7 +4,7 @@
 MainLoop2:
 	jsr		F_Time_Run2							; 走时全局生效
 	jsr		F_Louding2							; 响铃处理全局生效
-	jsr		F_Backlight							; 背光全局生效
+	jsr		F_Backlight2						; 背光全局生效
 	jsr		F_SymbolRegulate2
 
 Status_Juge2:

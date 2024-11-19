@@ -66,7 +66,7 @@ F_Port_Init:
 	EN_PA_IRQ									; 打开PA口外部中断
 
 	lda		PB
-	and		#$fb
+	and		#$f3
 	sta		PB
 	rmb2	PB_TYPE
 	rmb3	PB_TYPE
@@ -125,6 +125,21 @@ F_Beep_Init:
 	lda		#$ff
 	sta		AUD0								; TONE模式下其实AUD0没用
 
+	rts
+
+
+F_Beep_Init2:
+	PB2_PB2_COMS								; PP(PB2)初始化成IO输出，避免漏电
+	rmb2	PB
+
+	rmb2    DIVC								; 配置蜂鸣音调频率(占空比3/4)
+    rmb3    DIVC
+	rmb7	DIVC
+	rmb1	AUDCR								; 配置BP位，选择AUD开启时的模式，这里选择TONE模式				
+	lda		#$ff
+	sta		AUD0
+
+	rts
 
 F_Port_Init2:
 	lda		#$fc
@@ -135,7 +150,7 @@ F_Port_Init2:
 	sta		PA
 	EN_PA_IRQ									; 打开PA口外部中断
 
-	PB2_PB2_COMS								; PB口作背光输出
+	PB3_PB3_COMS								; PB3口作背光输出
 	
 	lda		PC_SEG								; 配置PC0~5为普通IO口
 	and		#$e0

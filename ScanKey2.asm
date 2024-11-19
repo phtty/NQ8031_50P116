@@ -58,7 +58,7 @@ L_KeyHTrigger_RunTimeMode2:
 
 L_KeyBTrigger_RunTimeMode2:
 	smb3	Key_Flag							; 背光激活，同时启动贪睡
-	smb2	PB
+	smb3	PB
 	lda		#0									; 每次按背光都会重置计时
 	sta		Backlight_Counter
 	bbs2	Clock_Flag,L_KeyBTrigger_NoLoud2	; 如果不是在响闹模式下，则退出贪睡
