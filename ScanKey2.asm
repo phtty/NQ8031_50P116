@@ -132,7 +132,7 @@ L_Alarm_off_RunTime:
 
 ; 时间设置模式的按键处理
 F_KeyTrigger_TimeSetMode2:
-	bbs3	Timer_Flag,L_Key8Hz_TimeSetMode2	; 有快加则直接判断8Hz标志位
+	bbs3	Timer_Flag,L_Key4Hz_TimeSetMode2	; 有快加则直接判断4Hz标志位
 	bbr1	Key_Flag,L_KeyScan_TimeSetMode2		; 首次按键触发
 	rmb1	Key_Flag
 	lda		#$00
@@ -151,25 +151,29 @@ L_KeyYes_TimeSetMode2:
 	sta		PA_IO_Backup
 	bra		L_KeyHandle_TimeSetMode2			; 首次触发处理结束
 
+L_Key4Hz_TimeSetMode2:
+	bbr2	Key_Flag,L_Key4HzExit_TimeSetMode2
+	rmb2	Key_Flag
 L_KeyScan_TimeSetMode2:							; 长按处理部分
 	bbr0	Key_Flag,L_KeyExit_TimeSetMode2		; 没有扫键标志直接退出
-L_Key8Hz_TimeSetMode2:
-	bbr4	Timer_Flag,L_Key8HzExit_TimeSetMode2; 8Hz标志位到来前也不进行按键处理(快加下)
+
+	bbr4	Timer_Flag,L_Key4HzExit_TimeSetMode2; 8Hz标志位到来前也不进行按键处理(快加下)
 	rmb4	Timer_Flag
 	lda		PA
 	and		#$ac
 	cmp		PA_IO_Backup						; 若检测到有按键的状态变化则退出快加判断并结束
-	beq		L_8Hz_Count_TimeSetMode2
+	beq		L_4Hz_Count_TimeSetMode2
 	bra		L_KeyExit_TimeSetMode2
 	rts
-L_8Hz_Count_TimeSetMode2:
+L_4Hz_Count_TimeSetMode2:
 	inc		QuickAdd_Counter
 	lda		QuickAdd_Counter
-	cmp		#12
+	cmp		#24
 	bcs		L_QuikAdd_TimeSetMode2
 	rts											; 长按计时，必须满1.5S才有快加
 L_QuikAdd_TimeSetMode2:
 	smb3	Timer_Flag
+	rmb2	Key_Flag
 
 L_KeyHandle_TimeSetMode2:
 	lda		PA
@@ -196,7 +200,7 @@ L_KeyExit_TimeSetMode2:
 	rmb3	Timer_Flag
 	lda		#0									; 清理相关变量
 	sta		QuickAdd_Counter
-L_Key8HzExit_TimeSetMode2:
+L_Key4HzExit_TimeSetMode2:
 	rts
 
 L_KeyMTrigger_TimeSetMode2:
@@ -269,7 +273,7 @@ L_NoKeyT_Keep:
 
 ; 闹钟设置模式的按键处理
 F_KeyTrigger_AlarmSetMode2:
-	bbs3	Timer_Flag,L_Key8Hz_AlarmSetMode2	; 有快加则直接判断8Hz标志位
+	bbs3	Timer_Flag,L_Key4Hz_AlarmSetMode2	; 有快加则直接判断4Hz标志位
 	bbr1	Key_Flag,L_KeyScan_AlarmSetMode2	; 首次按键触发
 	rmb1	Key_Flag
 	lda		#$00
@@ -288,25 +292,29 @@ L_KeyYes_AlarmSetMode2:
 	sta		PA_IO_Backup
 	bra		L_KeyHandle_AlarmSetMode2			; 首次触发处理结束
 
+L_Key4Hz_AlarmSetMode2:
+	bbr2	Key_Flag,L_Key4HzExit_AlarmSetMode2
+	rmb2	Key_Flag
 L_KeyScan_AlarmSetMode2:						; 长按处理部分
 	bbr0	Key_Flag,L_KeyExit_AlarmSetMode2	; 没有扫键标志直接退出
-L_Key8Hz_AlarmSetMode2:
-	bbr4	Timer_Flag,L_Key8HzExit_AlarmSetMode2; 8Hz标志位到来前也不进行按键处理(快加下)
+
+	bbr4	Timer_Flag,L_Key4HzExit_AlarmSetMode2; 8Hz标志位到来前也不进行按键处理(快加下)
 	rmb4	Timer_Flag
 	lda		PA
 	and		#$ac
 	cmp		PA_IO_Backup						; 若检测到有按键的状态变化则退出快加判断并结束
-	beq		L_8Hz_Count_AlarmSetMode2
+	beq		L_4Hz_Count_AlarmSetMode2
 	bra		L_KeyExit_AlarmSetMode2
 	rts
-L_8Hz_Count_AlarmSetMode2:
+L_4Hz_Count_AlarmSetMode2:
 	inc		QuickAdd_Counter
 	lda		QuickAdd_Counter
-	cmp		#12
+	cmp		#24
 	bcs		L_QuikAdd_AlarmSetMode2
 	rts											; 长按计时，必须满1.5S才有快加
 L_QuikAdd_AlarmSetMode2:
 	smb3	Timer_Flag
+	rmb2	Key_Flag
 
 L_KeyHandle_AlarmSetMode2:
 	lda		PA
@@ -333,7 +341,7 @@ L_KeyExit_AlarmSetMode2:
 	rmb3	Timer_Flag
 	lda		#0									; 清理相关变量
 	sta		QuickAdd_Counter
-L_Key8HzExit_AlarmSetMode2:
+L_Key4HzExit_AlarmSetMode2:
 	rts
 
 

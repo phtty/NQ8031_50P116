@@ -191,7 +191,16 @@ L_16Hz_Out:
 
 L_Timer1Irq:									; 用于快加计时
 	CLR_TMR1_IRQ_FLAG
-	smb4	Timer_Flag							; 8Hz标志
+	smb4	Timer_Flag							; 扫键16Hz标志
+	lda		Counter_4Hz							; 4Hz计数
+	cmp		#03
+	bcs		L_4Hz_Out
+	inc		Counter_4Hz
+	bra		L_EndIrq
+L_4Hz_Out:
+	lda		#$0
+	sta		Counter_4Hz
+	smb2	Key_Flag							; 快加4Hz标志
 	bra		L_EndIrq
 
 L_PaIrq:

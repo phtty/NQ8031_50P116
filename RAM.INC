@@ -21,6 +21,7 @@ LCDRAM					DS		6*6
 R_Int_Backup			DS		1
 
 Counter_1Hz				DS		1
+Counter_4Hz				DS		1	
 Counter_16Hz			DS		1
 
 QuickAdd_Counter		DS		1
@@ -45,7 +46,7 @@ Timer_Flag				DS		1
 ;bit1 = 1 Timer2 1S计时
 ;bit2 = 1 增S标志
 ;bit3 = 1 快加标志
-;bit4 = 1 Timer1 8Hz计时
+;bit4 = 1 Timer1 16Hz计时
 ;bit5 = 1 Timer2 背光1S计时
 ;bit6 = 1 Timer0 16Hz标志
 ;bit7 = 1 Timer2 响铃1S计时
@@ -59,7 +60,7 @@ Sys_Status_Flag			DS		1
 Key_Flag				DS		1
 ;bit0 = 1 扫键标志位
 ;bit1 = 1 首次触发
-;bit2 = 1 按键处理
+;bit2 = 1 快加4Hz标志
 ;bit3 = 1 背光激活
 
 Beep_Serial				DS		1

@@ -1,6 +1,7 @@
 F_Init_SystemRam_Prog:							; 系统初始化
 	lda		#0
 	sta		Counter_1Hz
+	sta		Counter_4Hz
 	sta		Counter_16Hz
 	sta		Key_Flag
 	sta		Timer_Flag
@@ -96,7 +97,7 @@ F_Timer_Init:
 	sta		TMR0
 	sta		TMR2
 
-	lda		#$bf								; 8Hz一次中断
+	lda		#$df								; 8Hz一次中断
 	sta		TMR1
 
 	rmb6	DIVC								; 关闭定时器同步
@@ -201,7 +202,7 @@ L_QuikAdd_ScanReady:
 	sta		PA
 	rts
 
-F_QuikAdd_ScanReset:
+F_QuikAdd_ScanReset:							; PA口配置为输出高
 	bbs3	Timer_Flag,L_QuikAdd_ScanReset
 	rts
 L_QuikAdd_ScanReset:
