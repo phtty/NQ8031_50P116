@@ -18,7 +18,7 @@ F_Init_SystemRam_Prog:							; 系统初始化
 	sta		R_Time_Hour
 	lda		#00
 	sta		R_Time_Min
-	lda		#50
+	lda		#00
 	sta		R_Time_Sec
 
 	lda		#06
