@@ -113,17 +113,17 @@ L_BeepStart2:
 	sta		Beep_Serial
 	rmb4	Clock_Flag							; 0-30S为序列响铃
 	lda		AlarmLoud_Counter
-	cmp		#10
+	cmp		#11
 	bcc		L_Alarm_Exit2
 	lda		#4									; 10-20S响闹的序列为4，2声
 	sta		Beep_Serial
 	lda		AlarmLoud_Counter
-	cmp		#20
+	cmp		#21
 	bcc		L_Alarm_Exit2
 	lda		#8									; 20-30S响闹的序列为8，4声
 	sta		Beep_Serial
 	lda		AlarmLoud_Counter
-	cmp		#30
+	cmp		#31
 	bcc		L_Alarm_Exit2
 	smb4	Clock_Flag							; 30S以上使用持续响铃
 

@@ -236,3 +236,4 @@ Table_Digit_3bit:
 	.byte	$00	; undisplay
 	.byte	$06	; 1
 	.byte	$03	; 2
+

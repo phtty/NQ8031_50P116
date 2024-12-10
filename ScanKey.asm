@@ -180,8 +180,6 @@ L_Snooze_OverflowMin:
 	lda		#00									; 产生贪睡小时进位
 	sta		R_Snooze_Hour
 L_KeyBTrigger_Exit:
-	lda		R_Snooze_Hour
-	lda		R_Snooze_Min
 	rts
 
 L_KeySTrigger_RunTimeMode:

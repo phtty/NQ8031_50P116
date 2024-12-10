@@ -18,7 +18,7 @@ F_Init_SystemRam_Prog:							; 系统初始化
 	sta		R_Time_Hour
 	lda		#00
 	sta		R_Time_Min
-	lda		#00
+	lda		#50
 	sta		R_Time_Sec
 
 	lda		#06
@@ -30,7 +30,7 @@ F_Init_SystemRam_Prog:							; 系统初始化
 	sta		R_Date_Day
 	lda		#01
 	sta		R_Date_Month
-	lda		#07
+	lda		#24
 	sta		R_Date_Year
 	lda		#00
 	sta		R_Date_Week

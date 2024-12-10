@@ -25,15 +25,19 @@ F_Test_Mode2:
 	TMR0_ON
 	lda		#00
 	sta		P_Temp
+	rmb4	Clock_Flag							;配置为序列响铃模式
+	lda		#4
+	sta		Beep_Serial
 
 L_Test_Loop2:
 	bbr6	Timer_Flag,L_No_Test_16Hz2
 	inc		P_Temp
 L_No_Test_16Hz2:
+	jsr		F_Louding2
 	lda		P_Temp
 	cmp		#28
-	bcs		L_Test_Over
-	bra		L_Test_Loop
+	bcs		L_Test_Over2
+	bra		L_Test_Loop2
 L_Test_Over2:
 	TMR0_OFF
 	rts
