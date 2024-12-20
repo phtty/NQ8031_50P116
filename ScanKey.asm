@@ -450,6 +450,8 @@ L_KeyMTrigger_TimeSetMode:
 	sta		R_Time_Min
 L_MinSet_Juge:
 	jsr		F_Display_Time
+	ldx		#lcd_DotC
+	jsr		F_DispSymbol
 	rts
 L_KeyHTrigger_TimeSetMode:
 	jsr		F_QuikAdd_ScanReset					; 有快加的情况需要重置IO口为输出高避免漏电
@@ -461,6 +463,8 @@ L_KeyHTrigger_TimeSetMode:
 	sta		R_Time_Hour
 L_HourSet_Juge:
 	jsr		F_Display_Time
+	ldx		#lcd_DotC
+	jsr		F_DispSymbol
 	rts
 L_KeyBTrigger_TimeSetMode:
 	smb3	Key_Flag
@@ -473,6 +477,8 @@ L_KeySTrigger_TimeSetMode:
 	eor		#0001B
 	sta		Clock_Flag
 	jsr		F_Display_Time
+	ldx		#lcd_DotC
+	jsr		F_DispSymbol
 	jsr		F_Display_Alarm
 	rts
 
@@ -591,5 +597,7 @@ L_KeySTrigger_AlarmSetMode:
 	eor		#0001B
 	sta		Clock_Flag
 	jsr		F_Display_Time
+	ldx		#lcd_DotC
+	jsr		F_DispSymbol
 	jsr		F_Display_Alarm
 	rts

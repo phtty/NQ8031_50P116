@@ -7,9 +7,11 @@ F_Init_SystemRam_Prog:							; 系统初始化
 	sta		Timer_Flag
 	sta		Clock_Flag
 	sta		Calendar_Flag
+	sta		Test_Flag
 	sta		AlarmLoud_Counter					; 阶段响闹计数
 	sta		QuickAdd_Counter					; 快加标志的计数
 	sta		Backlight_Counter
+	sta		CC0
 
 	lda		#01
 	sta		Sys_Status_Flag
@@ -97,7 +99,7 @@ F_Timer_Init:
 	sta		TMR0
 	sta		TMR2
 
-	lda		#$df								; 8Hz一次中断
+	lda		#$e0								; 8Hz一次中断
 	sta		TMR1
 
 	rmb6	DIVC								; 关闭定时器同步

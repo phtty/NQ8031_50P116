@@ -49,6 +49,7 @@ L_KeyTTrigger_RunTimeMode2:
 	rmb1	Key_Flag							; 进入时间设置模式的处理
 	sta		AlarmLoud_Counter					; 清空响铃计数
 	jsr		L_NoSnooze_CloseLoud2				; 清理响铃计时、16Hz计时、响铃计数、贪睡等标志位
+	smb6	IER									; 开LCD中断，用于判空函数的及时响应
 	pla
 	pla
 	jmp		MainLoop2
@@ -99,6 +100,7 @@ L_KeyATrigger_RunTimeMode2:
 	lda		#00
 	sta		AlarmLoud_Counter					; 清空响铃计数
 	jsr		L_NoSnooze_CloseLoud2				; 清理响铃计时、16Hz计时、响铃计数、贪睡等标志位
+	smb6	IER									; 开LCD中断，用于判空函数的及时响应
 	pla
 	pla
 	jmp		MainLoop2
@@ -258,6 +260,7 @@ L_NoKeyT_Keep:
 	TMR1_OFF									; 关闭快加8Hz计时的定时器
 	rmb0	Key_Flag							; 清相关标志位
 	rmb3	Timer_Flag
+	rmb6	IER
 	lda		#0									; 清理相关变量
 	sta		QuickAdd_Counter
 	lda		#0001B								; 回到走时模式

@@ -142,6 +142,7 @@ L_Beeping2:
 	beq		L_NoBeep_Serial_Mode2
 	dec		Beep_Serial
 	bbr0	Beep_Serial,L_NoBeep_Serial_Mode2
+	smb0	SYSCLK
 	PB2_PWM
 	smb7	TMRC
 	rts
@@ -149,6 +150,9 @@ L_NoBeep_Serial_Mode2:
 	rmb7	TMRC
 	PB2_PB2_COMS								; 不响铃时配置为输出口，避免漏电
 	rmb2	PB
+	bbs0	Test_Flag,L_SerialBeep_Exit2
+	rmb0	SYSCLK
+L_SerialBeep_Exit2:
 	rts
 
 L_ConstBeep_Mode2:
@@ -158,6 +162,7 @@ L_ConstBeep_Mode2:
 
 	lda		Beep_Serial
 	bbr0	Beep_Serial,L_NoBeep_Const_Mode2
+	smb0	SYSCLK
 	PB2_PWM
 	smb7	TMRC
 	rts
@@ -165,4 +170,5 @@ L_NoBeep_Const_Mode2:
 	rmb7	TMRC
 	PB2_PB2_COMS								; 不响铃时配置为输出口，避免漏电
 	rmb2	PB
+	rmb0	SYSCLK
 	rts

@@ -14,10 +14,9 @@ L_No_Date_Add_AS:
 	rts
 L_Alarm_Clear:
 	rmb1	Timer_Flag
-	lda		PA
-	and		#$C0
-	bne		L_Blink_Alarm						; 有按键时不闪烁
+	bbs0	Key_Flag,No_Alarm_UnDis
 	jsr		F_UnDisplay_Alarm					; 1S灭
+No_Alarm_UnDis:
 	ldx		#lcd_DotC
 	jsr		F_ClrpSymbol
 	jsr		F_Display_Time
@@ -111,17 +110,17 @@ L_BeepStart:
 	sta		Beep_Serial
 	rmb4	Clock_Flag							; 0-30S为序列响铃
 	lda		AlarmLoud_Counter
-	cmp		#10
+	cmp		#12
 	bcc		L_Alarm_Exit
 	lda		#4									; 10-20S响闹的序列为4，2声
 	sta		Beep_Serial
 	lda		AlarmLoud_Counter
-	cmp		#20
+	cmp		#22
 	bcc		L_Alarm_Exit
 	lda		#8									; 20-30S响闹的序列为8，4声
 	sta		Beep_Serial
 	lda		AlarmLoud_Counter
-	cmp		#30
+	cmp		#32
 	bcc		L_Alarm_Exit
 	smb4	Clock_Flag							; 30S以上使用持续响铃
 
@@ -140,6 +139,7 @@ L_Beeping:
 	beq		L_NoBeep_Serial_Mode
 	dec		Beep_Serial
 	bbr0	Beep_Serial,L_NoBeep_Serial_Mode
+	smb0	SYSCLK
 	PB3_PWM
 	smb7	TMRC
 	rts
@@ -147,6 +147,7 @@ L_NoBeep_Serial_Mode:
 	rmb7	TMRC
 	PB3_PB3_COMS
 	rmb3	PB
+	rmb0	SYSCLK
 	rts
 
 L_ConstBeep_Mode:
@@ -156,6 +157,7 @@ L_ConstBeep_Mode:
 
 	lda		Beep_Serial
 	bbr0	Beep_Serial,L_NoBeep_Const_Mode
+	smb0	SYSCLK
 	PB3_PWM
 	smb7	TMRC
 	rts
@@ -163,4 +165,7 @@ L_NoBeep_Const_Mode:
 	rmb7	TMRC
 	PB3_PB3_COMS
 	rmb3	PB
+	bbs0	Test_Flag,L_ConstBeep_Exit
+	rmb0	SYSCLK
+L_ConstBeep_Exit:
 	rts

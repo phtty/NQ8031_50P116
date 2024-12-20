@@ -62,6 +62,10 @@ Key_Flag				DS		1
 ;bit1 = 1 首次触发
 ;bit2 = 1 快加4Hz标志
 ;bit3 = 1 背光激活
+;bit4 = 1 双键扫描唤醒
+
+Test_Flag				DS		1
+;bit0 = 1 测试(上电全显)模式
 
 Beep_Serial				DS		1
 ;响铃序列
@@ -81,6 +85,8 @@ R_Alarm_Min				DS		1	;闹钟分钟
 R_Alarm_Hour			DS		1	;闹钟小时
 R_Snooze_Min			DS		1	;贪睡闹钟分钟
 R_Snooze_Hour			DS		1	;贪睡闹钟小时
+
+CC0						DS		1
 
 ;---------------------------------------       
 P_Temp					DS	16	

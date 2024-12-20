@@ -120,6 +120,7 @@ Status_Calendar_Set:
 	jsr		F_KeyTrigger_DateSetMode			; DateSet模式下按键逻辑
 	jsr		F_DisCalendar_Set
 	bbs7	TMRC,L_InBeep_NoHalt_Calendar_Set
+
 	sta		HALT
 L_InBeep_NoHalt_Calendar_Set:
 	bra		MainLoop
@@ -218,6 +219,15 @@ L_PaIrq:
 
 L_LcdIrq:
 	CLR_LCD_IRQ_FLAG
+	inc		CC0
+	lda		CC0
+	cmp		#5
+	beq		Lcd_15Hz
+	bra		L_EndIrq
+Lcd_15Hz:
+	lda		#0
+	sta		CC0
+	smb4	Key_Flag							; AlarmSet和TimeSet键的判空扫描
 
 L_EndIrq:
 	pla
@@ -256,8 +266,8 @@ L_EndIrq:
 .BLKB	0FFFFH-$,0FFH							; 从当前地址到FFFF全部填充0xFF
 	
 .ORG	0FFF8H
-	DB		C_RST_SEL + C_VOLT_V30 + C_OMS0 + C_PAIM
-	DB		C_PB32IS + C_PROTB
+	DB		C_RST_SEL+C_VOLT_V30+C_OMS0+C_PAIM
+	DB		C_PB32IS+C_PROTB
 	DW		0FFFFH
 ;***********************************************************************
 .ORG	0FFFCH

@@ -4,6 +4,7 @@ F_Test_Mode:
 	lda		#00
 	sta		P_Temp
 	smb4	Clock_Flag							;配置为持续响铃模式
+	smb0	Test_Flag
 
 L_Test_Loop:
 	bbr6	Timer_Flag,L_No_Test_16Hz
@@ -17,6 +18,8 @@ L_No_Test_16Hz:
 L_Test_Over:
 	TMR0_OFF
 	rmb4	Clock_Flag
+	rmb0	Test_Flag
+	rmb0	SYSCLK
 	rts
 
 
@@ -26,6 +29,7 @@ F_Test_Mode2:
 	lda		#00
 	sta		P_Temp
 	rmb4	Clock_Flag							;配置为序列响铃模式
+	smb0	Test_Flag
 	lda		#4
 	sta		Beep_Serial
 
@@ -40,4 +44,6 @@ L_No_Test_16Hz2:
 	bra		L_Test_Loop2
 L_Test_Over2:
 	TMR0_OFF
+	rmb0	SYSCLK
+	rmb0	Test_Flag
 	rts
