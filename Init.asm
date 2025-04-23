@@ -1,4 +1,4 @@
-F_Init_SystemRam_Prog:							; ç³»ç»Ÿåˆå§‹åŒ–
+F_Init_SystemRam_Prog:							; ÏµÍ³³õÊ¼»¯
 	lda		#0
 	sta		Counter_1Hz
 	sta		Counter_4Hz
@@ -8,8 +8,8 @@ F_Init_SystemRam_Prog:							; ç³»ç»Ÿåˆå§‹åŒ–
 	sta		Clock_Flag
 	sta		Calendar_Flag
 	sta		Test_Flag
-	sta		AlarmLoud_Counter					; é˜¶æ®µå“é—¹è®¡æ•°
-	sta		QuickAdd_Counter					; å¿«åŠ æ ‡å¿—çš„è®¡æ•°
+	sta		AlarmLoud_Counter					; ½×¶ÎÏìÄÖ¼ÆÊı
+	sta		QuickAdd_Counter					; ¿ì¼Ó±êÖ¾µÄ¼ÆÊı
 	sta		Backlight_Counter
 	sta		CC0
 
@@ -48,12 +48,12 @@ F_LCD_Init:
 	smb2	LCDCTRL
 	smb3	LCDCTRL
 
-	PC67_SEG									; é…ç½®IOå£ä¸ºSEGçº¿æ¨¡å¼
+	PC67_SEG									; ÅäÖÃIO¿ÚÎªSEGÏßÄ£Ê½
 	PD03_SEG
 	PD47_SEG
 
 	LCD_ON
-	jsr		F_ClearScreen						; æ¸…å±
+	jsr		F_ClearScreen						; ÇåÆÁ
 
 	rts
 
@@ -63,24 +63,24 @@ F_Port_Init:
 	sta		PA_WAKE
 	lda		#$f0
 	sta		PA_DIR
-	lda		#$f0								; PAå£åˆå§‹é…ç½®ä¸ºä¸‹æ‹‰è¾“å…¥
+	lda		#$f0								; PA¿Ú³õÊ¼ÅäÖÃÎªÏÂÀ­ÊäÈë
 	sta		PA
-	EN_PA_IRQ									; æ‰“å¼€PAå£å¤–éƒ¨ä¸­æ–­
+	EN_PA_IRQ									; ´ò¿ªPA¿ÚÍâ²¿ÖĞ¶Ï
 
 	lda		PB
 	and		#$f3
 	sta		PB
 	rmb2	PB_TYPE
 	rmb3	PB_TYPE
-	PB2_PB2_COMS								; PB2å£ä½œèƒŒå…‰è¾“å‡º
+	PB2_PB2_COMS								; PB2¿Ú×÷±³¹âÊä³ö
 	
-	lda		PC_SEG								; é…ç½®PC0~5ä¸ºæ™®é€šIOå£
+	lda		PC_SEG								; ÅäÖÃPC0~5ÎªÆÕÍ¨IO¿Ú
 	and		#$e0
 	sta		PC_SEG
-	lda		PC_DIR								; PC2~5ä½œæ‹¨é”®è¾“å…¥ï¼ŒPC0ã€1åšé‚¦é€‰
+	lda		PC_DIR								; PC2~5×÷²¦¼üÊäÈë£¬PC0¡¢1×ö°îÑ¡
 	ora		#$3f
 	sta		PC_DIR
-	lda		PC									; PC0~5é…ç½®ä¸ºä¸‹æ‹‰
+	lda		PC									; PC0~5ÅäÖÃÎªÏÂÀ­
 	ora		#$3f
 	sta		PC
 
@@ -91,20 +91,20 @@ F_Port_Init:
 
 
 F_Timer_Init:
-	TMR0_CLK_FSUB								; TIM0æ—¶é’ŸæºFsub(32768Hz)
-	TMR1_CLK_512Hz								; TIM1æ—¶é’ŸæºFsub/64(512Hz)
-	DIV_512HZ									; TIM2æ—¶é’ŸæºDIVåˆ†é¢‘
+	TMR0_CLK_FSUB								; TIM0Ê±ÖÓÔ´Fsub(32768Hz)
+	TMR1_CLK_512Hz								; TIM1Ê±ÖÓÔ´Fsub/64(512Hz)
+	DIV_512HZ									; TIM2Ê±ÖÓÔ´DIV·ÖÆµ
 
-	lda		#$0									; é‡è£…è½½è®¡æ•°è®¾ç½®ä¸º0
+	lda		#$0									; ÖØ×°ÔØ¼ÆÊıÉèÖÃÎª0
 	sta		TMR0
 	sta		TMR2
 
-	lda		#$e0								; 8Hzä¸€æ¬¡ä¸­æ–­
+	lda		#$e0								; 8HzÒ»´ÎÖĞ¶Ï
 	sta		TMR1
 
-	rmb6	DIVC								; å…³é—­å®šæ—¶å™¨åŒæ­¥
+	rmb6	DIVC								; ¹Ø±Õ¶¨Ê±Æ÷Í¬²½
 
-	EN_TMR1_IRQ									; å¼€å®šæ—¶å™¨ç»ˆç«¯
+	EN_TMR1_IRQ									; ¿ª¶¨Ê±Æ÷ÖĞ¶Ï
 	EN_TMR2_IRQ
 	EN_TMR0_IRQ
 	TMR0_OFF
@@ -117,27 +117,27 @@ F_Timer_Init:
 
 
 F_Beep_Init:
-	PB3_PB3_COMS								; PN(PB3)åˆå§‹åŒ–æˆIOè¾“å‡ºï¼Œé¿å…æ¼ç”µ
+	PB3_PB3_COMS								; PN(PB3)³õÊ¼»¯³ÉIOÊä³ö£¬±ÜÃâÂ©µç
 	rmb3	PB
 
-	rmb2    DIVC								; é…ç½®èœ‚é¸£éŸ³è°ƒé¢‘ç‡(å ç©ºæ¯”3/4)
+	rmb2    DIVC								; ÅäÖÃ·äÃùÒôµ÷ÆµÂÊ(Õ¼¿Õ±È3/4)
     rmb3    DIVC
 	rmb7	DIVC
-	rmb1	AUDCR								; é…ç½®BPä½ï¼Œé€‰æ‹©AUDå¼€å¯æ—¶çš„æ¨¡å¼ï¼Œè¿™é‡Œé€‰æ‹©TONEæ¨¡å¼				
+	rmb1	AUDCR								; ÅäÖÃBPÎ»£¬Ñ¡ÔñAUD¿ªÆôÊ±µÄÄ£Ê½£¬ÕâÀïÑ¡ÔñTONEÄ£Ê½				
 	lda		#$ff
-	sta		AUD0								; TONEæ¨¡å¼ä¸‹å…¶å®AUD0æ²¡ç”¨
+	sta		AUD0								; TONEÄ£Ê½ÏÂÆäÊµAUD0Ã»ÓÃ
 
 	rts
 
 
 F_Beep_Init2:
-	PB2_PB2_COMS								; PP(PB2)åˆå§‹åŒ–æˆIOè¾“å‡ºï¼Œé¿å…æ¼ç”µ
+	PB2_PB2_COMS								; PP(PB2)³õÊ¼»¯³ÉIOÊä³ö£¬±ÜÃâÂ©µç
 	rmb2	PB
 
-	rmb2    DIVC								; é…ç½®èœ‚é¸£éŸ³è°ƒé¢‘ç‡(å ç©ºæ¯”3/4)
-    rmb3    DIVC
+	rmb2	DIVC								; ÅäÖÃ·äÃùÒôµ÷ÆµÂÊ(Õ¼¿Õ±È3/4)
+	rmb3	DIVC
 	rmb7	DIVC
-	rmb1	AUDCR								; é…ç½®BPä½ï¼Œé€‰æ‹©AUDå¼€å¯æ—¶çš„æ¨¡å¼ï¼Œè¿™é‡Œé€‰æ‹©TONEæ¨¡å¼				
+	rmb1	AUDCR								; ÅäÖÃBPÎ»£¬Ñ¡ÔñAUD¿ªÆôÊ±µÄÄ£Ê½£¬ÕâÀïÑ¡ÔñTONEÄ£Ê½				
 	lda		#$ff
 	sta		AUD0
 
@@ -150,17 +150,17 @@ F_Port_Init2:
 	sta		PA_DIR
 	lda		#$fc
 	sta		PA
-	EN_PA_IRQ									; æ‰“å¼€PAå£å¤–éƒ¨ä¸­æ–­
+	EN_PA_IRQ									; ´ò¿ªPA¿ÚÍâ²¿ÖĞ¶Ï
 
-	PB3_PB3_COMS								; PB3å£ä½œèƒŒå…‰è¾“å‡º
+	PB3_PB3_COMS								; PB3¿Ú×÷±³¹âÊä³ö
 	
-	lda		PC_SEG								; é…ç½®PC0~5ä¸ºæ™®é€šIOå£
+	lda		PC_SEG								; ÅäÖÃPC0~5ÎªÆÕÍ¨IO¿Ú
 	and		#$e0
 	sta		PC_SEG
-	lda		PC_DIR								; PC0/2~5ä½œæ‹¨é”®è¾“å…¥
+	lda		PC_DIR								; PC0/2~5×÷²¦¼üÊäÈë
 	and		#$c0
 	sta		PC_DIR
-	lda		PC									; PC0/2~5é…ç½®ä¸ºä¸‹æ‹‰
+	lda		PC									; PC0/2~5ÅäÖÃÎªÏÂÀ­
 	and		#$c0
 	sta		PC
 
@@ -174,7 +174,7 @@ F_LCD_Init2:
 	LCD_3COM
 	LCD_ON
 
-	jsr		F_ClearScreen						; æ¸…å±
+	jsr		F_ClearScreen						; ÇåÆÁ
 
 	rts
 
@@ -182,7 +182,7 @@ F_LCD_Init2:
 F_BoundPort_Reset:
 	rmb0	PC_DIR
 	rmb1	PC_DIR
-	smb0	PC									; é‚¦é€‰å®Œæˆåé…ç½®æˆè¾“å‡ºé«˜é¿å…æ¼ç”µ
+	smb0	PC									; °îÑ¡Íê³ÉºóÅäÖÃ³ÉÊä³ö¸ß±ÜÃâÂ©µç
 	smb1	PC
 	rts
 
@@ -191,7 +191,7 @@ F_SwitchPort_ScanReady:
 	lda		PC_DIR
 	ora		#$3c
 	sta		PC_DIR
-	lda		PC									; PC2~5é…ç½®ä¸ºä¸‹æ‹‰
+	lda		PC									; PC2~5ÅäÖÃÎªÏÂÀ­
 	ora		#$3c
 	sta		PC
 	rts
@@ -200,12 +200,12 @@ F_SwitchPort_ScanReset:
 	lda		PC_DIR
 	and		#$c3
 	sta		PC_DIR
-	lda		PC									; PC2~5é…ç½®ä¸ºä¸‹æ‹‰
+	lda		PC									; PC2~5ÅäÖÃÎªÏÂÀ­
 	ora		#$3c
 	sta		PC
 	rts
 
-F_QuikAdd_ScanReady:							; PAå£é…ç½®ä¸ºä¸‹æ‹‰è¾“å…¥
+F_QuikAdd_ScanReady:							; PA¿ÚÅäÖÃÎªÏÂÀ­ÊäÈë
 	bbs3	Timer_Flag,L_QuikAdd_ScanReady
 	rts
 L_QuikAdd_ScanReady:
@@ -217,7 +217,7 @@ L_QuikAdd_ScanReady:
 	sta		PA
 	rts
 
-F_QuikAdd_ScanReset:							; PAå£é…ç½®ä¸ºè¾“å‡ºé«˜
+F_QuikAdd_ScanReset:							; PA¿ÚÅäÖÃÎªÊä³ö¸ß
 	bbs3	Timer_Flag,L_QuikAdd_ScanReset
 	rts
 L_QuikAdd_ScanReset:
@@ -255,8 +255,29 @@ L_QuikAdd_ScanReset2:
 F_Delay:
 	lda		#$f5
 	sta		P_Temp
-L_Delay_f5:										; å»¶æ—¶å¾ªç¯ç”¨æ ‡ç­¾
+L_Delay_f5:										; ÑÓÊ±Ñ­»·ÓÃ±êÇ©
 	inc		P_Temp
 	lda		P_Temp
 	bne		L_Delay_f5
+	rts
+
+L_KeyDelay_1:
+	lda		#0
+	sta		P_Temp+1
+DelayLoop_1:
+	inc		P_Temp+1
+	bne		DelayLoop_1
+	
+	rts
+
+L_KeyDelay:
+	lda		#0
+	sta		P_Temp
+DelayLoop:
+	jsr		L_KeyDelay_1
+	inc		P_Temp
+	lda		P_Temp
+	cmp		#10
+	bcc		DelayLoop
+	
 	rts

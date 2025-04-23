@@ -1,10 +1,10 @@
 
-; æ¤­åœ†æ—¶é’ŸçŠ¶æ€æœº
+; ÍÖÔ²Ê±ÖÓ×´Ì¬»ú
 
 MainLoop2:
-	jsr		F_Time_Run2							; èµ°æ—¶å…¨å±€ç”Ÿæ•ˆ
-	jsr		F_Louding2							; å“é“ƒå¤„ç†å…¨å±€ç”Ÿæ•ˆ
-	jsr		F_Backlight2						; èƒŒå…‰å…¨å±€ç”Ÿæ•ˆ
+	jsr		F_Time_Run2							; ×ßÊ±È«¾ÖÉúĞ§
+	jsr		F_Louding2							; ÏìÁå´¦ÀíÈ«¾ÖÉúĞ§
+	jsr		F_Backlight2						; ±³¹âÈ«¾ÖÉúĞ§
 	jsr		F_SymbolRegulate2
 
 Status_Juge2:
@@ -13,7 +13,7 @@ Status_Juge2:
 	bbs3	Sys_Status_Flag,Status_Alarm_Set2
 	bra		MainLoop2
 Status_Runtime2:
-	jsr		F_KeyTrigger_RunTimeMode2			; èµ°æ—¶æ¨¡å¼ä¸‹çš„æŒ‰é”®é€»è¾‘
+	jsr		F_KeyTrigger_RunTimeMode2			; ×ßÊ±Ä£Ê½ÏÂµÄ°´¼üÂß¼­
 	jsr		F_DisTime_Run2
 	jsr		F_Alarm_Handler2
 	bbs7	TMRC,L_InBeep_NoHalt_Runtime2
@@ -21,17 +21,17 @@ Status_Runtime2:
 L_InBeep_NoHalt_Runtime2:
 	bra		MainLoop2
 Status_Time_Set2:
-	jsr		F_KeyTrigger_TimeSetMode2			; TimeSetæ¨¡å¼ä¸‹æŒ‰é”®é€»è¾‘
+	jsr		F_KeyTrigger_TimeSetMode2			; TimeSetÄ£Ê½ÏÂ°´¼üÂß¼­
 	jsr		F_DisTime_Set2
 	jsr		F_Alarm_Handler2
-	jsr		F_Is_KeyTKeep						; åˆ¤æ–­Té”®æ˜¯å¦ä¿æŒæŒ‰ä¸‹
+	jsr		F_Is_KeyTKeep						; ÅĞ¶ÏT¼üÊÇ·ñ±£³Ö°´ÏÂ
 	sta		HALT
 	bra		MainLoop2
 Status_Alarm_Set2:
-	jsr		F_KeyTrigger_AlarmSetMode2			; AlarmSetæ¨¡å¼ä¸‹æŒ‰é”®é€»è¾‘
+	jsr		F_KeyTrigger_AlarmSetMode2			; AlarmSetÄ£Ê½ÏÂ°´¼üÂß¼­
 	jsr		F_DisAlarm_Set2
 	jsr		F_Alarm_Handler2
-	jsr		F_Is_KeyAKeep						; åˆ¤æ–­Aé”®æ˜¯å¦ä¿æŒæŒ‰ä¸‹
+	jsr		F_Is_KeyAKeep						; ÅĞ¶ÏA¼üÊÇ·ñ±£³Ö°´ÏÂ
 	sta		HALT
 	bra		MainLoop2
 

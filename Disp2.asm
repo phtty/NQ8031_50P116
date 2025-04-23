@@ -1,103 +1,103 @@
 ;===========================================================
-;@brief		æ˜¾ç¤ºå®Œæ•´çš„ä¸€ä¸ªæ•°å­—
+;@brief		ÏÔÊ¾ÍêÕûµÄÒ»¸öÊı×Ö
 ;@para:		A = 0~9
 ;			X = offset	
-;@impact:	P_Tempï¼ŒP_Temp+1ï¼ŒP_Temp+2ï¼ŒP_Temp+3, P_Temp+4, P_Temp+5, Xï¼ŒA
+;@impact:	P_Temp£¬P_Temp+1£¬P_Temp+2£¬P_Temp+3, P_Temp+4, P_Temp+5, X£¬A
 ;===========================================================
 L_Dis_7Bit_DigitDot_Prog2:
-	stx		P_Temp+3					; åç§»é‡æš‚å­˜è¿›P_Temp+3, è…¾å‡ºXæ¥åšå˜å€å¯»å€
-	sta		P_Temp						; å°†æ˜¾ç¤ºçš„æ•°å­—è½¬æ¢ä¸ºå†…å­˜åç§»é‡
+	stx		P_Temp+3					; Æ«ÒÆÁ¿Ôİ´æ½øP_Temp+3, ÌÚ³öXÀ´×ö±äÖ·Ñ°Ö·
+	sta		P_Temp						; ½«ÏÔÊ¾µÄÊı×Ö×ª»»ÎªÄÚ´æÆ«ÒÆÁ¿
 
 	tax
-	lda		Table_Digit_7bit2,x			; å°†æ˜¾ç¤ºçš„æ•°å­—é€šè¿‡æŸ¥è¡¨æ‰¾åˆ°å¯¹åº”çš„æ®µç å­˜è¿›A
-	sta		P_Temp						; æš‚å­˜æ®µç å€¼åˆ°P_Temp
+	lda		Table_Digit_7bit2,x			; ½«ÏÔÊ¾µÄÊı×ÖÍ¨¹ı²é±íÕÒµ½¶ÔÓ¦µÄ¶ÎÂë´æ½øA
+	sta		P_Temp						; Ôİ´æ¶ÎÂëÖµµ½P_Temp
 
-	ldx		P_Temp+3					; å°†åç§»é‡å–å›
-	stx		P_Temp+3					; æš‚å­˜åç§»é‡åˆ°P_Temp+3
+	ldx		P_Temp+3					; ½«Æ«ÒÆÁ¿È¡»Ø
+	stx		P_Temp+3					; Ôİ´æÆ«ÒÆÁ¿µ½P_Temp+3
 	lda		#7
-	sta		P_Temp+4					; è®¾ç½®æ˜¾ç¤ºæ®µæ•°ä¸º7
-L_Judge_Dis_7Bit_DigitDot2:				; æ˜¾ç¤ºå¾ªç¯çš„å¼€å§‹
-	ldx		P_Temp+3					; å–å›åç§»é‡ä½œä¸ºç´¢å¼•
-	lda		Lcd_bit2,x					; æŸ¥è¡¨å®šä½ç›®æ ‡æ®µçš„bitä½
+	sta		P_Temp+4					; ÉèÖÃÏÔÊ¾¶ÎÊıÎª7
+L_Judge_Dis_7Bit_DigitDot2:				; ÏÔÊ¾Ñ­»·µÄ¿ªÊ¼
+	ldx		P_Temp+3					; È¡»ØÆ«ÒÆÁ¿×÷ÎªË÷Òı
+	lda		Lcd_bit2,x					; ²é±í¶¨Î»Ä¿±ê¶ÎµÄbitÎ»
 	sta		P_Temp+5	
-	lda		Lcd_byte2,x					; æŸ¥è¡¨å®šä½ç›®æ ‡æ®µçš„æ˜¾å­˜åœ°å€
+	lda		Lcd_byte2,x					; ²é±í¶¨Î»Ä¿±ê¶ÎµÄÏÔ´æµØÖ·
 	tax
-	ror		P_Temp						; å¾ªç¯å³ç§»å–å¾—ç›®æ ‡æ®µæ˜¯äº®æˆ–è€…ç­
-	bcc		L_CLR_7bit2					; å½“å‰æ®µçš„å€¼è‹¥æ˜¯0åˆ™è¿›æ¸…ç‚¹å­ç¨‹åº
-	lda		LCD_RamAddr,x				; å°†ç›®æ ‡æ®µçš„æ˜¾å­˜çš„ç‰¹å®šbitä½ç½®1æ¥æ‰“äº®
+	ror		P_Temp						; Ñ­»·ÓÒÒÆÈ¡µÃÄ¿±ê¶ÎÊÇÁÁ»òÕßÃğ
+	bcc		L_CLR_7bit2					; µ±Ç°¶ÎµÄÖµÈôÊÇ0Ôò½øÇåµã×Ó³ÌĞò
+	lda		LCD_RamAddr,x				; ½«Ä¿±ê¶ÎµÄÏÔ´æµÄÌØ¶¨bitÎ»ÖÃ1À´´òÁÁ
 	ora		P_Temp+5
 	sta		LCD_RamAddr,x
-	bra		L_Inc_Dis_Index_Prog2		; è·³è½¬åˆ°æ˜¾ç¤ºç´¢å¼•å¢åŠ çš„å­ç¨‹åºã€‚
+	bra		L_Inc_Dis_Index_Prog2		; Ìø×ªµ½ÏÔÊ¾Ë÷ÒıÔö¼ÓµÄ×Ó³ÌĞò¡£
 L_CLR_7bit2:	
-	lda		LCD_RamAddr,x				; åŠ è½½LCD RAMçš„åœ°å€
-	ora		P_Temp+5					; å°†COMå’ŒSEGä¿¡æ¯ä¸LCD RAMåœ°å€è¿›è¡Œé€»è¾‘æˆ–æ“ä½œ
-	eor		P_Temp+5					; è¿›è¡Œå¼‚æˆ–æ“ä½œï¼Œç”¨äºæ¸…é™¤å¯¹åº”çš„æ®µã€‚
-	sta		LCD_RamAddr,x				; å°†ç»“æœå†™å›LCD RAMï¼Œæ¸…é™¤å¯¹åº”ä½ç½®ã€‚
+	lda		LCD_RamAddr,x				; ¼ÓÔØLCD RAMµÄµØÖ·
+	ora		P_Temp+5					; ½«COMºÍSEGĞÅÏ¢ÓëLCD RAMµØÖ·½øĞĞÂß¼­»ò²Ù×÷
+	eor		P_Temp+5					; ½øĞĞÒì»ò²Ù×÷£¬ÓÃÓÚÇå³ı¶ÔÓ¦µÄ¶Î¡£
+	sta		LCD_RamAddr,x				; ½«½á¹ûĞ´»ØLCD RAM£¬Çå³ı¶ÔÓ¦Î»ÖÃ¡£
 L_Inc_Dis_Index_Prog2:
-	inc		P_Temp+3					; é€’å¢åç§»é‡ï¼Œå¤„ç†ä¸‹ä¸€ä¸ªæ®µ
-	dec		P_Temp+4					; é€’å‡å‰©ä½™è¦æ˜¾ç¤ºçš„æ®µæ•°
-	bne		L_Judge_Dis_7Bit_DigitDot2	; å‰©ä½™æ®µæ•°ä¸º0åˆ™è¿”å›
+	inc		P_Temp+3					; µİÔöÆ«ÒÆÁ¿£¬´¦ÀíÏÂÒ»¸ö¶Î
+	dec		P_Temp+4					; µİ¼õÊ£ÓàÒªÏÔÊ¾µÄ¶ÎÊı
+	bne		L_Judge_Dis_7Bit_DigitDot2	; Ê£Óà¶ÎÊıÎª0Ôò·µ»Ø
 	rts
 
 
-; 6bitæ•°æ˜¾	lcd_d2
+; 6bitÊıÏÔ	lcd_d2
 L_Dis_6Bit_DigitDot_Prog2:
-	stx		P_Temp+3					; åç§»é‡æš‚å­˜è¿›P_Temp+3, è…¾å‡ºXæ¥åšå˜å€å¯»å€
-	sta		P_Temp						; å°†æ˜¾ç¤ºçš„æ•°å­—è½¬æ¢ä¸ºå†…å­˜åç§»é‡
+	stx		P_Temp+3					; Æ«ÒÆÁ¿Ôİ´æ½øP_Temp+3, ÌÚ³öXÀ´×ö±äÖ·Ñ°Ö·
+	sta		P_Temp						; ½«ÏÔÊ¾µÄÊı×Ö×ª»»ÎªÄÚ´æÆ«ÒÆÁ¿
 
 	tax
-	lda		Table_Digit_6bit2,x			; å°†æ˜¾ç¤ºçš„æ•°å­—é€šè¿‡æŸ¥è¡¨æ‰¾åˆ°å¯¹åº”çš„æ®µç å­˜è¿›A
-	sta		P_Temp						; æš‚å­˜æ®µç å€¼åˆ°P_Temp
+	lda		Table_Digit_6bit2,x			; ½«ÏÔÊ¾µÄÊı×ÖÍ¨¹ı²é±íÕÒµ½¶ÔÓ¦µÄ¶ÎÂë´æ½øA
+	sta		P_Temp						; Ôİ´æ¶ÎÂëÖµµ½P_Temp
 
-	ldx		P_Temp+3					; å°†åç§»é‡å–å›
-	stx		P_Temp+3					; æš‚å­˜åç§»é‡åˆ°P_Temp+3
+	ldx		P_Temp+3					; ½«Æ«ÒÆÁ¿È¡»Ø
+	stx		P_Temp+3					; Ôİ´æÆ«ÒÆÁ¿µ½P_Temp+3
 	lda		#6
-	sta		P_Temp+4					; è®¾ç½®æ˜¾ç¤ºæ®µæ•°ä¸º6
-L_Judge_Dis_6Bit_DigitDot2				; æ˜¾ç¤ºå¾ªç¯çš„å¼€å§‹
-	ldx		P_Temp+3					; å–å›åç§»é‡ä½œä¸ºç´¢å¼•
-	lda		Lcd_bit2,x					; æŸ¥è¡¨å®šä½ç›®æ ‡æ®µçš„bitä½
+	sta		P_Temp+4					; ÉèÖÃÏÔÊ¾¶ÎÊıÎª6
+L_Judge_Dis_6Bit_DigitDot2				; ÏÔÊ¾Ñ­»·µÄ¿ªÊ¼
+	ldx		P_Temp+3					; È¡»ØÆ«ÒÆÁ¿×÷ÎªË÷Òı
+	lda		Lcd_bit2,x					; ²é±í¶¨Î»Ä¿±ê¶ÎµÄbitÎ»
 	sta		P_Temp+5	
-	lda		Lcd_byte2,x					; æŸ¥è¡¨å®šä½ç›®æ ‡æ®µçš„æ˜¾å­˜åœ°å€
+	lda		Lcd_byte2,x					; ²é±í¶¨Î»Ä¿±ê¶ÎµÄÏÔ´æµØÖ·
 	tax
-	ror		P_Temp						; å¾ªç¯å³ç§»å–å¾—ç›®æ ‡æ®µæ˜¯äº®æˆ–è€…ç­
-	bcc		L_CLR_6bit2					; å½“å‰æ®µçš„å€¼è‹¥æ˜¯0åˆ™è¿›æ¸…ç‚¹å­ç¨‹åº
-	lda		LCD_RamAddr,x				; å°†ç›®æ ‡æ®µçš„æ˜¾å­˜çš„ç‰¹å®šbitä½ç½®1æ¥æ‰“äº®
+	ror		P_Temp						; Ñ­»·ÓÒÒÆÈ¡µÃÄ¿±ê¶ÎÊÇÁÁ»òÕßÃğ
+	bcc		L_CLR_6bit2					; µ±Ç°¶ÎµÄÖµÈôÊÇ0Ôò½øÇåµã×Ó³ÌĞò
+	lda		LCD_RamAddr,x				; ½«Ä¿±ê¶ÎµÄÏÔ´æµÄÌØ¶¨bitÎ»ÖÃ1À´´òÁÁ
 	ora		P_Temp+5
 	sta		LCD_RamAddr,x
-	bra		L_Inc_Dis_Index_Prog_6bit2	; è·³è½¬åˆ°æ˜¾ç¤ºç´¢å¼•å¢åŠ çš„å­ç¨‹åºã€‚
+	bra		L_Inc_Dis_Index_Prog_6bit2	; Ìø×ªµ½ÏÔÊ¾Ë÷ÒıÔö¼ÓµÄ×Ó³ÌĞò¡£
 L_CLR_6bit2:	
-	lda		LCD_RamAddr,x				; åŠ è½½LCD RAMçš„åœ°å€
-	ora		P_Temp+5					; å°†COMå’ŒSEGä¿¡æ¯ä¸LCD RAMåœ°å€è¿›è¡Œé€»è¾‘æˆ–æ“ä½œ
-	eor		P_Temp+5					; è¿›è¡Œå¼‚æˆ–æ“ä½œï¼Œç”¨äºæ¸…é™¤å¯¹åº”çš„æ®µã€‚
-	sta		LCD_RamAddr,x				; å°†ç»“æœå†™å›LCD RAMï¼Œæ¸…é™¤å¯¹åº”ä½ç½®ã€‚
+	lda		LCD_RamAddr,x				; ¼ÓÔØLCD RAMµÄµØÖ·
+	ora		P_Temp+5					; ½«COMºÍSEGĞÅÏ¢ÓëLCD RAMµØÖ·½øĞĞÂß¼­»ò²Ù×÷
+	eor		P_Temp+5					; ½øĞĞÒì»ò²Ù×÷£¬ÓÃÓÚÇå³ı¶ÔÓ¦µÄ¶Î¡£
+	sta		LCD_RamAddr,x				; ½«½á¹ûĞ´»ØLCD RAM£¬Çå³ı¶ÔÓ¦Î»ÖÃ¡£
 L_Inc_Dis_Index_Prog_6bit2:
-	inc		P_Temp+3					; é€’å¢åç§»é‡ï¼Œå¤„ç†ä¸‹ä¸€ä¸ªæ®µ
-	dec		P_Temp+4					; é€’å‡å‰©ä½™è¦æ˜¾ç¤ºçš„æ®µæ•°
-	bne		L_Judge_Dis_6Bit_DigitDot2	; å‰©ä½™æ®µæ•°ä¸º0åˆ™è¿”å›
+	inc		P_Temp+3					; µİÔöÆ«ÒÆÁ¿£¬´¦ÀíÏÂÒ»¸ö¶Î
+	dec		P_Temp+4					; µİ¼õÊ£ÓàÒªÏÔÊ¾µÄ¶ÎÊı
+	bne		L_Judge_Dis_6Bit_DigitDot2	; Ê£Óà¶ÎÊıÎª0Ôò·µ»Ø
 	rts
 
 ;-----------------------------------------
-;@brief:	å•ç‹¬çš„ç”»ç‚¹ã€æ¸…ç‚¹å‡½æ•°,ä¸€èˆ¬ç”¨äºMSæ˜¾ç¤º
+;@brief:	µ¥¶ÀµÄ»­µã¡¢Çåµãº¯Êı,Ò»°ãÓÃÓÚMSÏÔÊ¾
 ;@para:		X = offset
 ;@impact:	A, X, P_Temp+2
 ;-----------------------------------------
 F_DispSymbol2:
 	jsr		F_DispSymbol_Com2
-	sta		LCD_RamAddr,x				; ç”»ç‚¹
+	sta		LCD_RamAddr,x				; »­µã
 	rts
 
 F_ClrpSymbol2:
-	jsr		F_DispSymbol_Com2			; æ¸…ç‚¹
+	jsr		F_DispSymbol_Com2			; Çåµã
 	eor		P_Temp+2
 	sta		LCD_RamAddr,x
 	rts
 
 F_DispSymbol_Com2:
-	lda		Lcd_bit2,x					; æŸ¥è¡¨å¾—çŸ¥ç›®æ ‡æ®µçš„bitä½
+	lda		Lcd_bit2,x					; ²é±íµÃÖªÄ¿±ê¶ÎµÄbitÎ»
 	sta		P_Temp+2
-	lda		Lcd_byte2,x					; æŸ¥è¡¨å¾—çŸ¥ç›®æ ‡æ®µçš„åœ°å€
+	lda		Lcd_byte2,x					; ²é±íµÃÖªÄ¿±ê¶ÎµÄµØÖ·
 	tax
-	lda		LCD_RamAddr,x				; å°†ç›®æ ‡æ®µçš„æ˜¾å­˜çš„ç‰¹å®šbitä½ç½®1æ¥æ‰“äº®
+	lda		LCD_RamAddr,x				; ½«Ä¿±ê¶ÎµÄÏÔ´æµÄÌØ¶¨bitÎ»ÖÃ1À´´òÁÁ
 	ora		P_Temp+2
 	rts
 

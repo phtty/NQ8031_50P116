@@ -1,53 +1,46 @@
-;********************************************************************************
-; PROJECT	: Time Counter(ET50P104)					*
-; AUTHOR	: WYH										*
-; REVISION	: 09/23/2024  V1.0							*
-; High OSC CLK  : Internal RC 4.4MHz	Fcpu = Fosc/2	*
-; Function	: 											*
-;********************************************************************************
-	.CHIP	W65C02S		;cpuçš„é€‰å‹
-	;.INCLIST	ON		;å®å®šä¹‰å’Œæ–‡ä»¶
+	.CHIP	W65C02S		;cpuµÄÑ¡ĞÍ
+	;.INCLIST	ON		;ºê¶¨ÒåºÍÎÄ¼ş
 	.MACLIST	ON
 ;***************************************
-CODE_BEG	EQU		C000H						;èµ·å§‹åœ°å€
+CODE_BEG	EQU		C000H						;ÆğÊ¼µØÖ·
 ;***************************************
 
-PROG	SECTION	OFFSET	CODE_BEG				;å®šä¹‰ä»£ç æ®µçš„åç§»é‡ä»CODE_BEGå¼€å§‹ï¼Œç”¨äºç»„ç»‡ç¨‹åºä»£ç ã€‚
+PROG	SECTION	OFFSET	CODE_BEG				;¶¨Òå´úÂë¶ÎµÄÆ«ÒÆÁ¿´ÓCODE_BEG¿ªÊ¼£¬ÓÃÓÚ×éÖ¯³ÌĞò´úÂë¡£
 
 ;***************************************
-;*	header include								;å¤´æ–‡ä»¶
+;*	header include								;Í·ÎÄ¼ş
 ;***************************************
 	.include	50Px1x.h
 	.include	RAM.INC	
 	.include	50P116.mac
 	.include	MACRO.mac
 ;***************************************
-STACK_BOT		EQU		FFH						;å †æ ˆåº•éƒ¨
+STACK_BOT		EQU		FFH						;¶ÑÕ»µ×²¿
 ;***************************************
-	.PROG										;ç¨‹åºå¼€å§‹
+	.PROG										;³ÌĞò¿ªÊ¼
 V_RESET:
 	nop
 	nop
 	nop
 	ldx		#STACK_BOT
-	txs											; ä½¿ç”¨è¿™ä¸ªå€¼åˆå§‹åŒ–å †æ ˆæŒ‡é’ˆï¼Œè¿™é€šå¸¸æ˜¯ä¸ºäº†è®¾ç½®å †æ ˆçš„åº•éƒ¨åœ°å€ï¼Œç¡®ä¿ç¨‹åºè¿è¡Œä¸­å †æ ˆçš„æ­£ç¡®ä½¿ç”¨ã€‚
+	txs											; Ê¹ÓÃÕâ¸öÖµ³õÊ¼»¯¶ÑÕ»Ö¸Õë£¬ÕâÍ¨³£ÊÇÎªÁËÉèÖÃ¶ÑÕ»µÄµ×²¿µØÖ·£¬È·±£³ÌĞòÔËĞĞÖĞ¶ÑÕ»µÄÕıÈ·Ê¹ÓÃ¡£
 	lda		#$17								; #$97
-	sta		SYSCLK								; è®¾ç½®ç³»ç»Ÿæ—¶é’Ÿ
-	ClrAllRam									; æ¸…RAM
+	sta		SYSCLK								; ÉèÖÃÏµÍ³Ê±ÖÓ
+	ClrAllRam									; ÇåRAM
 	lda		#$0
-	sta		DIVC								; åˆ†é¢‘æ§åˆ¶å™¨ï¼Œå®šæ—¶å™¨ä¸DIVå¼‚æ­¥
-	sta		IER									; é™¤èƒ½ä¸­æ–­
-	sta		IFR									; åˆå§‹åŒ–ä¸­æ–­æ ‡å¿—ä½
+	sta		DIVC								; ·ÖÆµ¿ØÖÆÆ÷£¬¶¨Ê±Æ÷ÓëDIVÒì²½
+	sta		IER									; ³ıÄÜÖĞ¶Ï
+	sta		IFR									; ³õÊ¼»¯ÖĞ¶Ï±êÖ¾Î»
 	lda		FUSE
-	sta		MF0									;ä¸ºå†…éƒ¨RCæŒ¯è¡å™¨æä¾›æ ¡å‡†æ•°æ®	
+	sta		MF0									;ÎªÄÚ²¿RCÕñµ´Æ÷Ìá¹©Ğ£×¼Êı¾İ	
 
 	jsr		F_Beep_Init
-	jsr		F_Init_SystemRam_Prog				;åˆå§‹åŒ–ç³»ç»ŸRAMå¹¶ç¦ç”¨æ‰€æœ‰æ–­ç”µä¿ç•™çš„RAM
+	jsr		F_Init_SystemRam_Prog				;³õÊ¼»¯ÏµÍ³RAM²¢½ûÓÃËùÓĞ¶Ïµç±£ÁôµÄRAM
 
 	jsr		F_LCD_Init
 	jsr		F_Port_Init
 
-	lda		#$07								;ç³»ç»Ÿæ—¶é’Ÿå’Œä¸­æ–­ä½¿èƒ½
+	lda		#$07								;ÏµÍ³Ê±ÖÓºÍÖĞ¶ÏÊ¹ÄÜ
 	sta		SYSCLK
 
 	jsr		F_Timer_Init
@@ -61,30 +54,30 @@ V_RESET:
 	beq		L_MODE2
 	bra		V_RESET
 
-L_MODE0:										; MODE0ä»£è¡¨æ¤­åœ†æ—¶é’Ÿ
-	jsr		F_Port_Init2						; Mode0åˆå§‹åŒ–
+L_MODE0:										; MODE0´ú±íÍÖÔ²Ê±ÖÓ
+	jsr		F_Port_Init2						; Mode0³õÊ¼»¯
 	jsr		F_LCD_Init2
-	jsr		F_Beep_Init2						; æ¤­åœ†æ—¶é’Ÿçš„èœ‚é¸£å™¨å£ä¸ä¸€æ ·
+	jsr		F_Beep_Init2						; ÍÖÔ²Ê±ÖÓµÄ·äÃùÆ÷¿Ú²»Ò»Ñù
 	jsr		F_MODE0_Init
-	jsr		F_BoundPort_Reset					; é‚¦é€‰ç¡®å®šåé‡ç½®è¾“å‡ºå£é¿å…æ¼ç”µ
-	cli											; å¼€æ€»ä¸­æ–­
+	jsr		F_BoundPort_Reset					; °îÑ¡È·¶¨ºóÖØÖÃÊä³ö¿Ú±ÜÃâÂ©µç
+	cli											; ¿ª×ÜÖĞ¶Ï
 
 	jsr		F_Test_Mode2
 	jsr		F_Display_Symbol2
 	jsr		F_Display_Time2
 	jmp		MainLoop2
 
-L_MODE1:										; MODE1ä»£è¡¨æ—§æ–¹å—æ—¶é’Ÿ
-	jsr		F_BoundPort_Reset					; é‚¦é€‰ç¡®å®šåé‡ç½®è¾“å‡ºå£é¿å…æ¼ç”µ
-	cli											; å¼€æ€»ä¸­æ–­
+L_MODE1:										; MODE1´ú±í¾É·½¿éÊ±ÖÓ
+	jsr		F_BoundPort_Reset					; °îÑ¡È·¶¨ºóÖØÖÃÊä³ö¿Ú±ÜÃâÂ©µç
+	cli											; ¿ª×ÜÖĞ¶Ï
 	rmb0	Key_Flag
 	smb0	Clock_Flag
 	jsr		F_Test_Mode
 	jsr		F_Display_Symbol
 	jmp		MainLoop
 
-L_MODE2:										; MODE2ä»£è¡¨æ˜ŸæœŸæ–¹å—æ—¶é’Ÿ
-	jsr		F_BoundPort_Reset					; é‚¦é€‰ç¡®å®šåé‡ç½®è¾“å‡ºå£é¿å…æ¼ç”µ
+L_MODE2:										; MODE2´ú±íĞÇÆÚ·½¿éÊ±ÖÓ
+	jsr		F_BoundPort_Reset					; °îÑ¡È·¶¨ºóÖØÖÃÊä³ö¿Ú±ÜÃâÂ©µç
 	cli
 	smb0	Clock_Flag
 	jsr		F_Test_Mode
@@ -94,12 +87,12 @@ L_MODE2:										; MODE2ä»£è¡¨æ˜ŸæœŸæ–¹å—æ—¶é’Ÿ
 
 ;***********************************************************************
 ;***********************************************************************
-; æ–¹å—æ—¶é’Ÿï¼ˆæ—§ï¼‰çŠ¶æ€æœº
+; ·½¿éÊ±ÖÓ£¨¾É£©×´Ì¬»ú
 MainLoop:
-	jsr		F_Time_Run							; èµ°æ—¶å…¨å±€ç”Ÿæ•ˆ
-	jsr		F_Switch_Scan						; æ‹¨é”®æ‰«æå…¨å±€ç”Ÿæ•ˆ
-	jsr		F_Backlight							; èƒŒå…‰å…¨å±€ç”Ÿæ•ˆ
-	jsr		F_Louding							; å“é“ƒå¤„ç†å…¨å±€ç”Ÿæ•ˆ
+	jsr		F_Time_Run							; ×ßÊ±È«¾ÖÉúĞ§
+	jsr		F_Switch_Scan						; ²¦¼üÉ¨ÃèÈ«¾ÖÉúĞ§
+	jsr		F_Backlight							; ±³¹âÈ«¾ÖÉúĞ§
+	jsr		F_Louding							; ÏìÁå´¦ÀíÈ«¾ÖÉúĞ§
 	jsr		F_SymbolRegulate
 
 Status_Juge:
@@ -109,15 +102,15 @@ Status_Juge:
 	bbs3	Sys_Status_Flag,Status_Alarm_Set
 	bra		MainLoop
 Status_Runtime:
-	jsr		F_KeyTrigger_RunTimeMode			; RunTimeæ¨¡å¼ä¸‹æŒ‰é”®é€»è¾‘
+	jsr		F_KeyTrigger_RunTimeMode			; RunTimeÄ£Ê½ÏÂ°´¼üÂß¼­
 	jsr		F_DisTime_Run
-	jsr		F_Alarm_Handler						; åªåœ¨RunTimeæ¨¡å¼ä¸‹æ‰ä¼šå“é—¹
+	jsr		F_Alarm_Handler						; Ö»ÔÚRunTimeÄ£Ê½ÏÂ²Å»áÏìÄÖ
 	bbs7	TMRC,L_InBeep_NoHalt_Runtime
 	sta		HALT
 L_InBeep_NoHalt_Runtime:
 	bra		MainLoop
 Status_Calendar_Set:
-	jsr		F_KeyTrigger_DateSetMode			; DateSetæ¨¡å¼ä¸‹æŒ‰é”®é€»è¾‘
+	jsr		F_KeyTrigger_DateSetMode			; DateSetÄ£Ê½ÏÂ°´¼üÂß¼­
 	jsr		F_DisCalendar_Set
 	bbs7	TMRC,L_InBeep_NoHalt_Calendar_Set
 
@@ -125,14 +118,14 @@ Status_Calendar_Set:
 L_InBeep_NoHalt_Calendar_Set:
 	bra		MainLoop
 Status_Time_Set:
-	jsr		F_KeyTrigger_TimeSetMode			; TimeSetæ¨¡å¼ä¸‹æŒ‰é”®é€»è¾‘
+	jsr		F_KeyTrigger_TimeSetMode			; TimeSetÄ£Ê½ÏÂ°´¼üÂß¼­
 	jsr		F_DisTime_Set
 	bbs7	TMRC,L_InBeep_NoHalt_Time_Set
 	sta		HALT
 L_InBeep_NoHalt_Time_Set:
 	bra		MainLoop
 Status_Alarm_Set:
-	jsr		F_KeyTrigger_AlarmSetMode			; AlarmSetæ¨¡å¼ä¸‹æŒ‰é”®é€»è¾‘
+	jsr		F_KeyTrigger_AlarmSetMode			; AlarmSetÄ£Ê½ÏÂ°´¼üÂß¼­
 	jsr		F_DisAlarm_Set
 	bbs7	TMRC,L_InBeep_NoHalt_Alarm_Set
 	sta		HALT
@@ -142,7 +135,7 @@ L_InBeep_NoHalt_Alarm_Set:
 
 ;***********************************************************************
 ;***********************************************************************
-; ä¸­æ–­æœåŠ¡å‡½æ•°
+; ÖĞ¶Ï·şÎñº¯Êı
 V_IRQ:
 	pha
 	lda		IER
@@ -164,7 +157,7 @@ L_DivIrq:
 
 L_Timer2Irq:
 	CLR_TMR2_IRQ_FLAG
-	smb0	Timer_Flag							; åŠç§’æ ‡å¿—
+	smb0	Timer_Flag							; °ëÃë±êÖ¾
 	lda		Counter_1Hz
 	cmp		#01
 	bcs		L_1Hz_Out
@@ -174,13 +167,13 @@ L_1Hz_Out:
 	lda		#$0
 	sta		Counter_1Hz
 	lda		Timer_Flag
-	ora		#10100110B							; 1Sã€å¢Sã€èƒŒå…‰ã€å“é“ƒçš„1Sæ ‡å¿—ä½
+	ora		#10100110B							; 1S¡¢ÔöS¡¢±³¹â¡¢ÏìÁåµÄ1S±êÖ¾Î»
 	sta		Timer_Flag
 	bra		L_EndIrq
 
-L_Timer0Irq:									; ç”¨äºèœ‚é¸£å™¨
+L_Timer0Irq:									; ÓÃÓÚ·äÃùÆ÷
 	CLR_TMR0_IRQ_FLAG
-	lda		Counter_16Hz						; 16Hzè®¡æ•°
+	lda		Counter_16Hz						; 16Hz¼ÆÊı
 	cmp		#07
 	bcs		L_16Hz_Out
 	inc		Counter_16Hz
@@ -188,13 +181,13 @@ L_Timer0Irq:									; ç”¨äºèœ‚é¸£å™¨
 L_16Hz_Out:
 	lda		#$0
 	sta		Counter_16Hz
-	smb6	Timer_Flag							; 16Hzæ ‡å¿—
+	smb6	Timer_Flag							; 16Hz±êÖ¾
 	bra		L_EndIrq
 
-L_Timer1Irq:									; ç”¨äºå¿«åŠ è®¡æ—¶
+L_Timer1Irq:									; ÓÃÓÚ¿ì¼Ó¼ÆÊ±
 	CLR_TMR1_IRQ_FLAG
-	smb4	Timer_Flag							; æ‰«é”®16Hzæ ‡å¿—
-	lda		Counter_4Hz							; 4Hzè®¡æ•°
+	smb4	Timer_Flag							; É¨¼ü16Hz±êÖ¾
+	lda		Counter_4Hz							; 4Hz¼ÆÊı
 	cmp		#03
 	bcs		L_4Hz_Out
 	inc		Counter_4Hz
@@ -202,18 +195,18 @@ L_Timer1Irq:									; ç”¨äºå¿«åŠ è®¡æ—¶
 L_4Hz_Out:
 	lda		#$0
 	sta		Counter_4Hz
-	smb2	Key_Flag							; å¿«åŠ 4Hzæ ‡å¿—
+	smb2	Key_Flag							; ¿ì¼Ó4Hz±êÖ¾
 	bra		L_EndIrq
 
 L_PaIrq:
 	CLR_KEY_IRQ_FLAG
 
 	smb0	Key_Flag
-	smb1	Key_Flag							; é¦–æ¬¡è§¦å‘
-	rmb3	Timer_Flag							; å¦‚æœæœ‰æ–°çš„ä¸‹é™æ²¿åˆ°æ¥ï¼Œæ¸…å¿«åŠ æ ‡å¿—ä½
-	rmb4	Timer_Flag							; 8Hzè®¡æ—¶
+	smb1	Key_Flag							; Ê×´Î´¥·¢
+	rmb3	Timer_Flag							; Èç¹ûÓĞĞÂµÄÏÂ½µÑØµ½À´£¬Çå¿ì¼Ó±êÖ¾Î»
+	rmb4	Timer_Flag							; 16Hz¼ÆÊ±
 
-	TMR1_ON										; å¿«åŠ å®šæ—¶
+	TMR1_ON										; ¿ì¼Ó¶¨Ê±
 
 	bra		L_EndIrq
 
@@ -227,7 +220,7 @@ L_LcdIrq:
 Lcd_15Hz:
 	lda		#0
 	sta		CC0
-	smb4	Key_Flag							; AlarmSetå’ŒTimeSeté”®çš„åˆ¤ç©ºæ‰«æ
+	smb4	Key_Flag							; AlarmSetºÍTimeSet¼üµÄÅĞ¿ÕÉ¨Ãè
 
 L_EndIrq:
 	pla
@@ -263,8 +256,8 @@ L_EndIrq:
 
 ;--------------------------------------------------------	
 ;***********************************************************************
-.BLKB	0FFFFH-$,0FFH							; ä»å½“å‰åœ°å€åˆ°FFFFå…¨éƒ¨å¡«å……0xFF
-	
+.BLKB	0FFFFH-$,0FFH							; ´Óµ±Ç°µØÖ·µ½FFFFÈ«²¿Ìî³ä0xFF
+
 .ORG	0FFF8H
 	DB		C_RST_SEL+C_VOLT_V30+C_OMS0+C_PAIM
 	DB		C_PB32IS+C_PROTB

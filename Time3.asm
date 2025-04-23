@@ -7,28 +7,25 @@ L_TimeDot_Out3:
 	bbr1	Clock_Flag,L_Snooze_Blink13			; Alarm
 	bbs2	Clock_Flag,L_Snooze_Blink13			; Loud
 	bbr3	Clock_Flag,L_Snooze_Blink13			; Snooze	
-	ldx		#lcd3_Zz							; Zzé—ªçƒæ¡ä»¶:
+	ldx		#lcd3_Zz							; ZzÉÁË¸Ìõ¼ş:
 	jsr		F_DispSymbol3						; Snooze==1 && loud==0 && Alarm==1
 L_Snooze_Blink13:
-	ldx		#lcd3_DotC							; æ²¡1Säº®ç‚¹
-	jsr		F_DispSymbol3
 	jsr		F_Display_Time3
-	bbr1	Calendar_Flag,No_Date_Add3			; å¦‚æœ‰å¢æ—¥æœŸï¼Œåˆ™è°ƒç”¨æ˜¾ç¤ºæ—¥æœŸå‡½æ•°
+	bbr1	Calendar_Flag,No_Date_Add3			; ÈçÓĞÔöÈÕÆÚ£¬Ôòµ÷ÓÃÏÔÊ¾ÈÕÆÚº¯Êı
 	rmb1	Calendar_Flag
 	jsr		F_Display_Date3
-	rts											; åŠSè§¦å‘æ—¶æ²¡1Sæ ‡å¿—ä¸èµ°æ—¶ï¼Œç›´æ¥è¿”å›
+	rts											; °ëS´¥·¢Ê±Ã»1S±êÖ¾²»×ßÊ±£¬Ö±½Ó·µ»Ø
 L_Dot_Clear3:
-	rmb1	Timer_Flag							; æ¸…1Sæ ‡å¿—
-	ldx		#lcd3_DotC							; 1Sè§¦å‘åå¿…å®šè¿›ç­ç‚¹ï¼ŒåŒæ—¶èµ°æ—¶
-	jsr		F_ClrpSymbol3
+	rmb1	Timer_Flag							; Çå1S±êÖ¾
+
 	bbr1	Clock_Flag,L_Snooze_Blink23			; Alarm
 	bbs2	Clock_Flag,L_Snooze_Blink23			; Loud
 	bbr3	Clock_Flag,L_Snooze_Blink23			; Snooze	
-	ldx		#lcd3_Zz							; Zzé—ªçƒæ¡ä»¶:
+	ldx		#lcd3_Zz							; ZzÉÁË¸Ìõ¼ş:
 	jsr		F_ClrpSymbol3						; Snooze==1 && loud==0
 L_Snooze_Blink23:
 	jsr		F_Display_Time3
-	bbr1	Calendar_Flag,No_Date_Add3			; å¦‚æœ‰å¢æ—¥æœŸï¼Œåˆ™è°ƒç”¨æ˜¾ç¤ºæ—¥æœŸå‡½æ•°
+	bbr1	Calendar_Flag,No_Date_Add3			; ÈçÓĞÔöÈÕÆÚ£¬Ôòµ÷ÓÃÏÔÊ¾ÈÕÆÚº¯Êı
 	rmb1	Calendar_Flag
 	jsr		F_Display_Date3
 No_Date_Add3:
@@ -36,25 +33,23 @@ No_Date_Add3:
 
 
 F_DisTime_Set3:
-	bbs0	Timer_Flag,L_Blink_Time3			; æ²¡æœ‰åŠSæ ‡å¿—æ—¶ä¸é—ªçƒ
+	bbs0	Timer_Flag,L_Blink_Time3			; Ã»ÓĞ°ëS±êÖ¾Ê±²»ÉÁË¸
 	rts
 L_Blink_Time3:
-	rmb0	Timer_Flag							; æ¸…åŠSæ ‡å¿—
+	rmb0	Timer_Flag							; Çå°ëS±êÖ¾
 	bbr1	Calendar_Flag,L_No_Date_Add_TS3
 	rmb1	Calendar_Flag
 	jsr		F_Display_Date3
 L_No_Date_Add_TS3:
 	bbs1	Timer_Flag,L_Time_Clear3
-	jsr		F_Display_Time3						; åŠSäº®
-	ldx		#lcd3_DotC
-	jsr		F_DispSymbol3
+	jsr		F_Display_Time3						; °ëSÁÁ
+
 	rts
 L_Time_Clear3:
 	rmb1	Timer_Flag
-	lda		PA									; æœ‰æŒ‰é”®æ—¶ä¸é—ªçƒ
+	lda		PA									; ÓĞ°´¼üÊ±²»ÉÁË¸
 	and		#$C0
 	bne		L_Blink_Time3
-	jsr		F_UnDisplay_Time3					; 1Sç­
-	ldx		#lcd3_DotC
-	jsr		F_ClrpSymbol3
+	jsr		F_UnDisplay_Time3					; 1SÃğ
+
 	rts

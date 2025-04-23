@@ -1,4 +1,4 @@
-F_Display_Time3:								; è°ƒç”¨æ˜¾ç¤ºå‡½æ•°æ˜¾ç¤ºå½“å‰æ—¶é—´
+F_Display_Time3:								; µ÷ÓÃÏÔÊ¾º¯ÊıÏÔÊ¾µ±Ç°Ê±¼ä
 	jsr		L_DisTime_Min3
 	jsr		L_DisTime_Hour3
 	rts
@@ -17,35 +17,35 @@ L_DisTime_Min3:
 	jsr		L_Dis_7Bit_DigitDot_Prog3
 	rts
 
-L_DisTime_Hour3:								; æ˜¾ç¤ºå°æ—¶
+L_DisTime_Hour3:								; ÏÔÊ¾Ğ¡Ê±
 	bbr0	Clock_Flag,L_24hMode_Time3
 	lda		R_Time_Hour
 	cmp		#12
 	bcs		L_Time12h_PM3
-	ldx		#lcd3_AM							; 12hæ¨¡å¼AMéœ€è¦ç­PMã€äº®AMç‚¹
+	ldx		#lcd3_AM							; 12hÄ£Ê½AMĞèÒªÃğPM¡¢ÁÁAMµã
 	jsr		F_DispSymbol3
 	ldx		#lcd3_PM
 	jsr		F_ClrpSymbol3
-	lda		R_Time_Hour							; æ˜¾ç¤ºå‡½æ•°ä¼šæ”¹Aå€¼ï¼Œé‡æ–°å–å˜é‡
+	lda		R_Time_Hour							; ÏÔÊ¾º¯Êı»á¸ÄAÖµ£¬ÖØĞÂÈ¡±äÁ¿
 	cmp		#0
 	beq		L_Time_0Hour3
 	bra		L_Start_DisTime_Hour3
 L_Time12h_PM3:
-	ldx		#lcd3_AM							; 12hæ¨¡å¼PMéœ€è¦ç­AMã€äº®PMç‚¹
+	ldx		#lcd3_AM							; 12hÄ£Ê½PMĞèÒªÃğAM¡¢ÁÁPMµã
 	jsr		F_ClrpSymbol3
 	ldx		#lcd3_PM
 	jsr		F_DispSymbol3
-	lda		R_Time_Hour							; æ˜¾ç¤ºå‡½æ•°ä¼šæ”¹Aå€¼ï¼Œé‡æ–°å–å˜é‡
+	lda		R_Time_Hour							; ÏÔÊ¾º¯Êı»á¸ÄAÖµ£¬ÖØĞÂÈ¡±äÁ¿
 	sec
 	sbc		#12
 	cmp		#0
 	bne		L_Start_DisTime_Hour3
-L_Time_0Hour3:									; 12hæ¨¡å¼0ç‚¹éœ€è¦å˜æˆ12ç‚¹
+L_Time_0Hour3:									; 12hÄ£Ê½0µãĞèÒª±ä³É12µã
 	lda		#12
 	bra		L_Start_DisTime_Hour3
 
 L_24hMode_Time3:
-	ldx		#lcd3_AM							; 24hæ¨¡å¼ä¸‹éœ€è¦ç­AMã€PMç‚¹
+	ldx		#lcd3_AM							; 24hÄ£Ê½ÏÂĞèÒªÃğAM¡¢PMµã
 	jsr		F_ClrpSymbol3
 	ldx		#lcd3_PM
 	jsr		F_ClrpSymbol3
@@ -81,7 +81,7 @@ F_UnDisplay_Time3:
 
 
 
-; æ˜¾ç¤ºæ—¥æœŸå‡½æ•°
+; ÏÔÊ¾ÈÕÆÚº¯Êı
 F_Display_Date3:
 	jsr		L_DisDate_Day3
 	jsr		L_DisDate_Month3
@@ -98,7 +98,7 @@ L_DisDate_Day3:
 	pla
 	jsr		L_LSR_4Bit_Prog
 	ldx		#lcd3_d8
-	jsr		L_Dis_4Bit_DigitDot_Prog3			; æ—¥æœŸçš„åä½æ˜¯4æ®µ
+	jsr		L_Dis_4Bit_DigitDot_Prog3			; ÈÕÆÚµÄÊ®Î»ÊÇ4¶Î
 	rts
 
 L_DisDate_Month3:
@@ -110,7 +110,7 @@ L_DisDate_Month3:
 	jsr		L_Dis_7Bit_DigitDot_Prog3
 	pla
 	jsr		L_LSR_4Bit_Prog
-	cmp		#$0									; æœˆä»½çš„åä½åªæœ‰1æ®µï¼Œæ‰€ä»¥é€‰æ‹©ç”¨symbolæ˜¾ç¤º
+	cmp		#$0									; ÔÂ·İµÄÊ®Î»Ö»ÓĞ1¶Î£¬ËùÒÔÑ¡ÔñÓÃsymbolÏÔÊ¾
 	beq		No_Month_Tens3
 	ldx		#lcd3_d10
 	jsr		F_DispSymbol3
@@ -121,8 +121,8 @@ No_Month_Tens3:
 	rts
 
 L_DisDate_Year3:
-	ldx		#00									; 20xxå¹´çš„å¼€å¤´20æ˜¯å›ºå®šçš„
-	lda		Table_DataDot,x						; æ‰€ä»¥20å›ºå®šä¼šæ˜¾ç¤º
+	ldx		#00									; 20xxÄêµÄ¿ªÍ·20ÊÇ¹Ì¶¨µÄ
+	lda		Table_DataDot,x						; ËùÒÔ20¹Ì¶¨»áÏÔÊ¾
 	ldx		#lcd3_d1
 	jsr		L_Dis_7Bit_DigitDot_Prog3
 	ldx		#02
@@ -130,7 +130,7 @@ L_DisDate_Year3:
 	ldx		#lcd3_d0
 	jsr		L_Dis_3Bit_DigitDot_Prog3
 
-	ldx		R_Date_Year							; æ˜¾ç¤ºå½“å‰çš„å¹´ä»½
+	ldx		R_Date_Year							; ÏÔÊ¾µ±Ç°µÄÄê·İ
 	lda		Table_DataDot,x
 	pha
 	and		#$0f
@@ -156,7 +156,7 @@ L_DisDate_Week3:
 	jsr		L_Dis_14Bit_DigitDot_Prog3
 	rts
 
-F_UnDisplay_Date3:								; é—ªçƒæ—¶å–æ¶ˆæ˜¾ç¤ºç”¨çš„å‡½æ•°
+F_UnDisplay_Date3:								; ÉÁË¸Ê±È¡ÏûÏÔÊ¾ÓÃµÄº¯Êı
 	lda		#00
 	ldx		#lcd3_d0
 	jsr		L_Dis_3Bit_DigitDot_Prog3
@@ -182,7 +182,7 @@ F_UnDisplay_Date3:								; é—ªçƒæ—¶å–æ¶ˆæ˜¾ç¤ºç”¨çš„å‡½æ•°
 	jsr		F_ClrpSymbol3
 	rts
 
-; æ˜¾ç¤ºé—¹é’Ÿè®¾å®šå€¼å‡½æ•°
+; ÏÔÊ¾ÄÖÖÓÉè¶¨Öµº¯Êı
 F_Display_Alarm3:
 	jsr		L_DisAlarm_Min3
 	jsr		L_DisAlarm_Hour3
@@ -202,35 +202,35 @@ L_DisAlarm_Min3:
 	jsr		L_Dis_7Bit_DigitDot_Prog3
 	rts	
 
-L_DisAlarm_Hour3:								; æ˜¾ç¤ºé—¹é’Ÿå°æ—¶
+L_DisAlarm_Hour3:								; ÏÔÊ¾ÄÖÖÓĞ¡Ê±
 	bbr0	Clock_Flag,L_24hMode_Alarm3
 	lda		R_Alarm_Hour
 	cmp		#12
 	bcs		L_Alarm12h_PM3						
-	ldx		#lcd3_PM							; 12hæ¨¡å¼é—¹é’ŸAMéœ€è¦ç­PMäº®AM
+	ldx		#lcd3_PM							; 12hÄ£Ê½ÄÖÖÓAMĞèÒªÃğPMÁÁAM
 	jsr		F_ClrpSymbol3
 	ldx		#lcd3_AM
 	jsr		F_DispSymbol3
-	lda		R_Alarm_Hour						; æ˜¾ç¤ºå‡½æ•°ä¼šæ”¹Aå€¼ï¼Œé‡æ–°å–å˜é‡
+	lda		R_Alarm_Hour						; ÏÔÊ¾º¯Êı»á¸ÄAÖµ£¬ÖØĞÂÈ¡±äÁ¿
 	cmp		#0
 	beq		L_Alarm_0Hour3
 	bra		L_Start_DisAlarm_Hour3
 L_Alarm12h_PM3:
-	ldx		#lcd3_PM							; 12hæ¨¡å¼é—¹é’ŸPMéœ€è¦äº®PMç­AM
+	ldx		#lcd3_PM							; 12hÄ£Ê½ÄÖÖÓPMĞèÒªÁÁPMÃğAM
 	jsr		F_DispSymbol3
 	ldx		#lcd3_AM
 	jsr		F_ClrpSymbol3
-	lda		R_Alarm_Hour						; æ˜¾ç¤ºå‡½æ•°ä¼šæ”¹Aå€¼ï¼Œé‡æ–°å–å˜é‡
+	lda		R_Alarm_Hour						; ÏÔÊ¾º¯Êı»á¸ÄAÖµ£¬ÖØĞÂÈ¡±äÁ¿
 	sec
 	sbc		#12
 	cmp		#0
 	bne		L_Start_DisAlarm_Hour3
-L_Alarm_0Hour3:									; 12hæ¨¡å¼0ç‚¹éœ€è¦å˜æˆ12ç‚¹
+L_Alarm_0Hour3:									; 12hÄ£Ê½0µãĞèÒª±ä³É12µã
 	lda		#12
 	bra		L_Start_DisAlarm_Hour3
 
 L_24hMode_Alarm3:
-	ldx		#lcd3_PM							; 24hæ¨¡å¼é—¹é’Ÿéœ€è¦ç­PMã€AMç‚¹
+	ldx		#lcd3_PM							; 24hÄ£Ê½ÄÖÖÓĞèÒªÃğPM¡¢AMµã
 	jsr		F_ClrpSymbol3
 	ldx		#lcd3_AM
 	jsr		F_ClrpSymbol3
@@ -264,8 +264,10 @@ F_UnDisplay_Alarm3:
 	jsr		L_Dis_3Bit_DigitDot_Prog3
 	rts
 
-;æ˜¾ç¤ºå¸¸äº®çš„ç¬¦å·
+;ÏÔÊ¾³£ÁÁµÄ·ûºÅ
 F_Display_Symbol3:
+	ldx		#lcd3_DotC
+	jsr		F_DispSymbol3
 	ldx		#lcd3_Day
 	jsr		F_DispSymbol3
 	ldx		#lcd3_MDS
@@ -298,7 +300,7 @@ L_No_ClrALM:
 	ldx		#lcd3_bell
 	jsr		F_DispSymbol3
 	bbr3	Clock_Flag,L_Snz_Juge3
-	bbr2	Clock_Flag,L_Loud_Juge_Exit3		; Zzå¸¸äº®æ¡ä»¶ä¸ºLoud!=0 Snz!=1
+	bbr2	Clock_Flag,L_Loud_Juge_Exit3		; Zz³£ÁÁÌõ¼şÎªLoud!=0 Snz!=1
 L_Snz_Juge3:
 	ldx		#lcd3_Zz
 	jsr		F_DispSymbol3

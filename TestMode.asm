@@ -3,7 +3,7 @@ F_Test_Mode:
 	TMR0_ON
 	lda		#00
 	sta		P_Temp
-	smb4	Clock_Flag							;é…ç½®ä¸ºæŒç»­å“é“ƒæ¨¡å¼
+	smb4	Clock_Flag							;ÅäÖÃÎª³ÖĞøÏìÁåÄ£Ê½
 	smb0	Test_Flag
 
 L_Test_Loop:
@@ -28,7 +28,7 @@ F_Test_Mode2:
 	TMR0_ON
 	lda		#00
 	sta		P_Temp
-	rmb4	Clock_Flag							;é…ç½®ä¸ºåºåˆ—å“é“ƒæ¨¡å¼
+	rmb4	Clock_Flag							;ÅäÖÃÎªĞòÁĞÏìÁåÄ£Ê½
 	smb0	Test_Flag
 	lda		#4
 	sta		Beep_Serial

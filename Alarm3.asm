@@ -1,23 +1,21 @@
 F_DisAlarm_Set3:
-	bbs0	Timer_Flag,L_Blink_Alarm3			; æ²¡æœ‰åŠSæ ‡å¿—æ—¶ä¸é—ªçƒ
+	bbs0	Timer_Flag,L_Blink_Alarm3			; Ã»ÓĞ°ëS±êÖ¾Ê±²»ÉÁË¸
 	rts
 L_Blink_Alarm3:
-	rmb0	Timer_Flag							; æ¸…åŠSæ ‡å¿—
+	rmb0	Timer_Flag							; Çå°ëS±êÖ¾
 	ldx		#lcd3_ALM
 	jsr		F_DispSymbol3
-	bbr1	Calendar_Flag,L_No_Date_Add_AS3		; å¦‚æœ‰å¢æ—¥æœŸï¼Œåˆ™è°ƒç”¨æ˜¾ç¤ºæ—¥æœŸå‡½æ•°
+	bbr1	Calendar_Flag,L_No_Date_Add_AS3		; ÈçÓĞÔöÈÕÆÚ£¬Ôòµ÷ÓÃÏÔÊ¾ÈÕÆÚº¯Êı
 	rmb1	Calendar_Flag
 	jsr		F_Display_Date3
 L_No_Date_Add_AS3:
 	bbs1	Timer_Flag,L_Alarm_Clear3
-	jsr		F_Display_Alarm3					; åŠSäº®
-	ldx		#lcd3_DotC
-	jsr		F_DispSymbol3
+	jsr		F_Display_Alarm3					; °ëSÁÁ
 	rts
 L_Alarm_Clear3:
 	rmb1	Timer_Flag
-	lda		PA									; æœ‰æŒ‰é”®æ—¶ä¸é—ªçƒ
+	lda		PA									; ÓĞ°´¼üÊ±²»ÉÁË¸
 	and		#$C0
 	bne		L_Blink_Alarm3
-	jsr		F_UnDisplay_Alarm3					; 1Sç­
+	jsr		F_UnDisplay_Alarm3					; 1SÃğ
 	rts

@@ -1,32 +1,28 @@
 F_DisAlarm_Set:
-	bbs0	Timer_Flag,L_Blink_Alarm			; æ²¡æœ‰åŠSæ ‡å¿—æ—¶ä¸é—ªçƒ
+	bbs0	Timer_Flag,L_Blink_Alarm			; Ã»ÓĞ°ëS±êÖ¾Ê±²»ÉÁË¸
 	rts
 L_Blink_Alarm:
-	rmb0	Timer_Flag							; æ¸…åŠSæ ‡å¿—
-	bbr1	Calendar_Flag,L_No_Date_Add_AS		; å¦‚æœ‰å¢æ—¥æœŸï¼Œåˆ™è°ƒç”¨æ˜¾ç¤ºæ—¥æœŸå‡½æ•°
+	rmb0	Timer_Flag							; Çå°ëS±êÖ¾
+	bbr1	Calendar_Flag,L_No_Date_Add_AS		; ÈçÓĞÔöÈÕÆÚ£¬Ôòµ÷ÓÃÏÔÊ¾ÈÕÆÚº¯Êı
 	rmb1	Calendar_Flag
 	jsr		F_Display_Date
 L_No_Date_Add_AS:
 	bbs1	Timer_Flag,L_Alarm_Clear
-	jsr		F_Display_Alarm						; åŠSäº®
-	ldx		#lcd_DotC
-	jsr		F_DispSymbol
+	jsr		F_Display_Alarm						; °ëSÁÁ
 	rts
 L_Alarm_Clear:
 	rmb1	Timer_Flag
 	bbs0	Key_Flag,No_Alarm_UnDis
-	jsr		F_UnDisplay_Alarm					; 1Sç­
+	jsr		F_UnDisplay_Alarm					; 1SÃğ
 No_Alarm_UnDis:
-	ldx		#lcd_DotC
-	jsr		F_ClrpSymbol
 	jsr		F_Display_Time
 	rts
 
 
 
 F_Alarm_Handler:
-	jsr		L_IS_AlarmTrigger					; åˆ¤æ–­é—¹é’Ÿæ˜¯å¦è§¦å‘
-	bbr2	Clock_Flag,L_No_Alarm_Process		; æœ‰å“é—¹æ ‡å¿—ä½å†è¿›å¤„ç†
+	jsr		L_IS_AlarmTrigger					; ÅĞ¶ÏÄÖÖÓÊÇ·ñ´¥·¢
+	bbr2	Clock_Flag,L_No_Alarm_Process		; ÓĞÏìÄÖ±êÖ¾Î»ÔÙ½ø´¦Àí
 	jsr		L_Alarm_Process
 	rts
 L_No_Alarm_Process:
@@ -41,10 +37,10 @@ L_No_Alarm_Process:
 	rts
 
 L_IS_AlarmTrigger:
-	bbr1	Clock_Flag,L_CloseLoud				; æ²¡æœ‰å¼€å¯é—¹é’Ÿæ‹¨é”®ä¸ä¼šè¿›å“é—¹æ¨¡å¼
+	bbr1	Clock_Flag,L_CloseLoud				; Ã»ÓĞ¿ªÆôÄÖÖÓ²¦¼ü²»»á½øÏìÄÖÄ£Ê½
 	bbs3	Clock_Flag,L_Snooze
-	lda		R_Time_Hour							; æ²¡æœ‰è´ªç¡çš„æƒ…å†µä¸‹
-	cmp		R_Alarm_Hour						; é—¹é’Ÿè®¾å®šå€¼å’Œå½“å‰æ—¶é—´ä¸åŒ¹é…ä¸ä¼šè¿›å“é—¹æ¨¡å¼
+	lda		R_Time_Hour							; Ã»ÓĞÌ°Ë¯µÄÇé¿öÏÂ
+	cmp		R_Alarm_Hour						; ÄÖÖÓÉè¶¨ÖµºÍµ±Ç°Ê±¼ä²»Æ¥Åä²»»á½øÏìÄÖÄ£Ê½
 	bne		L_CloseLoud
 	lda		R_Time_Min
 	cmp		R_Alarm_Min
@@ -54,14 +50,14 @@ L_IS_AlarmTrigger:
 	cmp		#00
 	bne		L_CloseLoud
 L_Start_Loud_Juge:
-	lda		R_Alarm_Hour						; åœ¨è´ªç¡å¯åŠ¨å‰ï¼Œå¿…å®šå…ˆè§¦å‘è®¾å®šé—¹é’Ÿ
-	sta		R_Snooze_Hour						; æ­¤æ—¶åŒæ­¥è®¾å®šé—¹é’Ÿæ—¶é—´è‡³è´ªç¡é—¹é’Ÿ
-	lda		R_Alarm_Min							; ä¹‹åè´ªç¡è§¦å‘æ—¶åªéœ€è¦åœ¨è‡ªå·±çš„åŸºç¡€ä¸ŠåŠ 5min
+	lda		R_Alarm_Hour						; ÔÚÌ°Ë¯Æô¶¯Ç°£¬±Ø¶¨ÏÈ´¥·¢Éè¶¨ÄÖÖÓ
+	sta		R_Snooze_Hour						; ´ËÊ±Í¬²½Éè¶¨ÄÖÖÓÊ±¼äÖÁÌ°Ë¯ÄÖÖÓ
+	lda		R_Alarm_Min							; Ö®ºóÌ°Ë¯´¥·¢Ê±Ö»ĞèÒªÔÚ×Ô¼ºµÄ»ù´¡ÉÏ¼Ó5min
 	sta		R_Snooze_Min
 	bra		L_AlarmTrigger
 L_Snooze:
-	lda		R_Time_Hour							; æœ‰è´ªç¡çš„æƒ…å†µä¸‹
-	cmp		R_Snooze_Hour						; è´ªç¡é—¹é’Ÿè®¾å®šå€¼å’Œå½“å‰æ—¶é—´ä¸åŒ¹é…ä¸ä¼šè¿›å“é—¹æ¨¡å¼
+	lda		R_Time_Hour							; ÓĞÌ°Ë¯µÄÇé¿öÏÂ
+	cmp		R_Snooze_Hour						; Ì°Ë¯ÄÖÖÓÉè¶¨ÖµºÍµ±Ç°Ê±¼ä²»Æ¥Åä²»»á½øÏìÄÖÄ£Ê½
 	bne		L_Snooze_CloseLoud
 	lda		R_Time_Min
 	cmp		R_Snooze_Min
@@ -73,23 +69,23 @@ L_Snooze:
 L_AlarmTrigger:
 	smb7	Timer_Flag
 	TMR0_ON
-	smb2	Clock_Flag							; å¼€å¯å“é—¹æ¨¡å¼å’Œèœ‚é¸£å™¨è®¡æ—¶TIM0
+	smb2	Clock_Flag							; ¿ªÆôÏìÄÖÄ£Ê½ºÍ·äÃùÆ÷¼ÆÊ±TIM0
 L_Alarm_NoStop:
 	bbs5	Clock_Flag,L_AlarmTrigger_Exit
-	smb5	Clock_Flag							; ä¿å­˜å“é—¹æ¨¡å¼çš„å€¼,åŒºåˆ†å“é—¹ç»“æŸçŠ¶æ€å’Œæœªå“é—¹çŠ¶æ€
+	smb5	Clock_Flag							; ±£´æÏìÄÖÄ£Ê½µÄÖµ,Çø·ÖÏìÄÖ½áÊø×´Ì¬ºÍÎ´ÏìÄÖ×´Ì¬
 L_AlarmTrigger_Exit:
 	rts
 L_Snooze_CloseLoud:
 	bbr5	Clock_Flag,L_CloseLoud				; last==1 && now==0
-	rmb5	Clock_Flag							; å“é—¹ç»“æŸçŠ¶æ€åŒæ­¥å“é—¹æ¨¡å¼çš„ä¿å­˜å€¼
-	bbr6	Clock_Flag,L_NoSnooze_CloseLoud		; æ²¡æœ‰è´ªç¡æŒ‰é”®è§¦å‘&&è´ªç¡æ¨¡å¼&&å“é—¹ç»“æŸçŠ¶æ€æ‰ä¼šè‡ªç„¶ç»“æŸè´ªç¡æ¨¡å¼
-	rmb6	Clock_Flag							; æ¸…è´ªç¡æŒ‰é”®è§¦å‘
+	rmb5	Clock_Flag							; ÏìÄÖ½áÊø×´Ì¬Í¬²½ÏìÄÖÄ£Ê½µÄ±£´æÖµ
+	bbr6	Clock_Flag,L_NoSnooze_CloseLoud		; Ã»ÓĞÌ°Ë¯°´¼ü´¥·¢&&Ì°Ë¯Ä£Ê½&&ÏìÄÖ½áÊø×´Ì¬²Å»á×ÔÈ»½áÊøÌ°Ë¯Ä£Ê½
+	rmb6	Clock_Flag							; ÇåÌ°Ë¯°´¼ü´¥·¢
 	bra		L_CloseLoud
-L_NoSnooze_CloseLoud:							; ç»“æŸè´ªç¡æ¨¡å¼å¹¶å…³é—­å“é—¹
+L_NoSnooze_CloseLoud:							; ½áÊøÌ°Ë¯Ä£Ê½²¢¹Ø±ÕÏìÄÖ
 	rmb3	Clock_Flag
 	rmb6	Clock_Flag
 L_CloseLoud:
-	rmb2	Clock_Flag							; å…³é—­å“é—¹æ¨¡å¼
+	rmb2	Clock_Flag							; ¹Ø±ÕÏìÄÖÄ£Ê½
 	rmb5	Clock_Flag
 	rmb7	TMRC
 	PB3_PB3_COMS
@@ -101,28 +97,34 @@ L_CloseLoud:
 
 
 L_Alarm_Process:
-	bbs7	Timer_Flag,L_BeepStart				; æ¯Sè¿›ä¸€æ¬¡
+	bbs7	Timer_Flag,L_BeepStart				; Ã¿S½øÒ»´Î
 	rts
 L_BeepStart:
 	rmb7	Timer_Flag
-	inc		AlarmLoud_Counter					; å“é“ƒ1æ¬¡åŠ 1å“é“ƒè®¡æ•°
-	lda		#2									; 0-10Så“é—¹çš„åºåˆ—ä¸º2ï¼Œ1å£°
-	sta		Beep_Serial
-	rmb4	Clock_Flag							; 0-30Sä¸ºåºåˆ—å“é“ƒ
+	inc		AlarmLoud_Counter					; ÏìÁå1´Î¼Ó1ÏìÁå¼ÆÊı
 	lda		AlarmLoud_Counter
-	cmp		#12
-	bcc		L_Alarm_Exit
-	lda		#4									; 10-20Så“é—¹çš„åºåˆ—ä¸º4ï¼Œ2å£°
+	cmp		#11
+	bcs		No_Loud_Serial_2
+	lda		#2									; 0-10SÏìÄÖµÄĞòÁĞÎª2£¬1Éù
 	sta		Beep_Serial
-	lda		AlarmLoud_Counter
-	cmp		#22
-	bcc		L_Alarm_Exit
-	lda		#8									; 20-30Så“é—¹çš„åºåˆ—ä¸º8ï¼Œ4å£°
+	rmb4	Clock_Flag							; 0-30SÎªĞòÁĞÏìÁå
+	bra		L_Alarm_Exit
+No_Loud_Serial_2:
+	cmp		#21
+	bcs		No_Loud_Serial_4
+	lda		#4									; 10-20SÏìÄÖµÄĞòÁĞÎª4£¬2Éù
 	sta		Beep_Serial
-	lda		AlarmLoud_Counter
-	cmp		#32
-	bcc		L_Alarm_Exit
-	smb4	Clock_Flag							; 30Sä»¥ä¸Šä½¿ç”¨æŒç»­å“é“ƒ
+	rmb4	Clock_Flag
+	bra		L_Alarm_Exit
+No_Loud_Serial_4:
+	cmp		#31
+	bcs		No_Loud_Serial_8
+	lda		#8									; 20-30SÏìÄÖµÄĞòÁĞÎª8£¬4Éù
+	sta		Beep_Serial
+	rmb4	Clock_Flag
+	bra		L_Alarm_Exit
+No_Loud_Serial_8:
+	smb4	Clock_Flag							; 30SÒÔÉÏÊ¹ÓÃ³ÖĞøÏìÁå
 
 L_Alarm_Exit:
 	rts
@@ -134,7 +136,7 @@ F_Louding:
 L_Beeping:
 	rmb6	Timer_Flag
 	bbs4	Clock_Flag,L_ConstBeep_Mode
-	lda		Beep_Serial							; åºåˆ—å“é“ƒæ¨¡å¼
+	lda		Beep_Serial							; ĞòÁĞÏìÁåÄ£Ê½
 	cmp		#0
 	beq		L_NoBeep_Serial_Mode
 	dec		Beep_Serial
@@ -151,8 +153,8 @@ L_NoBeep_Serial_Mode:
 	rts
 
 L_ConstBeep_Mode:
-	lda		Beep_Serial							; æŒç»­å“é“ƒæ¨¡å¼
-	eor		#01B								; Beep_Serialç¿»è½¬ç¬¬ä¸€ä½
+	lda		Beep_Serial							; ³ÖĞøÏìÁåÄ£Ê½
+	eor		#01B								; Beep_Serial·­×ªµÚÒ»Î»
 	sta		Beep_Serial
 
 	lda		Beep_Serial

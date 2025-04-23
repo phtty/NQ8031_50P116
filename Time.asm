@@ -1,25 +1,25 @@
 F_Time_Run:
-	bbs2	Timer_Flag,L_TimeRun_Add			; æœ‰å¢Sæ ‡å¿—æ‰è¿›å¤„ç†
+	bbs2	Timer_Flag,L_TimeRun_Add			; ÓĞÔöS±êÖ¾²Å½ø´¦Àí
 	rts
 L_TimeRun_Add:
-	rmb2	Timer_Flag							; æ¸…å¢Sæ ‡å¿—
+	rmb2	Timer_Flag							; ÇåÔöS±êÖ¾
 
 	inc		R_Time_Sec
 	lda		R_Time_Sec
 	cmp		#60
-	bcc		L_Time_SecRun_Exit					; æœªå‘ç”Ÿåˆ†é’Ÿè¿›ä½
+	bcc		L_Time_SecRun_Exit					; Î´·¢Éú·ÖÖÓ½øÎ»
 	lda		#0
 	sta		R_Time_Sec
 	inc		R_Time_Min
 	lda		R_Time_Min
 	cmp		#60
-	bcc		L_Time_SecRun_Exit					; æœªå‘ç”Ÿå°æ—¶è¿›ä½
+	bcc		L_Time_SecRun_Exit					; Î´·¢ÉúĞ¡Ê±½øÎ»
 	lda		#0
 	sta		R_Time_Min
 	inc		R_Time_Hour
 	lda		R_Time_Hour
 	cmp		#24
-	bcc		L_Time_SecRun_Exit					; æœªå‘ç”Ÿå¤©è¿›ä½
+	bcc		L_Time_SecRun_Exit					; Î´·¢ÉúÌì½øÎ»
 	lda		#0
 	sta		R_Time_Hour
 	jsr		F_Calendar_Add
@@ -36,28 +36,24 @@ L_TimeDot_Out:
 	bbr1	Clock_Flag,L_Snooze_Blink1			; Alarm
 	bbs2	Clock_Flag,L_Snooze_Blink1			; Loud
 	bbr3	Clock_Flag,L_Snooze_Blink1			; Snooze	
-	ldx		#lcd_Zz								; Zzé—ªçƒæ¡ä»¶:
+	ldx		#lcd_Zz								; ZzÉÁË¸Ìõ¼ş:
 	jsr		F_DispSymbol						; Snooze==1 && loud==0 && Alarm==1
 L_Snooze_Blink1:
-	ldx		#lcd_DotC							; æ²¡1Säº®ç‚¹
-	jsr		F_DispSymbol
 	jsr		F_Display_Time
-	bbr1	Calendar_Flag,No_Date_Add			; å¦‚æœ‰å¢æ—¥æœŸï¼Œåˆ™è°ƒç”¨æ˜¾ç¤ºæ—¥æœŸå‡½æ•°
+	bbr1	Calendar_Flag,No_Date_Add			; ÈçÓĞÔöÈÕÆÚ£¬Ôòµ÷ÓÃÏÔÊ¾ÈÕÆÚº¯Êı
 	rmb1	Calendar_Flag
 	jsr		F_Display_Date
-	rts											; åŠSè§¦å‘æ—¶æ²¡1Sæ ‡å¿—ä¸èµ°æ—¶ï¼Œç›´æ¥è¿”å›
+	rts											; °ëS´¥·¢Ê±Ã»1S±êÖ¾²»×ßÊ±£¬Ö±½Ó·µ»Ø
 L_Dot_Clear:
-	rmb1	Timer_Flag							; æ¸…1Sæ ‡å¿—
-	ldx		#lcd_DotC							; 1Sè§¦å‘åå¿…å®šè¿›ç­ç‚¹ï¼ŒåŒæ—¶èµ°æ—¶
-	jsr		F_ClrpSymbol
+	rmb1	Timer_Flag							; Çå1S±êÖ¾
 	bbr1	Clock_Flag,L_Snooze_Blink2			; Alarm
 	bbs2	Clock_Flag,L_Snooze_Blink2			; Loud
 	bbr3	Clock_Flag,L_Snooze_Blink2			; Snooze	
-	ldx		#lcd_Zz								; Zzé—ªçƒæ¡ä»¶:
+	ldx		#lcd_Zz								; ZzÉÁË¸Ìõ¼ş:
 	jsr		F_ClrpSymbol						; Snooze==1 && loud==0
 L_Snooze_Blink2:
 	jsr		F_Display_Time
-	bbr1	Calendar_Flag,No_Date_Add			; å¦‚æœ‰å¢æ—¥æœŸï¼Œåˆ™è°ƒç”¨æ˜¾ç¤ºæ—¥æœŸå‡½æ•°
+	bbr1	Calendar_Flag,No_Date_Add			; ÈçÓĞÔöÈÕÆÚ£¬Ôòµ÷ÓÃÏÔÊ¾ÈÕÆÚº¯Êı
 	rmb1	Calendar_Flag
 	jsr		F_Display_Date
 No_Date_Add:
@@ -65,25 +61,21 @@ No_Date_Add:
 
 
 F_DisTime_Set:
-	bbs0	Timer_Flag,L_Blink_Time				; æ²¡æœ‰åŠSæ ‡å¿—æ—¶ä¸é—ªçƒ
+	bbs0	Timer_Flag,L_Blink_Time				; Ã»ÓĞ°ëS±êÖ¾Ê±²»ÉÁË¸
 	rts
 L_Blink_Time:
-	rmb0	Timer_Flag							; æ¸…åŠSæ ‡å¿—
+	rmb0	Timer_Flag							; Çå°ëS±êÖ¾
 	bbr1	Calendar_Flag,L_No_Date_Add_TS
 	rmb1	Calendar_Flag
 	jsr		F_Display_Date
 L_No_Date_Add_TS:
 	bbs1	Timer_Flag,L_Time_Clear
-	jsr		F_Display_Time						; åŠSäº®
-	ldx		#lcd_DotC
-	jsr		F_DispSymbol
+	jsr		F_Display_Time						; °ëSÁÁ
 	rts
 L_Time_Clear:
 	rmb1	Timer_Flag
-	lda		PA									; æœ‰æŒ‰é”®æ—¶ä¸é—ªçƒ
+	lda		PA									; ÓĞ°´¼üÊ±²»ÉÁË¸
 	and		#$C0
 	bne		L_Blink_Time
-	jsr		F_UnDisplay_Time					; 1Sç­
-	ldx		#lcd_DotC
-	jsr		F_ClrpSymbol
+	jsr		F_UnDisplay_Time					; 1SÃğ
 	rts

@@ -1,29 +1,29 @@
-; æ‹¨é”®åªå‘ç”ŸçŠ¶æ€å˜åŒ–ï¼Œä¸éœ€è¦å¤„ç†é¢å¤–å†…å®¹
-F_Switch_Scan3:									; æ‹¨é”®éƒ¨åˆ†éœ€è¦æ‰«æå¤„ç†
+; ²¦¼üÖ»·¢Éú×´Ì¬±ä»¯£¬²»ĞèÒª´¦Àí¶îÍâÄÚÈİ
+F_Switch_Scan3:									; ²¦¼ü²¿·ÖĞèÒªÉ¨Ãè´¦Àí
 	jsr		F_SwitchPort_ScanReady
 	jsr		F_Delay
 	lda		PC
-	cmp		PC_IO_Backup						; åˆ¤æ–­IOå£çŠ¶æ€æ˜¯å¦ä¸ä¸Šæ¬¡ç›¸åŒ
-	bne		L_Switch_Delay3						; å¦‚æœä¸åŒè¯´æ˜æ‹¨é”®çŠ¶æ€æœ‰æ”¹å˜ï¼Œè¿›æ¶ˆæŠ–
-	jsr		F_SwitchPort_ScanReset				; é¿å…æ¼ç”µ
+	cmp		PC_IO_Backup						; ÅĞ¶ÏIO¿Ú×´Ì¬ÊÇ·ñÓëÉÏ´ÎÏàÍ¬
+	bne		L_Switch_Delay3						; Èç¹û²»Í¬ËµÃ÷²¦¼ü×´Ì¬ÓĞ¸Ä±ä£¬½øÏû¶¶
+	jsr		F_SwitchPort_ScanReset				; ±ÜÃâÂ©µç
 	rts
 L_Switch_Delay3:
 	lda		#$00
 	sta		P_Temp
-L_Delay_S3:										; æ¶ˆæŠ–å»¶æ—¶å¾ªç¯ç”¨æ ‡ç­¾
+L_Delay_S3:										; Ïû¶¶ÑÓÊ±Ñ­»·ÓÃ±êÇ©
 	inc		P_Temp
 	lda		P_Temp
-	bne		L_Delay_S3							; è½¯ä»¶æ¶ˆæŠ–
+	bne		L_Delay_S3							; Èí¼şÏû¶¶
 
 	lda		PC_IO_Backup
 	cmp		PC
 	bne		L_Switched3
 
-	jsr		F_SwitchPort_ScanReset				; é¿å…æ¼ç”µ
+	jsr		F_SwitchPort_ScanReset				; ±ÜÃâÂ©µç
 	rts
-L_Switched3:									; æ£€æµ‹åˆ°IOå£çŠ¶æ€ä¸ä¸Šæ¬¡çš„ä¸åŒï¼Œåˆ™è¿›å…¥æ‹¨é”®å¤„ç†
+L_Switched3:									; ¼ì²âµ½IO¿Ú×´Ì¬ÓëÉÏ´ÎµÄ²»Í¬£¬Ôò½øÈë²¦¼ü´¦Àí
 	lda		PC
-	sta		PC_IO_Backup						; æ›´æ–°ä¿å­˜çš„IOå£çŠ¶æ€
+	sta		PC_IO_Backup						; ¸üĞÂ±£´æµÄIO¿Ú×´Ì¬
 
 	and		#$04
 	cmp		#$04
@@ -60,10 +60,10 @@ No_Time_Set_Mode3:
 	bne		No_Alarm_Set_Mode3
 	jmp		Switch_Alarm_Set_Mode3
 No_Alarm_Set_Mode3:
-	jsr		F_SwitchPort_ScanReset				; é¿å…æ¼ç”µ
+	jsr		F_SwitchPort_ScanReset				; ±ÜÃâÂ©µç
 	rts 
 
-; é—¹é’Ÿå¼€å¯æˆ–å…³é—­æ‹¨é”®å¤„ç†
+; ÄÖÖÓ¿ªÆô»ò¹Ø±Õ²¦¼ü´¦Àí
 Switch_Alarm_ON3:
 	smb1	Clock_Flag
 	ldx		#lcd3_bell
@@ -77,31 +77,31 @@ Switch_Alarm_OFF3:
 	jsr		F_ClrpSymbol3
 	ldx		#lcd3_Zz
 	jsr		F_ClrpSymbol3
-	jsr		L_NoSnooze_CloseLoud				; æ‰“æ–­å“é—¹å’Œè´ªç¡
+	jsr		L_NoSnooze_CloseLoud				; ´ò¶ÏÏìÄÖºÍÌ°Ë¯
 	rts
 
-; å››ç§æ¨¡å¼åˆ‡æ¢çš„æ‹¨é”®å¤„ç†
+; ËÄÖÖÄ£Ê½ÇĞ»»µÄ²¦¼ü´¦Àí
 Switch_Runtime_Mode3:
 	lda		#0001B
 	sta		Sys_Status_Flag
 	jsr		F_Display_All3
-	jsr		F_SwitchPort_ScanReset				; é¿å…æ¼ç”µ
+	jsr		F_SwitchPort_ScanReset				; ±ÜÃâÂ©µç
 	rts
 Switch_Date_Set_Mode3:
 	lda		#0010B
 	sta		Sys_Status_Flag
 	jsr		L_DisDate_Year3
 	jsr		F_Display_Date3
-	jsr		F_UnDisplay_InDateMode3				; è¿›å…¥æ—¥æœŸæ¨¡å¼ååœæ­¢æ˜¾ç¤ºä¸€äº›ç¬¦å·
-	jsr		L_NoSnooze_CloseLoud				; æ‰“æ–­å“é—¹å’Œè´ªç¡
-	jsr		F_SwitchPort_ScanReset				; é¿å…æ¼ç”µ
+	jsr		F_UnDisplay_InDateMode3				; ½øÈëÈÕÆÚÄ£Ê½ºóÍ£Ö¹ÏÔÊ¾Ò»Ğ©·ûºÅ
+	jsr		L_NoSnooze_CloseLoud				; ´ò¶ÏÏìÄÖºÍÌ°Ë¯
+	jsr		F_SwitchPort_ScanReset				; ±ÜÃâÂ©µç
 	rts
 Switch_Time_Set_Mode3:
 	lda		#0100B
 	sta		Sys_Status_Flag
 	jsr		F_Display_All3
-	jsr		L_NoSnooze_CloseLoud				; æ‰“æ–­å“é—¹å’Œè´ªç¡
-	jsr		F_SwitchPort_ScanReset				; é¿å…æ¼ç”µ
+	jsr		L_NoSnooze_CloseLoud				; ´ò¶ÏÏìÄÖºÍÌ°Ë¯
+	jsr		F_SwitchPort_ScanReset				; ±ÜÃâÂ©µç
 	rts
 Switch_Alarm_Set_Mode3:
 	lda		#1000B
@@ -110,62 +110,62 @@ Switch_Alarm_Set_Mode3:
 	jsr		F_Display_Date3
 	ldx		#lcd3_ALM
 	jsr		F_DispSymbol3
-	jsr		L_NoSnooze_CloseLoud				; æ‰“æ–­å“é—¹å’Œè´ªç¡
-	jsr		F_SwitchPort_ScanReset				; é¿å…æ¼ç”µ
+	jsr		L_NoSnooze_CloseLoud				; ´ò¶ÏÏìÄÖºÍÌ°Ë¯
+	jsr		F_SwitchPort_ScanReset				; ±ÜÃâÂ©µç
 	rts
 
 
 
-; æ­£å¸¸èµ°æ—¶æ¨¡å¼çš„æŒ‰é”®å¤„ç†
+; Õı³£×ßÊ±Ä£Ê½µÄ°´¼ü´¦Àí
 F_KeyTrigger_RunTimeMode3:
 	bbs0	Key_Flag,L_KeyTrigger_RunTimeMode3
 	rts
 L_KeyTrigger_RunTimeMode3:
 	rmb0	Key_Flag
-	TMR1_OFF									; æ²¡æœ‰å¿«åŠ åŠŸèƒ½ä¸éœ€è¦å¼€Timer1çš„8Hzè®¡æ—¶
+	TMR1_OFF									; Ã»ÓĞ¿ì¼Ó¹¦ÄÜ²»ĞèÒª¿ªTimer1µÄ8Hz¼ÆÊ±
 	lda		#$00
 	sta		P_Temp
-L_DelayTrigger_RunTimeMode3:					; æ¶ˆæŠ–å»¶æ—¶å¾ªç¯ç”¨æ ‡ç­¾
+L_DelayTrigger_RunTimeMode3:					; Ïû¶¶ÑÓÊ±Ñ­»·ÓÃ±êÇ©
 	inc		P_Temp
 	lda		P_Temp
-	bne		L_DelayTrigger_RunTimeMode3			; è½¯ä»¶æ¶ˆæŠ–
+	bne		L_DelayTrigger_RunTimeMode3			; Èí¼şÏû¶¶
 
-	lda		PA									; æ­£å¸¸èµ°æ—¶æ¨¡å¼ä¸‹åªå¯¹2ä¸ªæŒ‰é”®æœ‰å“åº”
+	lda		PA									; Õı³£×ßÊ±Ä£Ê½ÏÂÖ»¶Ô2¸ö°´¼üÓĞÏìÓ¦
 	and		#$f0
 	cmp		#$80
-	bne		No_KeyHTrigger_RunTimeMode3			; ç”±äºè·³è½¬æŒ‡ä»¤å¯»å€èƒ½åŠ›çš„é—®é¢˜ï¼Œè¿™é‡Œé‡‡ç”¨jmpè¿›è¡Œè·³è½¬
-	jmp		L_KeyHTrigger_RunTimeMode3			; Month/Hourå•ç‹¬è§¦å‘
+	bne		No_KeyHTrigger_RunTimeMode3			; ÓÉÓÚÌø×ªÖ¸ÁîÑ°Ö·ÄÜÁ¦µÄÎÊÌâ£¬ÕâÀï²ÉÓÃjmp½øĞĞÌø×ª
+	jmp		L_KeyHTrigger_RunTimeMode3			; Month/Hourµ¥¶À´¥·¢
 No_KeyHTrigger_RunTimeMode3:
 	cmp		#$40
 	bne		No_KeyMTrigger_RunTimeMode3
-	jmp		L_KeyMTrigger_RunTimeMode3			; Date/Minå•ç‹¬è§¦å‘
+	jmp		L_KeyMTrigger_RunTimeMode3			; Date/Minµ¥¶À´¥·¢
 No_KeyMTrigger_RunTimeMode3:
 	cmp		#$20
 	bne		No_KeySTrigger_RunTimeMode3
-	jmp		L_KeySTrigger_RunTimeMode3			; 12/24h & yearè§¦å‘
+	jmp		L_KeySTrigger_RunTimeMode3			; 12/24h & year´¥·¢
 No_KeySTrigger_RunTimeMode3:
 	cmp		#$10
 	bne		L_KeyExit_RunTimeMode3
-	jmp		L_KeyBTrigger_RunTimeMode3			; Backlight & SNZè§¦å‘
+	jmp		L_KeyBTrigger_RunTimeMode3			; Backlight & SNZ´¥·¢
 
 L_KeyExit_RunTimeMode3:
 	rts
 
-L_KeyMTrigger_RunTimeMode3:						; åœ¨èµ°æ—¶æ¨¡å¼ä¸‹ï¼ŒMã€Hé”®éƒ½åªä¼šæ‰“æ–­è´ªç¡è¿™ä¸€ä¸ªåŠŸèƒ½
+L_KeyMTrigger_RunTimeMode3:						; ÔÚ×ßÊ±Ä£Ê½ÏÂ£¬M¡¢H¼ü¶¼Ö»»á´ò¶ÏÌ°Ë¯ÕâÒ»¸ö¹¦ÄÜ
 L_KeyHTrigger_RunTimeMode3:
 	jsr		L_NoSnooze_CloseLoud
 	rts
 
 L_KeyBTrigger_RunTimeMode3:
-	smb3	Key_Flag							; èƒŒå…‰æ¿€æ´»ï¼ŒåŒæ—¶å¯åŠ¨è´ªç¡
+	smb3	Key_Flag							; ±³¹â¼¤»î£¬Í¬Ê±Æô¶¯Ì°Ë¯
 	smb2	PB
-	lda		#0									; æ¯æ¬¡æŒ‰èƒŒå…‰éƒ½ä¼šé‡ç½®è®¡æ—¶
+	lda		#0									; Ã¿´Î°´±³¹â¶¼»áÖØÖÃ¼ÆÊ±
 	sta		Backlight_Counter
-	bbr2	Clock_Flag,L_KeyBTrigger_Exit3		; å¦‚æœä¸æ˜¯åœ¨å“é—¹æ¨¡å¼ä¸‹ï¼Œåˆ™ä¸ä¼šå¤„ç†è´ªç¡
-	smb6	Clock_Flag							; è´ªç¡æŒ‰é”®è§¦å‘						
-	smb3	Clock_Flag							; è¿›å…¥è´ªç¡æ¨¡å¼
+	bbr2	Clock_Flag,L_KeyBTrigger_Exit3		; Èç¹û²»ÊÇÔÚÏìÄÖÄ£Ê½ÏÂ£¬Ôò²»»á´¦ÀíÌ°Ë¯
+	smb6	Clock_Flag							; Ì°Ë¯°´¼ü´¥·¢						
+	smb3	Clock_Flag							; ½øÈëÌ°Ë¯Ä£Ê½
 
-	lda		R_Snooze_Min						; è´ªç¡é—¹é’Ÿçš„æ—¶é—´åŠ 5
+	lda		R_Snooze_Min						; Ì°Ë¯ÄÖÖÓµÄÊ±¼ä¼Ó5
 	clc
 	adc		#5
 	cmp		#60
@@ -175,63 +175,63 @@ L_KeyBTrigger_RunTimeMode3:
 L_Snooze_OverflowMin3:
 	sec
 	sbc		#60
-	sta		R_Snooze_Min						; äº§ç”Ÿè´ªç¡å“é—¹çš„åˆ†é’Ÿè¿›ä½
+	sta		R_Snooze_Min						; ²úÉúÌ°Ë¯ÏìÄÖµÄ·ÖÖÓ½øÎ»
 	inc		R_Snooze_Hour
 	lda		R_Snooze_Hour
 	cmp		#24
 	bcc		L_KeyBTrigger_Exit3
-	lda		#00									; äº§ç”Ÿè´ªç¡å°æ—¶è¿›ä½
+	lda		#00									; ²úÉúÌ°Ë¯Ğ¡Ê±½øÎ»
 	sta		R_Snooze_Hour
 L_KeyBTrigger_Exit3:
 	rts
 
 L_KeySTrigger_RunTimeMode3:
-	bbs2	Clock_Flag,L_LoundSnz_Handle3		; è‹¥æœ‰å“é—¹æ¨¡å¼æˆ–è´ªç¡æ¨¡å¼ï¼Œåˆ™ä¸åˆ‡æ¢æ—¶é—´æ¨¡å¼ï¼Œåªæ‰“æ–­å“é—¹å’Œè´ªç¡
+	bbs2	Clock_Flag,L_LoundSnz_Handle3		; ÈôÓĞÏìÄÖÄ£Ê½»òÌ°Ë¯Ä£Ê½£¬Ôò²»ÇĞ»»Ê±¼äÄ£Ê½£¬Ö»´ò¶ÏÏìÄÖºÍÌ°Ë¯
 	bbs3	Clock_Flag,L_LoundSnz_Handle3
-	lda		Clock_Flag							; æ¯æŒ‰ä¸€æ¬¡ç¿»è½¬clock_flag bit0çŠ¶æ€
+	lda		Clock_Flag							; Ã¿°´Ò»´Î·­×ªclock_flag bit0×´Ì¬
 	eor		#$01
 	sta		Clock_Flag
 	jsr		F_Display_Time3
 L_LoundSnz_Handle3:
-	jsr		L_NoSnooze_CloseLoud				; æ‰“æ–­å“é—¹å’Œè´ªç¡
+	jsr		L_NoSnooze_CloseLoud				; ´ò¶ÏÏìÄÖºÍÌ°Ë¯
 	rts
 
 
 
-; æ—¥å†è®¾ç½®æ¨¡å¼çš„æŒ‰é”®å¤„ç†
+; ÈÕÀúÉèÖÃÄ£Ê½µÄ°´¼ü´¦Àí
 F_KeyTrigger_DateSetMode3:
-	bbs3	Timer_Flag,L_Key4Hz_DateSetMode3	; æœ‰å¿«åŠ åˆ™ç›´æ¥åˆ¤æ–­4Hzæ ‡å¿—ä½
-	bbr1	Key_Flag,L_KeyScan_DateSetMode3		; é¦–æ¬¡æŒ‰é”®è§¦å‘
+	bbs3	Timer_Flag,L_Key4Hz_DateSetMode3	; ÓĞ¿ì¼ÓÔòÖ±½ÓÅĞ¶Ï4Hz±êÖ¾Î»
+	bbr1	Key_Flag,L_KeyScan_DateSetMode3		; Ê×´Î°´¼ü´¥·¢
 	rmb1	Key_Flag
 	lda		#$00
 	sta		P_Temp
-L_DelayTrigger_DateSetMode3:					; æ¶ˆæŠ–å»¶æ—¶å¾ªç¯ç”¨æ ‡ç­¾
+L_DelayTrigger_DateSetMode3:					; Ïû¶¶ÑÓÊ±Ñ­»·ÓÃ±êÇ©
 	inc		P_Temp
 	lda		P_Temp
-	bne		L_DelayTrigger_DateSetMode3			; è½¯ä»¶æ¶ˆæŠ–
+	bne		L_DelayTrigger_DateSetMode3			; Èí¼şÏû¶¶
 	lda		PA
 	and		#$f0
 	cmp		#$00
-	bne		L_KeyYes_DateSetMode3				; æ£€æµ‹æ˜¯å¦æœ‰æŒ‰é”®è§¦å‘
+	bne		L_KeyYes_DateSetMode3				; ¼ì²âÊÇ·ñÓĞ°´¼ü´¥·¢
 	bra		L_KeyExit_DateSetMode3
 	rts
 L_KeyYes_DateSetMode3:
 	sta		PA_IO_Backup
-	bra		L_KeyHandle_DateMode3				; é¦–æ¬¡è§¦å‘å¤„ç†ç»“æŸ
+	bra		L_KeyHandle_DateMode3				; Ê×´Î´¥·¢´¦Àí½áÊø
 
 L_Key4Hz_DateSetMode3:
 	bbr2	Key_Flag,L_Key4HzExit_DateSetMode3
 	rmb2	Key_Flag
-L_KeyScan_DateSetMode3:							; é•¿æŒ‰å¤„ç†éƒ¨åˆ†
-	bbr0	Key_Flag,L_KeyExit_DateSetMode3		; æ²¡æœ‰æ‰«é”®æ ‡å¿—ç›´æ¥é€€å‡º
+L_KeyScan_DateSetMode3:							; ³¤°´´¦Àí²¿·Ö
+	bbr0	Key_Flag,L_KeyExit_DateSetMode3		; Ã»ÓĞÉ¨¼ü±êÖ¾Ö±½ÓÍË³ö
 
-	jsr		F_QuikAdd_ScanReady					; é…ç½®ä¸ºè¾“å…¥
+	jsr		F_QuikAdd_ScanReady					; ÅäÖÃÎªÊäÈë
 	jsr		F_Delay
-	bbr4	Timer_Flag,L_Key4HzExit_DateSetMode3; 8Hzæ ‡å¿—ä½åˆ°æ¥å‰ä¹Ÿä¸è¿›è¡ŒæŒ‰é”®å¤„ç†(å¿«åŠ ä¸‹)
+	bbr4	Timer_Flag,L_Key4HzExit_DateSetMode3; 8Hz±êÖ¾Î»µ½À´Ç°Ò²²»½øĞĞ°´¼ü´¦Àí(¿ì¼ÓÏÂ)
 	rmb4	Timer_Flag
 	lda		PA
 	and		#$f0
-	cmp		PA_IO_Backup						; è‹¥æ£€æµ‹åˆ°æœ‰æŒ‰é”®çš„çŠ¶æ€å˜åŒ–åˆ™é€€å‡ºå¿«åŠ åˆ¤æ–­å¹¶ç»“æŸ
+	cmp		PA_IO_Backup						; Èô¼ì²âµ½ÓĞ°´¼üµÄ×´Ì¬±ä»¯ÔòÍË³ö¿ì¼ÓÅĞ¶Ï²¢½áÊø
 	beq		L_4Hz_Count_DateSetMode3
 	bra		L_KeyExit_DateSetMode3
 	rts
@@ -240,48 +240,48 @@ L_4Hz_Count_DateSetMode3:
 	lda		QuickAdd_Counter
 	cmp		#24
 	bcs		L_QuikAdd_DateSetMode3
-	rts											; é•¿æŒ‰è®¡æ—¶ï¼Œå¿…é¡»æ»¡1Sæ‰æœ‰å¿«åŠ 
+	rts											; ³¤°´¼ÆÊ±£¬±ØĞëÂú1S²ÅÓĞ¿ì¼Ó
 L_QuikAdd_DateSetMode3:
 	smb3	Timer_Flag
 	rmb2	Key_Flag
 
 L_KeyHandle_DateMode3:
-	lda		PA									; åˆ¤æ–­4ç§æŒ‰é”®è§¦å‘æƒ…å†µ
+	lda		PA									; ÅĞ¶Ï4ÖÖ°´¼ü´¥·¢Çé¿ö
 	and		#$f0
 	cmp		#$80
-	bne		No_KeyHTrigger_DateSetMode3			; ç”±äºè·³è½¬æŒ‡ä»¤å¯»å€èƒ½åŠ›çš„é—®é¢˜ï¼Œè¿™é‡Œé‡‡ç”¨jmpè¿›è¡Œè·³è½¬
-	jmp		L_KeyHTrigger_DateSetMode3			; Monthå•ç‹¬è§¦å‘
+	bne		No_KeyHTrigger_DateSetMode3			; ÓÉÓÚÌø×ªÖ¸ÁîÑ°Ö·ÄÜÁ¦µÄÎÊÌâ£¬ÕâÀï²ÉÓÃjmp½øĞĞÌø×ª
+	jmp		L_KeyHTrigger_DateSetMode3			; Monthµ¥¶À´¥·¢
 No_KeyHTrigger_DateSetMode3:
 	cmp		#$40
 	bne		No_KeyMTrigger_DateSetMode3
-	jmp		L_KeyMTrigger_DateSetMode3			; Dateå•ç‹¬è§¦å‘
+	jmp		L_KeyMTrigger_DateSetMode3			; Dateµ¥¶À´¥·¢
 No_KeyMTrigger_DateSetMode3:
 	cmp		#$20
 	bne		No_KeySTrigger_DateSetMode3
-	jmp		L_KeySTrigger_DateSetMode3			; yearè§¦å‘
+	jmp		L_KeySTrigger_DateSetMode3			; year´¥·¢
 No_KeySTrigger_DateSetMode3:
 	cmp		#$10
 	bne		L_KeyExit_DateSetMode3
-	jmp		L_KeyBTrigger_DateSetMode3			; Backlightå•ç‹¬è§¦å‘
+	jmp		L_KeyBTrigger_DateSetMode3			; Backlightµ¥¶À´¥·¢
 
 L_KeyExit_DateSetMode3:
-	TMR1_OFF									; å…³é—­å¿«åŠ 8Hzè®¡æ—¶çš„å®šæ—¶å™¨
-	rmb0	Key_Flag							; æ¸…ç›¸å…³æ ‡å¿—ä½
+	TMR1_OFF									; ¹Ø±Õ¿ì¼Ó8Hz¼ÆÊ±µÄ¶¨Ê±Æ÷
+	rmb0	Key_Flag							; ÇåÏà¹Ø±êÖ¾Î»
 	rmb3	Timer_Flag
-	lda		#0									; æ¸…ç†ç›¸å…³å˜é‡
+	lda		#0									; ÇåÀíÏà¹Ø±äÁ¿
 	sta		QuickAdd_Counter
 L_Key4HzExit_DateSetMode3:
-	jsr		F_QuikAdd_ScanReady					; é…ç½®ä¸ºè¾“å…¥
+	jsr		F_QuikAdd_ScanReady					; ÅäÖÃÎªÊäÈë
 	rts
 
 
 L_KeyMTrigger_DateSetMode3:
-	jsr		F_QuikAdd_ScanReset					; æœ‰å¿«åŠ çš„æƒ…å†µéœ€è¦é‡ç½®IOå£ä¸ºè¾“å‡ºé«˜é¿å…æ¼ç”µ
+	jsr		F_QuikAdd_ScanReset					; ÓĞ¿ì¼ÓµÄÇé¿öĞèÒªÖØÖÃIO¿ÚÎªÊä³ö¸ß±ÜÃâÂ©µç
 	jsr		F_Is_Leap_Year
-	ldx		R_Date_Month						; æœˆä»½æ•°ä½œä¸ºç´¢å¼•ï¼ŒæŸ¥æœˆä»½å¤©æ•°è¡¨
-	dex											; è¡¨å¤´ä»0å¼€å§‹ï¼Œè€Œæœˆä»½æ˜¯ä»1å¼€å§‹
-	bbs0	Calendar_Flag,L_Leap_Year_Set3		; é—°å¹´æŸ¥é—°å¹´æœˆä»½å¤©æ•°è¡¨
-	lda		L_Table_Month_Common,x				; å¦åˆ™æŸ¥å¹³å¹´æœˆä»½å¤©æ•°è¡¨
+	ldx		R_Date_Month						; ÔÂ·İÊı×÷ÎªË÷Òı£¬²éÔÂ·İÌìÊı±í
+	dex											; ±íÍ·´Ó0¿ªÊ¼£¬¶øÔÂ·İÊÇ´Ó1¿ªÊ¼
+	bbs0	Calendar_Flag,L_Leap_Year_Set3		; ÈòÄê²éÈòÄêÔÂ·İÌìÊı±í
+	lda		L_Table_Month_Common,x				; ·ñÔò²éÆ½ÄêÔÂ·İÌìÊı±í
 	bra		L_Day_Juge_Set3
 L_Leap_Year_Set3:
 	lda		L_Table_Month_Leap,x
@@ -289,16 +289,16 @@ L_Day_Juge_Set3:
 	cmp		R_Date_Day
 	bne		L_Day_Add_Set3
 	lda		#1
-	sta		R_Date_Day							; æ—¥è¿›ä½ï¼Œé‡æ–°å›åˆ°1
-	jsr		F_Display_Date3						; æ˜¾ç¤ºè°ƒæ•´åçš„æ—¥æœŸ
+	sta		R_Date_Day							; ÈÕ½øÎ»£¬ÖØĞÂ»Øµ½1
+	jsr		F_Display_Date3						; ÏÔÊ¾µ÷ÕûºóµÄÈÕÆÚ
 	rts
 L_Day_Add_Set3:
 	inc		R_Date_Day
-	jsr		F_Display_Date3						; æ˜¾ç¤ºè°ƒæ•´åçš„æ—¥æœŸ
+	jsr		F_Display_Date3						; ÏÔÊ¾µ÷ÕûºóµÄÈÕÆÚ
 	rts
 
 L_KeyHTrigger_DateSetMode3:
-	jsr		F_QuikAdd_ScanReset					; æœ‰å¿«åŠ çš„æƒ…å†µéœ€è¦é‡ç½®IOå£ä¸ºè¾“å‡ºé«˜é¿å…æ¼ç”µ
+	jsr		F_QuikAdd_ScanReset					; ÓĞ¿ì¼ÓµÄÇé¿öĞèÒªÖØÖÃIO¿ÚÎªÊä³ö¸ß±ÜÃâÂ©µç
 	lda		R_Date_Month
 	cmp		#12
 	bcc		L_Month_Juge3
@@ -307,12 +307,12 @@ L_KeyHTrigger_DateSetMode3:
 	jsr		F_Display_Date3
 	rts
 L_Month_Juge3:
-	inc		R_Date_Month						; è°ƒæ•´æœˆä»½
-	jsr		F_Is_Leap_Year						; æ£€æŸ¥è°ƒæ•´åçš„æœˆä»½é‡Œæ—¥æœŸæœ‰æ²¡æœ‰è¶Šç•Œ
-	ldx		R_Date_Month						; æœˆä»½æ•°ä½œä¸ºç´¢å¼•ï¼ŒæŸ¥æœˆä»½å¤©æ•°è¡¨
-	dex											; è¡¨å¤´ä»0å¼€å§‹ï¼Œè€Œæœˆä»½æ˜¯ä»1å¼€å§‹
-	bbs0	Calendar_Flag,L_Leap_Year_Set13		; é—°å¹´æŸ¥é—°å¹´æœˆä»½å¤©æ•°è¡¨
-	lda		L_Table_Month_Common,x				; å¦åˆ™æŸ¥å¹³å¹´æœˆä»½å¤©æ•°è¡¨
+	inc		R_Date_Month						; µ÷ÕûÔÂ·İ
+	jsr		F_Is_Leap_Year						; ¼ì²éµ÷ÕûºóµÄÔÂ·İÀïÈÕÆÚÓĞÃ»ÓĞÔ½½ç
+	ldx		R_Date_Month						; ÔÂ·İÊı×÷ÎªË÷Òı£¬²éÔÂ·İÌìÊı±í
+	dex											; ±íÍ·´Ó0¿ªÊ¼£¬¶øÔÂ·İÊÇ´Ó1¿ªÊ¼
+	bbs0	Calendar_Flag,L_Leap_Year_Set13		; ÈòÄê²éÈòÄêÔÂ·İÌìÊı±í
+	lda		L_Table_Month_Common,x				; ·ñÔò²éÆ½ÄêÔÂ·İÌìÊı±í
 	bra		L_Day_Juge_Set13
 L_Leap_Year_Set13:
 	lda		L_Table_Month_Leap,x
@@ -320,20 +320,20 @@ L_Day_Juge_Set13:
 	cmp		R_Date_Day
 	bcs		L_Month_Add_Set3
 	lda		#1
-	sta		R_Date_Day							; æ—¥æœŸå¦‚æœå’Œå½“å‰æœˆä»½æ•°ä¸åŒ¹é…ï¼Œåˆ™åˆå§‹åŒ–æ—¥æœŸ
+	sta		R_Date_Day							; ÈÕÆÚÈç¹ûºÍµ±Ç°ÔÂ·İÊı²»Æ¥Åä£¬Ôò³õÊ¼»¯ÈÕÆÚ
 L_Month_Add_Set3:
 	jsr		F_Display_Date3
 	rts
 
 L_KeyBTrigger_DateSetMode3:
-	smb3	Key_Flag							; èƒŒå…‰æ¿€æ´»
+	smb3	Key_Flag							; ±³¹â¼¤»î
 	smb2	PB
 	lda		#0
-	sta		Backlight_Counter					; æ¯æ¬¡æŒ‰èƒŒå…‰éƒ½ä¼šé‡ç½®è®¡æ—¶
+	sta		Backlight_Counter					; Ã¿´Î°´±³¹â¶¼»áÖØÖÃ¼ÆÊ±
 	rts
 
 L_KeySTrigger_DateSetMode3:
-	jsr		F_QuikAdd_ScanReset					; æœ‰å¿«åŠ çš„æƒ…å†µéœ€è¦é‡ç½®IOå£ä¸ºè¾“å‡ºé«˜é¿å…æ¼ç”µ
+	jsr		F_QuikAdd_ScanReset					; ÓĞ¿ì¼ÓµÄÇé¿öĞèÒªÖØÖÃIO¿ÚÎªÊä³ö¸ß±ÜÃâÂ©µç
 	lda		R_Date_Year
 	cmp		#99
 	bcc		L_Year_Juge3
@@ -342,12 +342,12 @@ L_KeySTrigger_DateSetMode3:
 	jsr		L_DisDate_Year3
 	rts
 L_Year_Juge3:
-	inc		R_Date_Year							; è°ƒæ•´å¹´ä»½
-	jsr		F_Is_Leap_Year						; æ£€æŸ¥è°ƒæ•´åçš„å¹´ä»½é‡Œæ—¥æœŸæœ‰æ²¡æœ‰è¶Šç•Œ
-	ldx		R_Date_Month						; æœˆä»½æ•°ä½œä¸ºç´¢å¼•ï¼ŒæŸ¥æœˆä»½å¤©æ•°è¡¨
-	dex											; è¡¨å¤´ä»0å¼€å§‹ï¼Œè€Œæœˆä»½æ˜¯ä»1å¼€å§‹
-	bbs0	Calendar_Flag,L_Leap_Year_Set23		; é—°å¹´æŸ¥é—°å¹´æœˆä»½å¤©æ•°è¡¨
-	lda		L_Table_Month_Common,x				; å¦åˆ™æŸ¥å¹³å¹´æœˆä»½å¤©æ•°è¡¨
+	inc		R_Date_Year							; µ÷ÕûÄê·İ
+	jsr		F_Is_Leap_Year						; ¼ì²éµ÷ÕûºóµÄÄê·İÀïÈÕÆÚÓĞÃ»ÓĞÔ½½ç
+	ldx		R_Date_Month						; ÔÂ·İÊı×÷ÎªË÷Òı£¬²éÔÂ·İÌìÊı±í
+	dex											; ±íÍ·´Ó0¿ªÊ¼£¬¶øÔÂ·İÊÇ´Ó1¿ªÊ¼
+	bbs0	Calendar_Flag,L_Leap_Year_Set23		; ÈòÄê²éÈòÄêÔÂ·İÌìÊı±í
+	lda		L_Table_Month_Common,x				; ·ñÔò²éÆ½ÄêÔÂ·İÌìÊı±í
 	bra		L_Day_Juge_Set23
 L_Leap_Year_Set23:
 	lda		L_Table_Month_Leap,x
@@ -355,47 +355,47 @@ L_Day_Juge_Set23:
 	cmp		R_Date_Day
 	bcs		L_Year_Add_Set3
 	lda		#1
-	sta		R_Date_Day							; æ—¥æœŸå¦‚æœè¶…è¿‡å½“å‰æœˆä»½æœ€å¤§å€¼ï¼Œåˆ™åˆå§‹åŒ–æ—¥æœŸ
+	sta		R_Date_Day							; ÈÕÆÚÈç¹û³¬¹ıµ±Ç°ÔÂ·İ×î´óÖµ£¬Ôò³õÊ¼»¯ÈÕÆÚ
 L_Year_Add_Set3:
 	jsr		L_DisDate_Year3
 	rts
 
 
 
-; æ—¶é—´è®¾ç½®æ¨¡å¼çš„æŒ‰é”®å¤„ç†
+; Ê±¼äÉèÖÃÄ£Ê½µÄ°´¼ü´¦Àí
 F_KeyTrigger_TimeSetMode3:
-	bbs3	Timer_Flag,L_Key4Hz_TimeSetMode3	; æœ‰å¿«åŠ åˆ™ç›´æ¥åˆ¤æ–­8Hzæ ‡å¿—ä½
-	bbr1	Key_Flag,L_KeyScan_TimeSetMode3		; é¦–æ¬¡æŒ‰é”®è§¦å‘
+	bbs3	Timer_Flag,L_Key4Hz_TimeSetMode3	; ÓĞ¿ì¼ÓÔòÖ±½ÓÅĞ¶Ï8Hz±êÖ¾Î»
+	bbr1	Key_Flag,L_KeyScan_TimeSetMode3		; Ê×´Î°´¼ü´¥·¢
 	rmb1	Key_Flag
 	lda		#$00
 	sta		P_Temp
-L_DelayTrigger_TimeSetMode3:					; æ¶ˆæŠ–å»¶æ—¶å¾ªç¯ç”¨æ ‡ç­¾
+L_DelayTrigger_TimeSetMode3:					; Ïû¶¶ÑÓÊ±Ñ­»·ÓÃ±êÇ©
 	inc		P_Temp
 	lda		P_Temp
-	bne		L_DelayTrigger_TimeSetMode3			; è½¯ä»¶æ¶ˆæŠ–
+	bne		L_DelayTrigger_TimeSetMode3			; Èí¼şÏû¶¶
 	lda		PA
 	and		#$f0
 	cmp		#$00
-	bne		L_KeyYes_TimeSetMode3				; æ£€æµ‹æ˜¯å¦æœ‰æŒ‰é”®è§¦å‘
+	bne		L_KeyYes_TimeSetMode3				; ¼ì²âÊÇ·ñÓĞ°´¼ü´¥·¢
 	bra		L_KeyExit_TimeSetMode3
 	rts
 L_KeyYes_TimeSetMode3:
 	sta		PA_IO_Backup
-	bra		L_KeyHandle_TimeSetMode3			; é¦–æ¬¡è§¦å‘å¤„ç†ç»“æŸ
+	bra		L_KeyHandle_TimeSetMode3			; Ê×´Î´¥·¢´¦Àí½áÊø
 
 L_Key4Hz_TimeSetMode3:
 	bbr2	Key_Flag,L_Key4HzExit_TimeSetMode3
 	rmb2	Key_Flag
-L_KeyScan_TimeSetMode3:							; é•¿æŒ‰å¤„ç†éƒ¨åˆ†
-	bbr0	Key_Flag,L_KeyExit_TimeSetMode3		; æ²¡æœ‰æ‰«é”®æ ‡å¿—ç›´æ¥é€€å‡º
+L_KeyScan_TimeSetMode3:							; ³¤°´´¦Àí²¿·Ö
+	bbr0	Key_Flag,L_KeyExit_TimeSetMode3		; Ã»ÓĞÉ¨¼ü±êÖ¾Ö±½ÓÍË³ö
 
-	jsr		F_QuikAdd_ScanReady					; é…ç½®ä¸ºè¾“å…¥
+	jsr		F_QuikAdd_ScanReady					; ÅäÖÃÎªÊäÈë
 	jsr		F_Delay
-	bbr4	Timer_Flag,L_Key4HzExit_TimeSetMode3; 8Hzæ ‡å¿—ä½åˆ°æ¥å‰ä¹Ÿä¸è¿›è¡ŒæŒ‰é”®å¤„ç†(å¿«åŠ ä¸‹)
+	bbr4	Timer_Flag,L_Key4HzExit_TimeSetMode3; 8Hz±êÖ¾Î»µ½À´Ç°Ò²²»½øĞĞ°´¼ü´¦Àí(¿ì¼ÓÏÂ)
 	rmb4	Timer_Flag
 	lda		PA
 	and		#$f0
-	cmp		PA_IO_Backup						; è‹¥æ£€æµ‹åˆ°æœ‰æŒ‰é”®çš„çŠ¶æ€å˜åŒ–åˆ™é€€å‡ºå¿«åŠ åˆ¤æ–­å¹¶ç»“æŸ
+	cmp		PA_IO_Backup						; Èô¼ì²âµ½ÓĞ°´¼üµÄ×´Ì¬±ä»¯ÔòÍË³ö¿ì¼ÓÅĞ¶Ï²¢½áÊø
 	beq		L_4Hz_Count_TimeSetMode3
 	bra		L_KeyExit_TimeSetMode3
 	rts
@@ -404,46 +404,46 @@ L_4Hz_Count_TimeSetMode3:
 	lda		QuickAdd_Counter
 	cmp		#24
 	bcs		L_QuikAdd_TimeSetMode3
-	rts											; é•¿æŒ‰è®¡æ—¶ï¼Œå¿…é¡»æ»¡1Sæ‰æœ‰å¿«åŠ 
+	rts											; ³¤°´¼ÆÊ±£¬±ØĞëÂú1S²ÅÓĞ¿ì¼Ó
 L_QuikAdd_TimeSetMode3:
 	smb3	Timer_Flag
 	rmb2	Key_Flag
 
 L_KeyHandle_TimeSetMode3:
-	lda		PA									; åˆ¤æ–­4ç§æŒ‰é”®è§¦å‘æƒ…å†µ
+	lda		PA									; ÅĞ¶Ï4ÖÖ°´¼ü´¥·¢Çé¿ö
 	and		#$f0
 	cmp		#$80
-	bne		No_KeyHTrigger_TimeSetMode3			; ç”±äºè·³è½¬æŒ‡ä»¤å¯»å€èƒ½åŠ›çš„é—®é¢˜ï¼Œè¿™é‡Œé‡‡ç”¨jmpè¿›è¡Œè·³è½¬
-	jmp		L_KeyHTrigger_TimeSetMode3			; Hourå•ç‹¬è§¦å‘
+	bne		No_KeyHTrigger_TimeSetMode3			; ÓÉÓÚÌø×ªÖ¸ÁîÑ°Ö·ÄÜÁ¦µÄÎÊÌâ£¬ÕâÀï²ÉÓÃjmp½øĞĞÌø×ª
+	jmp		L_KeyHTrigger_TimeSetMode3			; Hourµ¥¶À´¥·¢
 No_KeyHTrigger_TimeSetMode3:
 	cmp		#$40
 	bne		No_KeyMTrigger_TimeSetMode3
-	jmp		L_KeyMTrigger_TimeSetMode3			; Minå•ç‹¬è§¦å‘
+	jmp		L_KeyMTrigger_TimeSetMode3			; Minµ¥¶À´¥·¢
 No_KeyMTrigger_TimeSetMode3:
-	bbs3	Timer_Flag,L_KeyExit_TimeSetMode3	; èƒŒå…‰å’Œ12hæ¨¡å¼åˆ‡æ¢ä¸éœ€è¦å¿«åŠ 
+	bbs3	Timer_Flag,L_KeyExit_TimeSetMode3	; ±³¹âºÍ12hÄ£Ê½ÇĞ»»²»ĞèÒª¿ì¼Ó
 	cmp		#$20
 	bne		No_KeySTrigger_TimeSetMode3
-	jmp		L_KeySTrigger_TimeSetMode3			; 12/24hè§¦å‘
+	jmp		L_KeySTrigger_TimeSetMode3			; 12/24h´¥·¢
 No_KeySTrigger_TimeSetMode3:
 	cmp		#$10
 	bne		L_KeyExit_TimeSetMode3
-	jmp		L_KeyBTrigger_TimeSetMode3			; Backlight/SNZå•ç‹¬è§¦å‘
+	jmp		L_KeyBTrigger_TimeSetMode3			; Backlight/SNZµ¥¶À´¥·¢
 
 L_KeyExit_TimeSetMode3:
-	TMR1_OFF									; å…³é—­å¿«åŠ 8Hzè®¡æ—¶çš„å®šæ—¶å™¨
-	rmb0	Key_Flag							; æ¸…ç›¸å…³æ ‡å¿—ä½
+	TMR1_OFF									; ¹Ø±Õ¿ì¼Ó8Hz¼ÆÊ±µÄ¶¨Ê±Æ÷
+	rmb0	Key_Flag							; ÇåÏà¹Ø±êÖ¾Î»
 	rmb3	Timer_Flag
-	lda		#0									; æ¸…ç†ç›¸å…³å˜é‡
+	lda		#0									; ÇåÀíÏà¹Ø±äÁ¿
 	sta		QuickAdd_Counter
 L_Key4HzExit_TimeSetMode3:
-	jsr		F_QuikAdd_ScanReady					; é…ç½®ä¸ºè¾“å…¥
+	jsr		F_QuikAdd_ScanReady					; ÅäÖÃÎªÊäÈë
 	rts
 
 
 L_KeyMTrigger_TimeSetMode3:
-	jsr		F_QuikAdd_ScanReset					; æœ‰å¿«åŠ çš„æƒ…å†µéœ€è¦é‡ç½®IOå£ä¸ºè¾“å‡ºé«˜é¿å…æ¼ç”µ
+	jsr		F_QuikAdd_ScanReset					; ÓĞ¿ì¼ÓµÄÇé¿öĞèÒªÖØÖÃIO¿ÚÎªÊä³ö¸ß±ÜÃâÂ©µç
 	lda		#00
-	sta		R_Time_Sec							; è°ƒåˆ†é’Ÿä¼šæ¸…Sè®¡æ•°
+	sta		R_Time_Sec							; µ÷·ÖÖÓ»áÇåS¼ÆÊı
 	inc		R_Time_Min
 	lda		#59
 	cmp		R_Time_Min
@@ -452,11 +452,10 @@ L_KeyMTrigger_TimeSetMode3:
 	sta		R_Time_Min
 L_MinSet_Juge3:
 	jsr		F_Display_Time3
-	ldx		#lcd3_DotC
-	jsr		F_DispSymbol3
+
 	rts
 L_KeyHTrigger_TimeSetMode3:
-	jsr		F_QuikAdd_ScanReset					; æœ‰å¿«åŠ çš„æƒ…å†µéœ€è¦é‡ç½®IOå£ä¸ºè¾“å‡ºé«˜é¿å…æ¼ç”µ
+	jsr		F_QuikAdd_ScanReset					; ÓĞ¿ì¼ÓµÄÇé¿öĞèÒªÖØÖÃIO¿ÚÎªÊä³ö¸ß±ÜÃâÂ©µç
 	inc		R_Time_Hour
 	lda		#23
 	cmp		R_Time_Hour
@@ -465,60 +464,58 @@ L_KeyHTrigger_TimeSetMode3:
 	sta		R_Time_Hour
 L_HourSet_Juge3:
 	jsr		F_Display_Time3
-	ldx		#lcd3_DotC
-	jsr		F_DispSymbol3
+
 	rts
 L_KeyBTrigger_TimeSetMode3:
 	smb3	Key_Flag
 	smb2	PB
 	lda		#0
-	sta		Backlight_Counter					; æ¯æ¬¡æŒ‰èƒŒå…‰éƒ½ä¼šé‡ç½®è®¡æ—¶
+	sta		Backlight_Counter					; Ã¿´Î°´±³¹â¶¼»áÖØÖÃ¼ÆÊ±
 	rts
 L_KeySTrigger_TimeSetMode3:
 	lda		Clock_Flag
 	eor		#0001B
 	sta		Clock_Flag
 	jsr		F_Display_Time3
-	ldx		#lcd3_DotC
-	jsr		F_DispSymbol3
+
 	rts
 
 
 
-; é—¹é’Ÿè®¾ç½®æ¨¡å¼çš„æŒ‰é”®å¤„ç†
+; ÄÖÖÓÉèÖÃÄ£Ê½µÄ°´¼ü´¦Àí
 F_KeyTrigger_AlarmSetMode3:
-	bbs3	Timer_Flag,L_Key4Hz_AlarmSetMode3	; æœ‰å¿«åŠ åˆ™ç›´æ¥åˆ¤æ–­8Hzæ ‡å¿—ä½
-	bbr1	Key_Flag,L_KeyScan_AlarmSetMode3	; é¦–æ¬¡æŒ‰é”®è§¦å‘
+	bbs3	Timer_Flag,L_Key4Hz_AlarmSetMode3	; ÓĞ¿ì¼ÓÔòÖ±½ÓÅĞ¶Ï8Hz±êÖ¾Î»
+	bbr1	Key_Flag,L_KeyScan_AlarmSetMode3	; Ê×´Î°´¼ü´¥·¢
 	rmb1	Key_Flag
 	lda		#$00
 	sta		P_Temp
-L_DelayTrigger_AlarmSetMode3:					; æ¶ˆæŠ–å»¶æ—¶å¾ªç¯ç”¨æ ‡ç­¾
+L_DelayTrigger_AlarmSetMode3:					; Ïû¶¶ÑÓÊ±Ñ­»·ÓÃ±êÇ©
 	inc		P_Temp
 	lda		P_Temp
-	bne		L_DelayTrigger_AlarmSetMode3		; è½¯ä»¶æ¶ˆæŠ–
+	bne		L_DelayTrigger_AlarmSetMode3		; Èí¼şÏû¶¶
 	lda		PA
 	and		#$f0
 	cmp		#$00
-	bne		L_KeyYes_AlarmSetMode3				; æ£€æµ‹æ˜¯å¦æœ‰æŒ‰é”®è§¦å‘
+	bne		L_KeyYes_AlarmSetMode3				; ¼ì²âÊÇ·ñÓĞ°´¼ü´¥·¢
 	bra		L_KeyExit_AlarmSetMode3
 	rts
 L_KeyYes_AlarmSetMode3:
 	sta		PA_IO_Backup
-	bra		L_KeyHandle_AlarmSetMode3			; é¦–æ¬¡è§¦å‘å¤„ç†ç»“æŸ
+	bra		L_KeyHandle_AlarmSetMode3			; Ê×´Î´¥·¢´¦Àí½áÊø
 
 L_Key4Hz_AlarmSetMode3:
 	bbr2	Key_Flag,L_Key4HzExit_AlarmSetMode3
 	rmb2	Key_Flag
-L_KeyScan_AlarmSetMode3:						; é•¿æŒ‰å¤„ç†éƒ¨åˆ†
-	bbr0	Key_Flag,L_KeyExit_AlarmSetMode3	; æ²¡æœ‰æ‰«é”®æ ‡å¿—ç›´æ¥é€€å‡º
+L_KeyScan_AlarmSetMode3:						; ³¤°´´¦Àí²¿·Ö
+	bbr0	Key_Flag,L_KeyExit_AlarmSetMode3	; Ã»ÓĞÉ¨¼ü±êÖ¾Ö±½ÓÍË³ö
 
-	jsr		F_QuikAdd_ScanReady					; é…ç½®ä¸ºè¾“å…¥
+	jsr		F_QuikAdd_ScanReady					; ÅäÖÃÎªÊäÈë
 	jsr		F_Delay
-	bbr4	Timer_Flag,L_Key4HzExit_AlarmSetMode3; 8Hzæ ‡å¿—ä½åˆ°æ¥å‰ä¹Ÿä¸è¿›è¡ŒæŒ‰é”®å¤„ç†(å¿«åŠ ä¸‹)
+	bbr4	Timer_Flag,L_Key4HzExit_AlarmSetMode3; 8Hz±êÖ¾Î»µ½À´Ç°Ò²²»½øĞĞ°´¼ü´¦Àí(¿ì¼ÓÏÂ)
 	rmb4	Timer_Flag
 	lda		PA
 	and		#$f0
-	cmp		PA_IO_Backup						; è‹¥æ£€æµ‹åˆ°æœ‰æŒ‰é”®çš„çŠ¶æ€å˜åŒ–åˆ™é€€å‡ºå¿«åŠ åˆ¤æ–­å¹¶ç»“æŸ
+	cmp		PA_IO_Backup						; Èô¼ì²âµ½ÓĞ°´¼üµÄ×´Ì¬±ä»¯ÔòÍË³ö¿ì¼ÓÅĞ¶Ï²¢½áÊø
 	beq		L_4Hz_Count_AlarmSetMode3
 	bra		L_KeyExit_AlarmSetMode3
 	rts
@@ -527,43 +524,43 @@ L_4Hz_Count_AlarmSetMode3:
 	lda		QuickAdd_Counter
 	cmp		#24
 	bcs		L_QuikAdd_AlarmSetMode3
-	rts											; é•¿æŒ‰è®¡æ—¶ï¼Œå¿…é¡»æ»¡1Sæ‰æœ‰å¿«åŠ 
+	rts											; ³¤°´¼ÆÊ±£¬±ØĞëÂú1S²ÅÓĞ¿ì¼Ó
 L_QuikAdd_AlarmSetMode3:
 	smb3	Timer_Flag
 	rmb2	Key_Flag
 
 L_KeyHandle_AlarmSetMode3:
-	lda		PA									; åˆ¤æ–­4ç§æŒ‰é”®è§¦å‘æƒ…å†µ
+	lda		PA									; ÅĞ¶Ï4ÖÖ°´¼ü´¥·¢Çé¿ö
 	and		#$f0
 	cmp		#$80
-	bne		No_KeyHTrigger_AlarmSetMode3		; ç”±äºè·³è½¬æŒ‡ä»¤å¯»å€èƒ½åŠ›çš„é—®é¢˜ï¼Œè¿™é‡Œé‡‡ç”¨jmpè¿›è¡Œè·³è½¬
-	jmp		L_KeyHTrigger_AlarmSetMode3			; Hourå•ç‹¬è§¦å‘
+	bne		No_KeyHTrigger_AlarmSetMode3		; ÓÉÓÚÌø×ªÖ¸ÁîÑ°Ö·ÄÜÁ¦µÄÎÊÌâ£¬ÕâÀï²ÉÓÃjmp½øĞĞÌø×ª
+	jmp		L_KeyHTrigger_AlarmSetMode3			; Hourµ¥¶À´¥·¢
 No_KeyHTrigger_AlarmSetMode3:
 	cmp		#$40
 	bne		No_KeyMTrigger_AlarmSetMode3
-	jmp		L_KeyMTrigger_AlarmSetMode3			; Minå•ç‹¬è§¦å‘
+	jmp		L_KeyMTrigger_AlarmSetMode3			; Minµ¥¶À´¥·¢
 No_KeyMTrigger_AlarmSetMode3:
-	bbs3	Timer_Flag,L_KeyExit_AlarmSetMode3	; èƒŒå…‰å’Œ12hæ¨¡å¼åˆ‡æ¢ä¸éœ€è¦å¿«åŠ 
+	bbs3	Timer_Flag,L_KeyExit_AlarmSetMode3	; ±³¹âºÍ12hÄ£Ê½ÇĞ»»²»ĞèÒª¿ì¼Ó
 	cmp		#$20
 	bne		No_KeySTrigger_AlarmSetMode3
-	jmp		L_KeySTrigger_AlarmSetMode3			; 12/24hè§¦å‘
+	jmp		L_KeySTrigger_AlarmSetMode3			; 12/24h´¥·¢
 No_KeySTrigger_AlarmSetMode3:
 	cmp		#$10
 	bne		L_KeyExit_AlarmSetMode3
-	jmp		L_KeyBTrigger_AlarmSetMode3			; Backlightå•ç‹¬è§¦å‘
+	jmp		L_KeyBTrigger_AlarmSetMode3			; Backlightµ¥¶À´¥·¢
 
 L_KeyExit_AlarmSetMode3:
-	TMR1_OFF									; å…³é—­å¿«åŠ 8Hzè®¡æ—¶çš„å®šæ—¶å™¨
-	rmb0	Key_Flag							; æ¸…ç›¸å…³æ ‡å¿—ä½
+	TMR1_OFF									; ¹Ø±Õ¿ì¼Ó8Hz¼ÆÊ±µÄ¶¨Ê±Æ÷
+	rmb0	Key_Flag							; ÇåÏà¹Ø±êÖ¾Î»
 	rmb3	Timer_Flag
-	lda		#0									; æ¸…ç†ç›¸å…³å˜é‡
+	lda		#0									; ÇåÀíÏà¹Ø±äÁ¿
 	sta		QuickAdd_Counter
 L_Key4HzExit_AlarmSetMode3:
-	jsr		F_QuikAdd_ScanReady					; é…ç½®ä¸ºè¾“å…¥
+	jsr		F_QuikAdd_ScanReady					; ÅäÖÃÎªÊäÈë
 	rts
 
 L_KeyMTrigger_AlarmSetMode3:
-	jsr		F_QuikAdd_ScanReset					; æœ‰å¿«åŠ çš„æƒ…å†µéœ€è¦é‡ç½®IOå£ä¸ºè¾“å‡ºé«˜é¿å…æ¼ç”µ
+	jsr		F_QuikAdd_ScanReset					; ÓĞ¿ì¼ÓµÄÇé¿öĞèÒªÖØÖÃIO¿ÚÎªÊä³ö¸ß±ÜÃâÂ©µç
 	inc		R_Alarm_Min
 	lda		#59
 	cmp		R_Alarm_Min
@@ -575,7 +572,7 @@ L_AlarmMinSet_Juge3:
 	rts
 
 L_KeyHTrigger_AlarmSetMode3:
-	jsr		F_QuikAdd_ScanReset					; æœ‰å¿«åŠ çš„æƒ…å†µéœ€è¦é‡ç½®IOå£ä¸ºè¾“å‡ºé«˜é¿å…æ¼ç”µ
+	jsr		F_QuikAdd_ScanReset					; ÓĞ¿ì¼ÓµÄÇé¿öĞèÒªÖØÖÃIO¿ÚÎªÊä³ö¸ß±ÜÃâÂ©µç
 	inc		R_Alarm_Hour
 	lda		#23
 	cmp		R_Alarm_Hour
@@ -589,7 +586,7 @@ L_KeyBTrigger_AlarmSetMode3:
 	smb3	Key_Flag
 	smb2	PB
 	lda		#0
-	sta		Backlight_Counter					; æ¯æ¬¡æŒ‰èƒŒå…‰éƒ½ä¼šé‡ç½®è®¡æ—¶
+	sta		Backlight_Counter					; Ã¿´Î°´±³¹â¶¼»áÖØÖÃ¼ÆÊ±
 	rts
 L_KeySTrigger_AlarmSetMode3:
 	lda		Clock_Flag

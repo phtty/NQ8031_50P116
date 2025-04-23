@@ -1,43 +1,38 @@
-; æ­£å¸¸èµ°æ—¶æ¨¡å¼çš„æŒ‰é”®å¤„ç†
+; Õı³£×ßÊ±Ä£Ê½µÄ°´¼ü´¦Àí
 F_KeyTrigger_RunTimeMode2:
 	bbs0	Key_Flag,L_KeyTrigger_RunTimeMode2
 	rts
 L_KeyTrigger_RunTimeMode2:
 	rmb0	Key_Flag
 	rmb1	Key_Flag
-	TMR1_OFF									; æ²¡æœ‰å¿«åŠ åŠŸèƒ½ä¸éœ€è¦å¼€Timer1çš„8Hzè®¡æ—¶
-	lda		#$00
-	sta		P_Temp
-L_DelayTrigger_RunTimeMode2:					; æ¶ˆæŠ–å»¶æ—¶å¾ªç¯ç”¨æ ‡ç­¾
-	inc		P_Temp
-	lda		P_Temp
-	bne		L_DelayTrigger_RunTimeMode2			; è½¯ä»¶æ¶ˆæŠ–
+	TMR1_OFF									; Ã»ÓĞ¿ì¼Ó¹¦ÄÜ²»ĞèÒª¿ªTimer1µÄ8Hz¼ÆÊ±
+	jsr		L_KeyDelay							; Èí¼şÏû¶¶
 
 	lda		PA
 	and		#$fc
 	cmp		#$80
-	bne		No_KeySTrigger_RunTimeMode2			; ç”±äºè·³è½¬æŒ‡ä»¤å¯»å€èƒ½åŠ›çš„é—®é¢˜ï¼Œè¿™é‡Œé‡‡ç”¨jmpè¿›è¡Œè·³è½¬
-	jmp		L_KeySTrigger_RunTimeMode2			; on/off Alarmè§¦å‘
+	bne		No_KeySTrigger_RunTimeMode2			; ÓÉÓÚÌø×ªÖ¸ÁîÑ°Ö·ÄÜÁ¦µÄÎÊÌâ£¬ÕâÀï²ÉÓÃjmp½øĞĞÌø×ª
+	jmp		L_KeySTrigger_RunTimeMode2			; on/off Alarm´¥·¢
 No_KeySTrigger_RunTimeMode2:
 	cmp		#$40
 	bne		No_KeyTTrigger_RunTimeMode2
-	jmp		L_KeyTTrigger_RunTimeMode2			; Time_Setè§¦å‘
+	jmp		L_KeyTTrigger_RunTimeMode2			; Time_Set´¥·¢
 No_KeyTTrigger_RunTimeMode2:
 	cmp		#$20
 	bne		No_KeyMTrigger_RunTimeMode2
-	jmp		L_KeyMTrigger_RunTimeMode2			; Minè§¦å‘
+	jmp		L_KeyMTrigger_RunTimeMode2			; Min´¥·¢
 No_KeyMTrigger_RunTimeMode2:
 	cmp		#$10
 	bne		No_KeyATrigger_RunTimeMode2
-	jmp		L_KeyATrigger_RunTimeMode2			; Alarm_Setè§¦å‘
+	jmp		L_KeyATrigger_RunTimeMode2			; Alarm_Set´¥·¢
 No_KeyATrigger_RunTimeMode2:
 	cmp		#$08
 	bne		No_KeyHTrigger_RunTimeMode2
-	jmp		L_KeyHTrigger_RunTimeMode2			; Hourè§¦å‘
+	jmp		L_KeyHTrigger_RunTimeMode2			; Hour´¥·¢
 No_KeyHTrigger_RunTimeMode2:
 	cmp		#$04
 	bne		L_KeyExit_RunTimeMode2
-	jmp		L_KeyBTrigger_RunTimeMode2			; Backlight/Snoozeè§¦å‘
+	jmp		L_KeyBTrigger_RunTimeMode2			; Backlight/Snooze´¥·¢
 
 L_KeyExit_RunTimeMode2:
 	rts
@@ -46,10 +41,10 @@ L_KeyExit_RunTimeMode2:
 L_KeyTTrigger_RunTimeMode2:
 	lda		#0100B
 	sta		Sys_Status_Flag
-	rmb1	Key_Flag							; è¿›å…¥æ—¶é—´è®¾ç½®æ¨¡å¼çš„å¤„ç†
-	sta		AlarmLoud_Counter					; æ¸…ç©ºå“é“ƒè®¡æ•°
-	jsr		L_NoSnooze_CloseLoud2				; æ¸…ç†å“é“ƒè®¡æ—¶ã€16Hzè®¡æ—¶ã€å“é“ƒè®¡æ•°ã€è´ªç¡ç­‰æ ‡å¿—ä½
-	smb6	IER									; å¼€LCDä¸­æ–­ï¼Œç”¨äºåˆ¤ç©ºå‡½æ•°çš„åŠæ—¶å“åº”
+	rmb1	Key_Flag							; ½øÈëÊ±¼äÉèÖÃÄ£Ê½µÄ´¦Àí
+	sta		AlarmLoud_Counter					; Çå¿ÕÏìÁå¼ÆÊı
+	jsr		L_NoSnooze_CloseLoud2				; ÇåÀíÏìÁå¼ÆÊ±¡¢16Hz¼ÆÊ±¡¢ÏìÁå¼ÆÊı¡¢Ì°Ë¯µÈ±êÖ¾Î»
+	smb6	IER									; ¿ªLCDÖĞ¶Ï£¬ÓÃÓÚÅĞ¿Õº¯ÊıµÄ¼°Ê±ÏìÓ¦
 	pla
 	pla
 	jmp		MainLoop2
@@ -58,18 +53,18 @@ L_KeyHTrigger_RunTimeMode2:
 	bra		L_KeyBTrigger_RunTimeMode2
 
 L_KeyBTrigger_RunTimeMode2:
-	smb3	Key_Flag							; èƒŒå…‰æ¿€æ´»ï¼ŒåŒæ—¶å¯åŠ¨è´ªç¡
+	smb3	Key_Flag							; ±³¹â¼¤»î£¬Í¬Ê±Æô¶¯Ì°Ë¯
 	smb3	PB
-	lda		#0									; æ¯æ¬¡æŒ‰èƒŒå…‰éƒ½ä¼šé‡ç½®è®¡æ—¶
+	lda		#0									; Ã¿´Î°´±³¹â¶¼»áÖØÖÃ¼ÆÊ±
 	sta		Backlight_Counter
-	bbs2	Clock_Flag,L_KeyBTrigger_NoLoud2	; å¦‚æœä¸æ˜¯åœ¨å“é—¹æ¨¡å¼ä¸‹ï¼Œåˆ™é€€å‡ºè´ªç¡
+	bbs2	Clock_Flag,L_KeyBTrigger_NoLoud2	; Èç¹û²»ÊÇÔÚÏìÄÖÄ£Ê½ÏÂ£¬ÔòÍË³öÌ°Ë¯
 	jsr		L_NoSnooze_CloseLoud2
 	rts
 L_KeyBTrigger_NoLoud2:
-	smb6	Clock_Flag							; è´ªç¡æŒ‰é”®è§¦å‘						
-	smb3	Clock_Flag							; è¿›å…¥è´ªç¡æ¨¡å¼
+	smb6	Clock_Flag							; Ì°Ë¯°´¼ü´¥·¢						
+	smb3	Clock_Flag							; ½øÈëÌ°Ë¯Ä£Ê½
 
-	lda		R_Snooze_Min						; è´ªç¡é—¹é’Ÿçš„æ—¶é—´åŠ 5
+	lda		R_Snooze_Min						; Ì°Ë¯ÄÖÖÓµÄÊ±¼ä¼Ó5
 	clc
 	adc		#8
 	cmp		#60
@@ -79,12 +74,12 @@ L_KeyBTrigger_NoLoud2:
 L_Snooze_OverflowMin2:
 	sec
 	sbc		#60
-	sta		R_Snooze_Min						; äº§ç”Ÿè´ªç¡å“é—¹çš„åˆ†é’Ÿè¿›ä½
+	sta		R_Snooze_Min						; ²úÉúÌ°Ë¯ÏìÄÖµÄ·ÖÖÓ½øÎ»
 	inc		R_Snooze_Hour
 	lda		R_Snooze_Hour
 	cmp		#24
 	bcc		L_KeyBTrigger_Exit2
-	lda		#00									; äº§ç”Ÿè´ªç¡å°æ—¶è¿›ä½
+	lda		#00									; ²úÉúÌ°Ë¯Ğ¡Ê±½øÎ»
 	sta		R_Snooze_Hour
 L_KeyBTrigger_Exit2:
 	rts
@@ -95,20 +90,20 @@ L_KeyMTrigger_RunTimeMode2:
 L_KeyATrigger_RunTimeMode2:
 	lda		#1000B
 	sta		Sys_Status_Flag
-	rmb1	Key_Flag							; æ¸…é¦–æ¬¡è§¦å‘ï¼Œç­‰å¾…é—¹é’Ÿè®¾ç½®æ¨¡å¼çš„é¦–ä¸ªæŒ‰é”®
+	rmb1	Key_Flag							; ÇåÊ×´Î´¥·¢£¬µÈ´ıÄÖÖÓÉèÖÃÄ£Ê½µÄÊ×¸ö°´¼ü
 	jsr		F_Display_Alarm2
 	lda		#00
-	sta		AlarmLoud_Counter					; æ¸…ç©ºå“é“ƒè®¡æ•°
-	jsr		L_NoSnooze_CloseLoud2				; æ¸…ç†å“é“ƒè®¡æ—¶ã€16Hzè®¡æ—¶ã€å“é“ƒè®¡æ•°ã€è´ªç¡ç­‰æ ‡å¿—ä½
-	smb6	IER									; å¼€LCDä¸­æ–­ï¼Œç”¨äºåˆ¤ç©ºå‡½æ•°çš„åŠæ—¶å“åº”
+	sta		AlarmLoud_Counter					; Çå¿ÕÏìÁå¼ÆÊı
+	jsr		L_NoSnooze_CloseLoud2				; ÇåÀíÏìÁå¼ÆÊ±¡¢16Hz¼ÆÊ±¡¢ÏìÁå¼ÆÊı¡¢Ì°Ë¯µÈ±êÖ¾Î»
+	smb6	IER									; ¿ªLCDÖĞ¶Ï£¬ÓÃÓÚÅĞ¿Õº¯ÊıµÄ¼°Ê±ÏìÓ¦
 	pla
 	pla
 	jmp		MainLoop2
 
 L_KeySTrigger_RunTimeMode2:
-	bbs2	Clock_Flag,L_LoundSnz_Handle12		; è‹¥æœ‰å“é—¹æ¨¡å¼æˆ–è´ªç¡æ¨¡å¼ï¼Œåˆ™ä¸åˆ‡æ¢æ—¶é—´æ¨¡å¼ï¼Œåªæ‰“æ–­å“é—¹å’Œè´ªç¡
+	bbs2	Clock_Flag,L_LoundSnz_Handle12		; ÈôÓĞÏìÄÖÄ£Ê½»òÌ°Ë¯Ä£Ê½£¬Ôò²»ÇĞ»»Ê±¼äÄ£Ê½£¬Ö»´ò¶ÏÏìÄÖºÍÌ°Ë¯
 	bbs3	Clock_Flag,L_LoundSnz_Handle12
-	lda		Clock_Flag							; æ¯æŒ‰ä¸€æ¬¡ç¿»è½¬é—¹é’Ÿæ¨¡å¼çš„çŠ¶æ€
+	lda		Clock_Flag							; Ã¿°´Ò»´Î·­×ªÄÖÖÓÄ£Ê½µÄ×´Ì¬
 	eor		#0010B
 	sta		Clock_Flag
 	bbr1	Clock_Flag,L_Alarm_off_RunTime
@@ -130,38 +125,38 @@ L_Alarm_off_RunTime:
 
 
 
-; æ—¶é—´è®¾ç½®æ¨¡å¼çš„æŒ‰é”®å¤„ç†
+; Ê±¼äÉèÖÃÄ£Ê½µÄ°´¼ü´¦Àí
 F_KeyTrigger_TimeSetMode2:
-	bbs3	Timer_Flag,L_Key4Hz_TimeSetMode2	; æœ‰å¿«åŠ åˆ™ç›´æ¥åˆ¤æ–­4Hzæ ‡å¿—ä½
-	bbr1	Key_Flag,L_KeyScan_TimeSetMode2		; é¦–æ¬¡æŒ‰é”®è§¦å‘
+	bbs3	Timer_Flag,L_Key4Hz_TimeSetMode2	; ÓĞ¿ì¼ÓÔòÖ±½ÓÅĞ¶Ï4Hz±êÖ¾Î»
+	bbr1	Key_Flag,L_KeyScan_TimeSetMode2		; Ê×´Î°´¼ü´¥·¢
 	rmb1	Key_Flag
 	lda		#$00
 	sta		P_Temp
-L_DelayTrigger_TimeSetMode2						; æ¶ˆæŠ–å»¶æ—¶å¾ªç¯ç”¨æ ‡ç­¾
+L_DelayTrigger_TimeSetMode2						; Ïû¶¶ÑÓÊ±Ñ­»·ÓÃ±êÇ©
 	inc		P_Temp
 	lda		P_Temp
-	bne		L_DelayTrigger_TimeSetMode2			; è½¯ä»¶æ¶ˆæŠ–
+	bne		L_DelayTrigger_TimeSetMode2			; Èí¼şÏû¶¶
 	lda		PA
 	and		#$ac
 	cmp		#$00
-	bne		L_KeyYes_TimeSetMode2				; æ£€æµ‹æ˜¯å¦æœ‰æŒ‰é”®è§¦å‘
+	bne		L_KeyYes_TimeSetMode2				; ¼ì²âÊÇ·ñÓĞ°´¼ü´¥·¢
 	bra		L_KeyExit_TimeSetMode2
 	rts
 L_KeyYes_TimeSetMode2:
 	sta		PA_IO_Backup
-	bra		L_KeyHandle_TimeSetMode2			; é¦–æ¬¡è§¦å‘å¤„ç†ç»“æŸ
+	bra		L_KeyHandle_TimeSetMode2			; Ê×´Î´¥·¢´¦Àí½áÊø
 
 L_Key4Hz_TimeSetMode2:
 	bbr2	Key_Flag,L_Key4HzExit_TimeSetMode2
 	rmb2	Key_Flag
-L_KeyScan_TimeSetMode2:							; é•¿æŒ‰å¤„ç†éƒ¨åˆ†
-	bbr0	Key_Flag,L_KeyExit_TimeSetMode2		; æ²¡æœ‰æ‰«é”®æ ‡å¿—ç›´æ¥é€€å‡º
+L_KeyScan_TimeSetMode2:							; ³¤°´´¦Àí²¿·Ö
+	bbr0	Key_Flag,L_KeyExit_TimeSetMode2		; Ã»ÓĞÉ¨¼ü±êÖ¾Ö±½ÓÍË³ö
 
-	bbr4	Timer_Flag,L_Key4HzExit_TimeSetMode2; 8Hzæ ‡å¿—ä½åˆ°æ¥å‰ä¹Ÿä¸è¿›è¡ŒæŒ‰é”®å¤„ç†(å¿«åŠ ä¸‹)
+	bbr4	Timer_Flag,L_Key4HzExit_TimeSetMode2; 8Hz±êÖ¾Î»µ½À´Ç°Ò²²»½øĞĞ°´¼ü´¦Àí(¿ì¼ÓÏÂ)
 	rmb4	Timer_Flag
 	lda		PA
 	and		#$ac
-	cmp		PA_IO_Backup						; è‹¥æ£€æµ‹åˆ°æœ‰æŒ‰é”®çš„çŠ¶æ€å˜åŒ–åˆ™é€€å‡ºå¿«åŠ åˆ¤æ–­å¹¶ç»“æŸ
+	cmp		PA_IO_Backup						; Èô¼ì²âµ½ÓĞ°´¼üµÄ×´Ì¬±ä»¯ÔòÍË³ö¿ì¼ÓÅĞ¶Ï²¢½áÊø
 	beq		L_4Hz_Count_TimeSetMode2
 	bra		L_KeyExit_TimeSetMode2
 	rts
@@ -170,7 +165,7 @@ L_4Hz_Count_TimeSetMode2:
 	lda		QuickAdd_Counter
 	cmp		#24
 	bcs		L_QuikAdd_TimeSetMode2
-	rts											; é•¿æŒ‰è®¡æ—¶ï¼Œå¿…é¡»æ»¡1.5Sæ‰æœ‰å¿«åŠ 
+	rts											; ³¤°´¼ÆÊ±£¬±ØĞëÂú1.5S²ÅÓĞ¿ì¼Ó
 L_QuikAdd_TimeSetMode2:
 	smb3	Timer_Flag
 	rmb2	Key_Flag
@@ -179,33 +174,33 @@ L_KeyHandle_TimeSetMode2:
 	lda		PA
 	and		#$ac
 	cmp		#$80
-	bne		No_KeySTrigger_TimeSetMode2			; ç”±äºè·³è½¬æŒ‡ä»¤å¯»å€èƒ½åŠ›çš„é—®é¢˜ï¼Œè¿™é‡Œé‡‡ç”¨jmpè¿›è¡Œè·³è½¬
-	jmp		L_KeySTrigger_TimeSetMode2			; on/off Alarmè§¦å‘
+	bne		No_KeySTrigger_TimeSetMode2			; ÓÉÓÚÌø×ªÖ¸ÁîÑ°Ö·ÄÜÁ¦µÄÎÊÌâ£¬ÕâÀï²ÉÓÃjmp½øĞĞÌø×ª
+	jmp		L_KeySTrigger_TimeSetMode2			; on/off Alarm´¥·¢
 No_KeySTrigger_TimeSetMode2:
 	cmp		#$20
 	bne		No_KeyMTrigger_TimeSetMode2
-	jmp		L_KeyMTrigger_TimeSetMode2			; Minè§¦å‘
+	jmp		L_KeyMTrigger_TimeSetMode2			; Min´¥·¢
 No_KeyMTrigger_TimeSetMode2:
 	cmp		#$08
 	bne		No_KeyHTrigger_TimeSetMode2
-	jmp		L_KeyHTrigger_TimeSetMode2			; Hourè§¦å‘
+	jmp		L_KeyHTrigger_TimeSetMode2			; Hour´¥·¢
 No_KeyHTrigger_TimeSetMode2:
 	cmp		#$04
 	bne		L_KeyExit_TimeSetMode2
-	jmp		L_KeyBTrigger_TimeSetMode2			; Backlight/Snoozeè§¦å‘
+	jmp		L_KeyBTrigger_TimeSetMode2			; Backlight/Snooze´¥·¢
 
 L_KeyExit_TimeSetMode2:
-	TMR1_OFF									; å…³é—­å¿«åŠ 8Hzè®¡æ—¶çš„å®šæ—¶å™¨
-	rmb0	Key_Flag							; æ¸…ç›¸å…³æ ‡å¿—ä½
+	TMR1_OFF									; ¹Ø±Õ¿ì¼Ó8Hz¼ÆÊ±µÄ¶¨Ê±Æ÷
+	rmb0	Key_Flag							; ÇåÏà¹Ø±êÖ¾Î»
 	rmb3	Timer_Flag
-	lda		#0									; æ¸…ç†ç›¸å…³å˜é‡
+	lda		#0									; ÇåÀíÏà¹Ø±äÁ¿
 	sta		QuickAdd_Counter
 L_Key4HzExit_TimeSetMode2:
 	rts
 
 L_KeyMTrigger_TimeSetMode2:
 	lda		#01
-	sta		R_Time_Sec							; è°ƒåˆ†é’Ÿä¼šæ¸…Sè®¡æ•°
+	sta		R_Time_Sec							; µ÷·ÖÖÓ»áÇåS¼ÆÊı
 	inc		R_Time_Min
 	lda		#59
 	cmp		R_Time_Min
@@ -214,7 +209,7 @@ L_KeyMTrigger_TimeSetMode2:
 	sta		R_Time_Min
 L_MinSet_Juge2:
 	jsr		L_DisTime_Min2
-	bra		L_KeyBTrigger_TimeSetMode2			; Mä¹Ÿä¼šè§¦å‘èƒŒå…‰
+	bra		L_KeyBTrigger_TimeSetMode2			; MÒ²»á´¥·¢±³¹â
 
 L_KeyHTrigger_TimeSetMode2:
 	inc		R_Time_Hour
@@ -224,16 +219,16 @@ L_KeyHTrigger_TimeSetMode2:
 	lda		#00
 	sta		R_Time_Hour
 L_HourSet_Juge2:
-	jsr		L_DisTime_Hour2						; Hä¹Ÿä¼šè§¦å‘èƒŒå…‰
+	jsr		L_DisTime_Hour2						; HÒ²»á´¥·¢±³¹â
 
 L_KeyBTrigger_TimeSetMode2:
 	jmp		L_KeyBTrigger_RunTimeMode2
 	rts
 
 L_KeySTrigger_TimeSetMode2:
-	bbs2	Clock_Flag,L_LoundSnz_Handle22		; è‹¥æœ‰å“é—¹æ¨¡å¼æˆ–è´ªç¡æ¨¡å¼ï¼Œåˆ™ä¸åˆ‡æ¢æ—¶é—´æ¨¡å¼ï¼Œåªæ‰“æ–­å“é—¹å’Œè´ªç¡
+	bbs2	Clock_Flag,L_LoundSnz_Handle22		; ÈôÓĞÏìÄÖÄ£Ê½»òÌ°Ë¯Ä£Ê½£¬Ôò²»ÇĞ»»Ê±¼äÄ£Ê½£¬Ö»´ò¶ÏÏìÄÖºÍÌ°Ë¯
 	bbs3	Clock_Flag,L_LoundSnz_Handle22
-	lda		Clock_Flag							; æ¯æŒ‰ä¸€æ¬¡ç¿»è½¬é—¹é’Ÿæ¨¡å¼çš„çŠ¶æ€
+	lda		Clock_Flag							; Ã¿°´Ò»´Î·­×ªÄÖÖÓÄ£Ê½µÄ×´Ì¬
 	eor		#0010B
 	sta		Clock_Flag
 	bbr1	Clock_Flag,L_Alarm_off_TimeSet
@@ -252,18 +247,18 @@ L_Alarm_off_TimeSet:
 	rts
 
 F_Is_KeyTKeep:
-	bbs3	Timer_Flag,L_QA_KeyTKeep			; æœ‰å¿«åŠ æ—¶ä¸é€€å‡º
+	bbs3	Timer_Flag,L_QA_KeyTKeep			; ÓĞ¿ì¼ÓÊ±²»ÍË³ö
 	bbr6	PA,L_NoKeyT_Keep
 L_QA_KeyTKeep:
 	rts
 L_NoKeyT_Keep:
-	TMR1_OFF									; å…³é—­å¿«åŠ 8Hzè®¡æ—¶çš„å®šæ—¶å™¨
-	rmb0	Key_Flag							; æ¸…ç›¸å…³æ ‡å¿—ä½
+	TMR1_OFF									; ¹Ø±Õ¿ì¼Ó8Hz¼ÆÊ±µÄ¶¨Ê±Æ÷
+	rmb0	Key_Flag							; ÇåÏà¹Ø±êÖ¾Î»
 	rmb3	Timer_Flag
 	rmb6	IER
-	lda		#0									; æ¸…ç†ç›¸å…³å˜é‡
+	lda		#0									; ÇåÀíÏà¹Ø±äÁ¿
 	sta		QuickAdd_Counter
-	lda		#0001B								; å›åˆ°èµ°æ—¶æ¨¡å¼
+	lda		#0001B								; »Øµ½×ßÊ±Ä£Ê½
 	sta		Sys_Status_Flag
 	jsr		F_Display_Time2
 	jsr		L_NoSnooze_CloseLoud2
@@ -272,38 +267,38 @@ L_NoKeyT_Keep:
 
 
 
-; é—¹é’Ÿè®¾ç½®æ¨¡å¼çš„æŒ‰é”®å¤„ç†
+; ÄÖÖÓÉèÖÃÄ£Ê½µÄ°´¼ü´¦Àí
 F_KeyTrigger_AlarmSetMode2:
-	bbs3	Timer_Flag,L_Key4Hz_AlarmSetMode2	; æœ‰å¿«åŠ åˆ™ç›´æ¥åˆ¤æ–­4Hzæ ‡å¿—ä½
-	bbr1	Key_Flag,L_KeyScan_AlarmSetMode2	; é¦–æ¬¡æŒ‰é”®è§¦å‘
+	bbs3	Timer_Flag,L_Key4Hz_AlarmSetMode2	; ÓĞ¿ì¼ÓÔòÖ±½ÓÅĞ¶Ï4Hz±êÖ¾Î»
+	bbr1	Key_Flag,L_KeyScan_AlarmSetMode2	; Ê×´Î°´¼ü´¥·¢
 	rmb1	Key_Flag
 	lda		#$00
 	sta		P_Temp
-L_DelayTrigger_AlarmSetMode2:					; æ¶ˆæŠ–å»¶æ—¶å¾ªç¯ç”¨æ ‡ç­¾
+L_DelayTrigger_AlarmSetMode2:					; Ïû¶¶ÑÓÊ±Ñ­»·ÓÃ±êÇ©
 	inc		P_Temp
 	lda		P_Temp
-	bne		L_DelayTrigger_AlarmSetMode2		; è½¯ä»¶æ¶ˆæŠ–
+	bne		L_DelayTrigger_AlarmSetMode2		; Èí¼şÏû¶¶
 	lda		PA
 	and		#$ac
 	cmp		#$00
-	bne		L_KeyYes_AlarmSetMode2				; æ£€æµ‹æ˜¯å¦æœ‰æŒ‰é”®è§¦å‘
+	bne		L_KeyYes_AlarmSetMode2				; ¼ì²âÊÇ·ñÓĞ°´¼ü´¥·¢
 	bra		L_KeyExit_AlarmSetMode2
 	rts
 L_KeyYes_AlarmSetMode2:
 	sta		PA_IO_Backup
-	bra		L_KeyHandle_AlarmSetMode2			; é¦–æ¬¡è§¦å‘å¤„ç†ç»“æŸ
+	bra		L_KeyHandle_AlarmSetMode2			; Ê×´Î´¥·¢´¦Àí½áÊø
 
 L_Key4Hz_AlarmSetMode2:
 	bbr2	Key_Flag,L_Key4HzExit_AlarmSetMode2
 	rmb2	Key_Flag
-L_KeyScan_AlarmSetMode2:						; é•¿æŒ‰å¤„ç†éƒ¨åˆ†
-	bbr0	Key_Flag,L_KeyExit_AlarmSetMode2	; æ²¡æœ‰æ‰«é”®æ ‡å¿—ç›´æ¥é€€å‡º
+L_KeyScan_AlarmSetMode2:						; ³¤°´´¦Àí²¿·Ö
+	bbr0	Key_Flag,L_KeyExit_AlarmSetMode2	; Ã»ÓĞÉ¨¼ü±êÖ¾Ö±½ÓÍË³ö
 
-	bbr4	Timer_Flag,L_Key4HzExit_AlarmSetMode2; 8Hzæ ‡å¿—ä½åˆ°æ¥å‰ä¹Ÿä¸è¿›è¡ŒæŒ‰é”®å¤„ç†(å¿«åŠ ä¸‹)
+	bbr4	Timer_Flag,L_Key4HzExit_AlarmSetMode2; 8Hz±êÖ¾Î»µ½À´Ç°Ò²²»½øĞĞ°´¼ü´¦Àí(¿ì¼ÓÏÂ)
 	rmb4	Timer_Flag
 	lda		PA
 	and		#$ac
-	cmp		PA_IO_Backup						; è‹¥æ£€æµ‹åˆ°æœ‰æŒ‰é”®çš„çŠ¶æ€å˜åŒ–åˆ™é€€å‡ºå¿«åŠ åˆ¤æ–­å¹¶ç»“æŸ
+	cmp		PA_IO_Backup						; Èô¼ì²âµ½ÓĞ°´¼üµÄ×´Ì¬±ä»¯ÔòÍË³ö¿ì¼ÓÅĞ¶Ï²¢½áÊø
 	beq		L_4Hz_Count_AlarmSetMode2
 	bra		L_KeyExit_AlarmSetMode2
 	rts
@@ -312,7 +307,7 @@ L_4Hz_Count_AlarmSetMode2:
 	lda		QuickAdd_Counter
 	cmp		#24
 	bcs		L_QuikAdd_AlarmSetMode2
-	rts											; é•¿æŒ‰è®¡æ—¶ï¼Œå¿…é¡»æ»¡1.5Sæ‰æœ‰å¿«åŠ 
+	rts											; ³¤°´¼ÆÊ±£¬±ØĞëÂú1.5S²ÅÓĞ¿ì¼Ó
 L_QuikAdd_AlarmSetMode2:
 	smb3	Timer_Flag
 	rmb2	Key_Flag
@@ -321,26 +316,26 @@ L_KeyHandle_AlarmSetMode2:
 	lda		PA
 	and		#$ac
 	cmp		#$80
-	bne		No_KeySTrigger_AlarmSetMode2		; ç”±äºè·³è½¬æŒ‡ä»¤å¯»å€èƒ½åŠ›çš„é—®é¢˜ï¼Œè¿™é‡Œé‡‡ç”¨jmpè¿›è¡Œè·³è½¬
-	jmp		L_KeySTrigger_AlarmSetMode2			; on/off Alarmè§¦å‘
+	bne		No_KeySTrigger_AlarmSetMode2		; ÓÉÓÚÌø×ªÖ¸ÁîÑ°Ö·ÄÜÁ¦µÄÎÊÌâ£¬ÕâÀï²ÉÓÃjmp½øĞĞÌø×ª
+	jmp		L_KeySTrigger_AlarmSetMode2			; on/off Alarm´¥·¢
 No_KeySTrigger_AlarmSetMode2:
 	cmp		#$20
 	bne		No_KeyMTrigger_AlarmSetMode2
-	jmp		L_KeyMTrigger_AlarmSetMode2			; Minè§¦å‘
+	jmp		L_KeyMTrigger_AlarmSetMode2			; Min´¥·¢
 No_KeyMTrigger_AlarmSetMode2:
 	cmp		#$08
 	bne		No_KeyHTrigger_AlarmSetMode2
-	jmp		L_KeyHTrigger_AlarmSetMode2			; Hourè§¦å‘
+	jmp		L_KeyHTrigger_AlarmSetMode2			; Hour´¥·¢
 No_KeyHTrigger_AlarmSetMode2:
 	cmp		#$04
 	bne		L_KeyExit_AlarmSetMode2
-	jmp		L_KeyBTrigger_AlarmSetMode2			; Backlight/Snoozeè§¦å‘
+	jmp		L_KeyBTrigger_AlarmSetMode2			; Backlight/Snooze´¥·¢
 
 L_KeyExit_AlarmSetMode2:
-	TMR1_OFF									; å…³é—­å¿«åŠ 8Hzè®¡æ—¶çš„å®šæ—¶å™¨
-	rmb0	Key_Flag							; æ¸…ç›¸å…³æ ‡å¿—ä½
+	TMR1_OFF									; ¹Ø±Õ¿ì¼Ó8Hz¼ÆÊ±µÄ¶¨Ê±Æ÷
+	rmb0	Key_Flag							; ÇåÏà¹Ø±êÖ¾Î»
 	rmb3	Timer_Flag
-	lda		#0									; æ¸…ç†ç›¸å…³å˜é‡
+	lda		#0									; ÇåÀíÏà¹Ø±äÁ¿
 	sta		QuickAdd_Counter
 L_Key4HzExit_AlarmSetMode2:
 	rts
@@ -355,7 +350,7 @@ L_KeyMTrigger_AlarmSetMode2:
 	sta		R_Alarm_Min
 L_AlarmMinSet_Juge2:
 	jsr		L_DisAlarm_Min2
-	bra		L_KeyBTrigger_AlarmSetMode2			; Mè§¦å‘ä¹Ÿä¼šè§¦å‘èƒŒå…‰
+	bra		L_KeyBTrigger_AlarmSetMode2			; M´¥·¢Ò²»á´¥·¢±³¹â
 L_KeyHTrigger_AlarmSetMode2:
 	inc		R_Alarm_Hour
 	lda		#23
@@ -364,14 +359,14 @@ L_KeyHTrigger_AlarmSetMode2:
 	lda		#00
 	sta		R_Alarm_Hour
 L_AlarmHourSet_Juge2:
-	jsr		L_DisAlarm_Hour2					; Hè§¦å‘ä¹Ÿä¼šè§¦å‘èƒŒå…‰
+	jsr		L_DisAlarm_Hour2					; H´¥·¢Ò²»á´¥·¢±³¹â
 L_KeyBTrigger_AlarmSetMode2:
 	jmp		L_KeyBTrigger_RunTimeMode2
 	rts
 L_KeySTrigger_AlarmSetMode2:
-	bbs2	Clock_Flag,L_LoundSnz_Handle32		; è‹¥æœ‰å“é—¹æ¨¡å¼æˆ–è´ªç¡æ¨¡å¼ï¼Œåˆ™ä¸åˆ‡æ¢æ—¶é—´æ¨¡å¼ï¼Œåªæ‰“æ–­å“é—¹å’Œè´ªç¡
+	bbs2	Clock_Flag,L_LoundSnz_Handle32		; ÈôÓĞÏìÄÖÄ£Ê½»òÌ°Ë¯Ä£Ê½£¬Ôò²»ÇĞ»»Ê±¼äÄ£Ê½£¬Ö»´ò¶ÏÏìÄÖºÍÌ°Ë¯
 	bbs3	Clock_Flag,L_LoundSnz_Handle32
-	lda		Clock_Flag							; æ¯æŒ‰ä¸€æ¬¡ç¿»è½¬é—¹é’Ÿæ¨¡å¼çš„çŠ¶æ€
+	lda		Clock_Flag							; Ã¿°´Ò»´Î·­×ªÄÖÖÓÄ£Ê½µÄ×´Ì¬
 	eor		#0010B
 	sta		Clock_Flag
 	bbr1	Clock_Flag,L_Alarm_off_AlarmSet
@@ -390,18 +385,18 @@ L_Alarm_off_AlarmSet:
 	rts
 
 F_Is_KeyAKeep:
-	bbs3	Timer_Flag,L_QA_KeyAKeep			; æœ‰å¿«åŠ æ—¶ä¸é€€å‡º
+	bbs3	Timer_Flag,L_QA_KeyAKeep			; ÓĞ¿ì¼ÓÊ±²»ÍË³ö
 	bbr4	PA,L_NoKeyA_Keep
 L_QA_KeyAKeep:
 	rts
 L_NoKeyA_Keep:
 	lda		Timer_Flag
-	TMR1_OFF									; å…³é—­å¿«åŠ 8Hzè®¡æ—¶çš„å®šæ—¶å™¨
-	rmb0	Key_Flag							; æ¸…ç›¸å…³æ ‡å¿—ä½
+	TMR1_OFF									; ¹Ø±Õ¿ì¼Ó8Hz¼ÆÊ±µÄ¶¨Ê±Æ÷
+	rmb0	Key_Flag							; ÇåÏà¹Ø±êÖ¾Î»
 	rmb3	Timer_Flag
-	lda		#0									; æ¸…ç†ç›¸å…³å˜é‡
+	lda		#0									; ÇåÀíÏà¹Ø±äÁ¿
 	sta		QuickAdd_Counter
-	lda		#0001B								; å›åˆ°èµ°æ—¶æ¨¡å¼
+	lda		#0001B								; »Øµ½×ßÊ±Ä£Ê½
 	sta		Sys_Status_Flag
 	jsr		F_Display_Time2
 	jsr		L_NoSnooze_CloseLoud2
